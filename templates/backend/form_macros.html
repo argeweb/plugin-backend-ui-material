@@ -1,0 +1,46 @@
+{% macro form_field(form, field, container_element='div') -%}
+    {%- if field.short_name in form.disabled_fields %}{%- set _ = kwargs.setdefault('readonly', true) -%}{%- endif -%}
+    {% if field.type == 'HiddenField' or field.widget.input_type == 'hidden' %}
+        {{ field(**kwargs) }}
+    {% else %}
+        {%- set _ = kwargs.setdefault('tabindex', 0) -%}
+        {%- set css_classes = [kwargs.pop('class','form-control')] -%}
+        {%- set css_classes_outsides = [] -%}
+
+        {%- if field.widget.__class__.__name__ in ('TextInput', 'Select', 'Text', 'PasswordInput', 'FileInput', 'TextArea', 'EditorTextProperty') -%}
+            {%- set _ = css_classes.append('field-control') -%}
+        {%- endif -%}
+        {%- if field.widget.__class__.__name__ in ('CheckboxInput') -%}
+            {%- set _ = css_classes_outsides.append('checkbox') -%}
+        {%- endif -%}
+
+        {%- set _ = css_classes.append('field-type-' + inflector.dasherize(inflector.underscore(field.__class__.__name__))) -%}
+        {%- for flag_name, flag_value in field.flags.__dict__.items() %}
+            {%- if flag_value %}
+                {%- set _ = css_classes.append(' flag_' + flag_name + '_true') %}
+            {%- else %}
+                {% set _ = css_classes.append(' flag_' + flag_name + '_false') %}
+            {%- endif %}
+        {%- endfor %}
+        {%- set css_class = ' '.join(css_classes) -%}
+        {%- set css_class_outsides = ' '.join(css_classes_outsides) -%}
+
+        {%- set lang_classes = [] -%}
+        {%- if field.id.find("_lang_")>0 -%}
+            {%- set _ = lang_classes.append('lang lang-' + field.id.split("_lang_")[0] + ' lang-' + field.id.split("_lang_")[1] ) -%}
+        {%- endif -%}
+        {%- set lang_class = ' '.join(lang_classes) -%}
+
+        <{{container_element}} class='form-group form-group-{{ field.id }} {{ lang_class }} {% if field.errors %}has-error{% endif %}'>
+            {{ field.label(class='col-sm-3 control-label') }}
+            <div class="col-sm-8 {{ css_class_outsides }}">
+                {{ field(class=css_class, **kwargs) }}
+                <p class="help-block">
+                    {%- if field.description %}{{field.description}}{% endif %}
+                    {%- for error in field.errors %}{{ error|e }}<br/>{% endfor %}
+                </p>
+            </div>
+        </{{container_element}}>
+        <div class="hr-line-dashed {{ lang_class }}"></div>
+    {%- endif %}
+{%- endmacro %}

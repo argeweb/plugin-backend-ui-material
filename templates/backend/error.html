@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <title>Application Error</title>
+</head>
+<body class="gray-bg">
+    <div class="aside-page">
+        <div class="aside-header">
+            <a class="aside-close"><i class="icon-2x icon material-icons">close</i></a>
+            <h3>Error {{ code }}</h3>
+        </div>
+        <div class="scrollDiv" style="height: 100%;">
+            <header class="header header-transparent header-waterfall affix-top animated fadeInDown print-hide" style="top: -70px">
+            </header>
+            <main class="content">
+                <h3 class="font-bold">{% block title %}Oops{% endblock %}</h3>
+
+                <div class="error-desc">
+                    {% block subtitle %}{% endblock %}
+                </div>
+                <div class="error-desc text-left">
+                    {% block body %}{% endblock %}
+                </div>
+                {% if exception %}
+                <div class="error-desc" style="margin-top: 30px;">
+                    <strong>技術細節</strong>
+                </div>
+                <div class="error-desc text-left">
+                <pre class='prettyprint' style="margin-top: 10px; background: #fff;">{{exception}}</pre>
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

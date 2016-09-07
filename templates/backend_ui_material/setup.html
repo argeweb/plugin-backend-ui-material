@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArgeWeb Framework 站點設置精靈</title>
+    <meta name="keywords" content="ArgeWeb Framework Google App Engine">
+    <meta name="description" content="ArgeWeb Framework 是一個 Google App Engine 網站系統，可以快速的在 Google App Engine 上建立起網站">
+    <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/font-awesome.min.css?v=4.4.0">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/plugins/steps/jquery.steps.css">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/animate.min.css">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/page.css?v=4.1.0">
+    <link href='https://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
+    <style>
+        .wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active {
+            background: #eee;
+            margin-left: 5px;
+            color: #000;
+            text-align: center;
+        }
+
+        .wizard > .actions .disabled a, .wizard > .actions .disabled a:hover, .wizard > .actions .disabled a:active,
+        .wizard > .steps .disabled a, .wizard > .steps .disabled a:hover, .wizard > .steps .disabled a:active {
+            background: transparent;
+            text-align: center;
+            color: #fff;
+        }
+
+        .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
+            background: rgba(51, 51, 51, 0.78);
+            text-align: center;
+        }
+
+        .wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active {
+            background: rgba(0, 0, 0, 0.55);
+            margin-left: 5px;
+            text-align: center;
+        }
+
+        span.number {
+            display: none !important;
+        }
+
+        .wizard > .steps a, .wizard > .steps a:hover, .wizard > .steps a:active {
+            margin-bottom: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+            background: transparent;
+            text-align: center;
+            color: #fff;
+        }
+
+        .wizard > .content {
+            margin-top: 0;
+            border-top-left-radius: 0;
+            height: 280px;
+        }
+
+        .wizard {
+            min-width: 380px;
+        }
+
+        .wrapper-content {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        h4 {
+            line-height: 22px;
+        }
+        body{
+            background: url(/plugins/backend_ui_material/static/img/install.jpg);background-size: cover; background-position: 80%;
+        }
+        .head_180{
+            padding: 180px 0;
+        }
+        .head_125{
+            padding: 125px 0; font-family: 'Finger Paint', cursive; color: #fff; font-size: 40px; text-align: center;
+        }
+        .head{
+            text-align: right;
+            font-size: 40px;
+            color: #fff;
+            line-height: 50px;
+            padding-top: 72px;
+            font-family: 'Finger Paint', cursive;
+        }
+        .row{
+            background: rgba(0, 0, 0, 0.55); height: 280px;
+        }
+        .ibox{
+            padding: 50px 10px; background: transparent; display: none;
+        }
+        .ibox-title{
+            border: 0;margin-top: -98px; background: transparent;
+        }
+        .wizard > .content > .body label {
+            line-height: 25px;
+        }
+        .hr-line-dashed {
+            margin: 5px 0 9px 0;
+            background-color: #888;
+        }
+        .wizard > .content > .body label.error{
+            display: inline-block;
+            margin: 5px 0 0 0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="visible-md visible-lg head_180"></div>
+    <div class="visible-sm visible-xs head_125">
+        ArgeWeb Framework
+    </div>
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-md-3 hidden-sm hidden-xs animated fadeInUp head">ArgeWeb <br/>Framework</div>
+        <div class="col-sm-10 col-md-8 col-lg-7">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <form id="wizard" action="/admin/setup_save" method="post">
+                        <h1>開始設置</h1>
+                        <div class="step-content form-horizontal">
+                            <h4>ArgeWeb Framework 讓您快速的在 Google App Engine 上建立起網站</h4>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">目標網域</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control" name="namespace" value="{{ server_name }}" readonly>
+                                    <span class="help-block m-b-none">若有多個網域使用相同資料，請指定相同的命名空間</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">命名空間</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control required" name="name_space" value="{{ namespace }}">
+                                    <span class="help-block m-b-none">將被 DataStore、Cache、Task queue、Search 所使用</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1>網站資訊</h1>
+                        <div class="step-content form-horizontal">
+                            <h4>請輸入網站名稱與佈景主題</h4>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">網站名稱</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control required" id="site_name" name="site_name" value="">
+                                    <label id="site_name-error" class="error" for="site_name"><i class="fa fa-times-circle"></i>  必填</label>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">佈景主題</label>
+                                <div class="col-xs-10">
+                                    <select class="form-control m-b required" name="theme">
+                                        {% for item in themes_list %}
+                                        <option value="{{ item.theme_name }}">{{ item.theme_title }} - {{ item.theme_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1>管理帳號</h1>
+                        <div class="step-content form-horizontal">
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">管理名稱</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control required" id="account_name" name="account_name" value="管理員">
+                                    <label id="account_name-error" class="error" for="account_name"><i class="fa fa-times-circle"></i>  必填</label>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">管理帳號</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control required" id="account" name="account" value="admin">
+                                    <label id="account-error" class="error" for="account"><i class="fa fa-times-circle"></i>  必填</label>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">管理密碼</label>
+                                <div class="col-xs-10">
+                                    <input type="text" class="form-control required" id="password" name="password" value="">
+                                    <label id="password-error" class="error" for="password"><i class="fa fa-times-circle"></i>  必填</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h1>完成</h1>
+                        <div class="step-content form-horizontal">
+                            <h4>已完成設定完成</h4>
+
+                            <p>
+                                請點擊下方的送出按鈕，請注意，送出後 命名空間 namespace 將不可在修改。
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1 visible-lg"></div>
+    </div>
+</div>
+<script src="/static/components/jquery/dist/jquery.min.js"></script>
+<script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="/plugins/backend_ui_material/static/js/plugins/staps/jquery.steps.min.js"></script>
+<script src="/plugins/backend_ui_material/static/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/plugins/backend_ui_material/static/js/plugins/validate/messages_zh_tw.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#wizard").steps({
+            enableCancelButton: false,
+            enableAllSteps: false,
+            enableFinishButton: true,
+            showFinishButtonAlways: false,
+            transitionEffect: "slideLeft",
+            onStepChanging: function (event, currentIndex, newIndex) {
+                if (currentIndex > newIndex) {
+                    return true;
+                }
+                var form = $(this);
+                if (currentIndex < newIndex) {
+                    $(".body:eq(" + newIndex + ") label.error", form).remove();
+                    $(".body:eq(" + newIndex + ") .error", form).removeClass("error");
+                }
+                form.validate().settings.ignore = ":disabled,:hidden";
+                return form.valid();
+            },
+            onFinishing: function (event, currentIndex) {
+                var form = $(this);
+                form.validate().settings.ignore = ":disabled";
+                return form.valid();
+            },
+            onFinished: function (event, currentIndex) {
+                var form = $(this);
+                form.submit();
+            }
+        }).validate({
+            errorPlacement: function (error, element) {
+                element.parent().append(error);
+            }
+        });
+        $(".ibox").show();
+    });
+    $("#send_form").click(function(){
+        $("#wizard").submit();;
+    })
+</script>
+</body>
+</html>

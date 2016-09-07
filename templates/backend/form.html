@@ -1,0 +1,65 @@
+{% import "backend/macros.html" as s with context %}
+{% import 'backend/form_macros.html' as f with context %}
+{% extends s.layout() %}
+{%- block header -%}
+    {%- if scaffolding %}
+{#        {% if uri_exists_with_permission(action="add") -%}<a class="btn btn-red btn-create" href="{{uri_action_link('add') }}"><i class="icon">edit</i>{{ s.scaffold_title("add") }}</a>{%- endif -%}#}
+        {% block partial_related_area %}{{s.partial_include('partial_related_area_in_page.html')}}{% endblock %}
+{#        {% block partial_list_area %}{{s.partial_include('partial_nav_lang.html')}}{% endblock %}#}
+    {%- endif %}
+{% endblock %}
+{% block layout_content %}
+<div class="wrapper wrapper-content">
+    <iframe name="iframeForm" width="0" height="0" frameborder="0" seamless></iframe>
+    {% block form_tag %}
+    <form method="POST"
+          action="{{scaffolding.form_action|default(uri(_pass_all=True), True)}}"
+          class="form-horizontal"
+          enctype="{{scaffolding.form_encoding|default('application/json', True)}}"
+          role="form" accept-charset="UTF-8"
+          target="iframeForm">
+        {% endblock %}
+        <div class="col-sm-12" style="margin-bottom: 30px;">
+            <div class="">
+                {% block form_actions %}
+                <div class="btn-group pull-right">
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
+                    <a href="javascript: backToList();" class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
+                </div>
+                {% endblock %}
+                {% block partial_box_header %}{{s.partial_include('partial_box_header.html')}}{% endblock %}
+            </div>
+            <div class="ibox-content">
+                {{events.before_form_fields()}}
+                <div class="row">
+                    {%- block form_fields %}
+                    {%- for field in form %}
+                    {% if not field.name in scaffolding.excluded_form_fields %}{{ f.form_field(form, field) }}{% endif %}
+                    {%- endfor %}
+                    {%- endblock %}
+                    {% block form_actions_footer -%}
+                    <div class="col-xs-12 text-right">
+                        {% block submit_button -%}
+
+                        {%- endblock %}
+{#                        {% block submit_and_exit_button -%}<a class="btn submit_and_exit"><i class="icon">save</i> {% block submit_and_exit_text_f %}{% endblock %}</a>{%- endblock %}#}
+{#                        {% block cancel_button -%}<a href="javascript: backToList();" class="btn backToList"><i class="icon">close</i> {% block cancel_text %}Cancel{% endblock %}</a>{%- endblock %}#}
+                    </div>
+                    {%- endblock %}
+                </div>
+                {{events.after_form_fields()}}
+            </div>
+            <input type="hidden" name="returnType" value="json" />
+            <input type="hidden" name="routeAction" value="{{ route.action }}" />
+            <input type="hidden" name="routeName" value="{{ route.name }}" />
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block float_buttons %}
+<div class="fbtn-container">
+    <div class="fbtn-inner">
+        <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: save_form();"><span class="fbtn-text fbtn-text-left">{% block submit_text_f %}{% endblock %}</span><span class="icon icon-lg">save</span></a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% import "backend/macros.html" as s with context %}
+{%- if scaffolding -%}
+    <div class="dropdown list-operations related-operations hide">
+        <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
+           data-toggle="dropdown">
+            <span><i class="icon icon-lg">arrow_drop_down</i></span>
+            　相關操作　
+        </a>
+        <ul class="dropdown-menu folder-list ">
+            {%- for nav_item in scaffolding.navigation -%}
+            {%- if uri_exists_with_permission("admin:" + scaffolding.singular + ":" + nav_item.action, item=item) -%}
+            <li><a href="{{uri_action_link(nav_item.action, item)}}" target="aside_iframe" class="waves-attach waves-effect"><i class="fa fa-angle-right"></i> {{ nav_item.title }} </a></li>
+            {%- endif -%}
+            {%- endfor %}
+        </ul>
+    </div>
+{%- endif %}

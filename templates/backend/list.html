@@ -1,0 +1,48 @@
+{%- import 'backend/macros.html' as s with context -%}
+{%- extends s.layout() -%}
+{%- block header -%}
+    {{s.next_page_link()}}
+    {%- if scaffolding %}
+        {% block partial_related_area %}{{s.partial_include('partial_related_area.html')}}{% endblock %}
+        {% block partial_list_area %}{{s.partial_include('partial_nav_list.html')}}{% endblock %}
+    {%- endif %}
+{% endblock %}
+{%- block layout_content -%}
+<div class="wrapper wrapper-content padding40">
+    <div class="row">
+        <div class="col-sm-12 mail-box table-responsive sortable-list">
+            <table class="table table-hover margin-0" data-cookie-id-table="{{ scaffolding.plural }}_{{ route.action }}" data-show-columns="true" data-toggle="table" data-cookie="true" id="list-table">
+                <thead>
+                <tr>
+                    <th data-field="sortable" class="col-1 sorting-mode text-center">排序</th>
+                    {% for property in scaffolding.display_properties_in_list -%}
+                        <th data-field="{{ property }}" class="text-center">{{s.scaffold_field_name(property)}}</th>
+                    {% endfor -%}
+                    <th data-field="more-field" class="col-1 text-center">更多</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% block partial_tr_item %}{{s.partial_include('partial_tr_item.html')}}{% endblock %}
+                </tbody>
+            </table>
+            {% block partial_box_header %}{{s.partial_include('partial_records_footer.html')}}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block layout_head -%}
+{%- endblock %}
+{% block layout_scripts -%}
+{%- endblock %}
+
+{% block float_buttons %}
+    {%- if scaffolding %}
+        {% if uri_exists_with_permission(action="add") -%}
+            <div class="fbtn-container">
+                <div class="fbtn-inner">
+                    <a href="{{uri_action_link('add') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
+                </div>
+            </div>
+        {%- endif -%}
+    {%- endif %}
+{% endblock %}

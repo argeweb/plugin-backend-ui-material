@@ -1,0 +1,7 @@
+{% if this.flash_messages %}
+{% for flash in this.flash_messages() %}
+    <div class="alert alert-{{flash[1].level}} alert-{{flash[0]}}">
+        {{flash[1].message}}
+    </div>
+{% endfor %}
+{% endif %}

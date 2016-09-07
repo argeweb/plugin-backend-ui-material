@@ -1,0 +1,50 @@
+{%- macro layout() -%}backend_ui_material/page.html{%- endmacro -%}
+
+{# Scaffold 頁面標題 #}
+{% macro scaffold_title(action) -%}
+    {%- if page_title -%}
+        {{- page_title -}}
+    {%- else -%}
+        {%- if scaffolding -%}
+            {{- scaffolding.scaffold_title[action] -}}
+        {%- else -%}
+            {{- inflector.humanize(route.action) -}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endmacro %}
+
+{# Scaffold 頁面描述 #}
+{% macro scaffold_description(action) -%}
+    {%- if scaffolding -%}
+        {{- scaffolding.scaffold_description[action] -}}
+    {%- endif -%}
+{%- endmacro %}
+
+{# Scaffold 欄位名稱 #}
+{% macro scaffold_field_name(field_name) -%}
+    {%- for key,name in scaffolding.scaffold_field_name.items() -%}
+        {%- if key == field_name -%}
+            {{- name -}}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endmacro %}
+
+{# 載入局部頁面 #}
+{% macro partial_include(template) -%}
+{% include [controller_name+'/'+template, 'backend_ui_material/partial/'+template, 'scaffolding/'+template] %}
+{%- endmacro %}
+
+{# 分頁按鈕 #}
+{% macro next_page_link() -%}
+{%- if paging -%}
+<ul class="nav nav-list margin-no pull-right">
+    <li><span style="float: left;line-height: 36px;margin-right: 10px;"> <i class="hidden-xs">第</i> <i>{{paging.page}}</i> <i class="hidden-xs">頁</i> </span></li>
+    <li>
+        {% if paging.previous_cursor is defined %}<a href="{{ uri(_pass_all=True, cursor=paging.previous_cursor)}}" class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_left</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_left</i></a>{% endif %}
+    </li>
+    <li>
+        {% if paging.next_cursor %}<a href="{{ uri(_pass_all=True, cursor=paging.next_cursor)}}"  class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_right</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_right</i></a>{% endif %}
+    </li>
+</ul>
+{%- endif %}
+{%- endmacro %}

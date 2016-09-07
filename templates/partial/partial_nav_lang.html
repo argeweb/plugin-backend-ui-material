@@ -1,0 +1,19 @@
+{% import "backend/macros.html" as s with context %}
+{% if scaffolding.scaffold_language %}
+
+    <div class="dropdown list-operations related-operations hide list-lang">
+        <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
+           data-toggle="dropdown">
+            <span><i class="icon icon-lg">arrow_drop_down</i></span>
+            　語系欄位切換　
+        </a>
+        <ul class="dropdown-menu folder-list ">
+            {%- set lang_count = 1 %}
+            {%- for item in scaffolding.scaffold_language %}
+                <li><a class="waves-attach waves-effect btn-lang" data-lang="{{ item.lang }}" href="#"> <i class="fa fa-flag-o"></i>{{ item.lang }}, {{ item.title }}
+                    <span class="label label-info quick-key">{{ lang_count }}</span><span class="quick-key quick-key-2">+</span><span class="label label-info quick-key">Alt</span></a></li>
+            {%- set lang_count = lang_count + 1 -%}
+            {%- endfor %}
+        </ul>
+    </div>
+{% endif %}

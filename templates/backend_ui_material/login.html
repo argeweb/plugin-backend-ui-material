@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="utf-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+	<title>{{ backend_title }}</title>
+	<link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/components/sweetalert2/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.more.css?run={{ framework.app_version }}">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
+    <!--[if lt IE 9]>
+{#    <meta http-equiv="refresh" content="0;ie.html" />#}
+    <![endif]-->
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+    <style type="text/css">
+        #messagebox {
+            color: #000;
+            background-color: #fff;
+            margin: 0 auto;
+            text-align: center;
+            font-weight: 900;
+            padding: 3px 25px;
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            display: none;
+        }
+        .form-control{
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+        header.header {
+            min-width: 250px;
+        }
+    </style>
+</head>
+
+<body class="page-brand">
+	<header class="header header-brand ui-header">
+		<span class="header-logo">{{ backend_title }}</span>
+	</header>
+	<main class="content" style="margin-left: auto;">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-lg-push-4 col-sm-6 col-sm-push-3">
+					<section class="content-inner">
+						<div class="card">
+							<div class="card-main">
+								<div class="card-header">
+									<div class="card-inner">
+										<h1 class="card-heading">Login</h1>
+									</div>
+								</div>
+								<div class="card-inner">
+									<p class="text-center">
+										<span class="avatar avatar-inline avatar-lg">
+											<img alt="Login" src="/plugins/backend_ui_material/static/images/users/avatar-001.jpg">
+										</span>
+									</p>
+									<form class="form">
+										<div class="form-group form-group-label">
+											<div class="row">
+												<div class="col-md-10 col-md-push-1">
+													<label class="floating-label" for="name">Username</label>
+													<input class="form-control" id="name" name="account" type="text">
+												</div>
+											</div>
+										</div>
+										<div class="form-group form-group-label">
+											<div class="row">
+												<div class="col-md-10 col-md-push-1">
+													<label class="floating-label" for="password">Password</label>
+													<input class="form-control" id="password" name="password" type="password">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-10 col-md-push-1">
+													<div class="btn btn-block btn-brand waves-attach waves-light" id="login_btn">Sign In</div>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-10 col-md-push-1">
+                                                    <div class="m-t-md" style="height: 21px;"><div id="messagebox"></div></div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- js -->
+    <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
+    <script type="text/javascript">
+        var c = null;
+        $(function () {
+            $("#login_btn").click(function () {
+                send_login();
+            });
+            $("body").on("keydown", function (event) {
+                if (event.keyCode == 13) {
+                    send_login();
+                }
+            });
+            $(document).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    send_login();
+                }
+            });
+            $("#name").keydown(function (event) {
+                if (event.keyCode == 13) {
+                    send_login();
+                }
+            });
+            $("#password").keydown(function (event) {
+                if (event.keyCode == 13) {
+                    send_login();
+                }
+            });
+        });
+
+        function send_login() {
+            show_message("正在進行登入中...");
+            var d = $("form").serialize();
+            if (c == null){
+                c = d;
+                json("/admin/login.json", d, json_message);
+            }
+        }
+
+
+        // 用 json 取得頁面
+        function json(url, data, callback) {
+            try {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    dataType: 'json',
+                    data: data,
+                    async: true,
+                    success: function (data) {
+                        c = null;
+                        callback(data);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        c = null;
+                        show_message(thrownError.message);
+                    }
+                });
+            } catch (e) {
+                //
+            }
+        }
+
+        // 顯示 json 回應的訊息
+        function json_message(data) {
+            if (data.is_login == "true"){
+                show_message("登入成功，請稍候...");
+                setTimeout(function(){
+                    location.href = "/admin";
+                }, 2000);
+            }else{
+                show_message("登入失敗，帳號密碼有誤...");
+            }
+        }
+
+        // 顯示訊息
+        function show_message(text) {
+            $("#messagebox").html(text).slideDown();
+            setTimeout('hide_message()', 3100);
+        }
+
+        // 隱藏訊息
+        function hide_message() {
+            $("#messagebox").slideUp();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+{% import "backend/macros.html" as s with context %}
+{% if last_record_date %}<span class="text-muted small pull-right visible-sm visible-md visible-lg" style="margin: 10px;">最後更新：<i class="fa fa-clock-o"></i> {{ print_value(last_record_date) }}</span>{% endif %}

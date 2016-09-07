@@ -1,0 +1,75 @@
+{% import "backend/macros.html" as s with context %}
+{% extends s.layout() %}
+
+{% block layout_content %}
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="p-xs">
+        <div class="pull-left m-r-md">
+            <i class="icon text-navy mid-icon">error_outline</i>
+        </div>
+        <h2>日誌記錄</h2>
+        <span>伺服器與系統更新日誌。</span>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>系統日誌</h5>
+                    <div class="ibox-tools">
+                        {% if next_link != '' %}<a class="btn btn-xs btn-primary btn-default" style="float: right; margin-left: 8px;" href="/admin/log?{{ next_link }}&log_level=3">下一頁</a>{% endif %}
+                        <div class="btn-group" style="float: right;margin-left: 8px;">
+                            <a class="btn btn-xs btn-primary btn-info" href="/admin/log?{{ this_link }}&log_level=1">資訊</a>
+                            <a class="btn btn-xs btn-primary btn-warning" href="/admin/log?{{ this_link }}&log_level=2">警告</a>
+                            <a class="btn btn-xs btn-primary btn-danger" href="/admin/log?{{ this_link }}&log_level=3">錯誤</a>
+                        </div>
+                        <a class="btn btn-xs btn-primary" style="float: right;" href="/admin/log?{{ first_link }}">最新</a>
+                    </div>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div class="panel-body timeline">
+                        {% for item in log_list %}
+                        <div class="timeline-item">
+                            <div class="row">
+                                <div class="col-xs-3 date ui-sortable" style="width: 25%;">
+                                    <i class="fa fa-indent"></i>
+                                    <small class="text-navy">{{ item.ip }} : 來源</small><br>
+                                    <small class="text-navy">{{ item.date }} : 日期</small><br>
+                                    <small class="text-navy">{{ item.time }} : 時間</small><br>
+                                </div>
+                                <div class="col-xs-9 content">
+                                    <strong class="log_msg_title"><span style="color: #337ab7;">{{ item.method }}</span> {{ item.resource }}</strong>
+                                    {% for log in item.logs %}
+                                        <pre class="log_msg text-{{ log.type }}" style="word-break:break-all; border: 0;">{{ log.message|escape }}</pre>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>更新日誌</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div class="panel-body">
+                        <div class="panel-group" id="version">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{%- endblock %}
+{% block layout_scripts -%}
+<script type="text/javascript" src="/plugins/backend_ui_material/static/js/version.change.js"></script>
+{% endblock %}

@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+	<meta charset="UTF-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+	<title>{{ backend_title }}</title>
+	<link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/components/sweetalert2/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.more.css?run={{ framework.app_version }}">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
+</head>
+<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}">
+	<header class="header header-transparent header-waterfall ui-header">
+		<ul class="nav nav-list pull-left"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
+		<a class="header-logo {% if page_title == backend_title %}header-affix-hide{% else %}{% endif %} margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != '{{ backend_title }}' %}{{ backend_title }}{% endif %}</a>
+        <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != backend_title %}．{% endif %}</a>
+        <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{{ page_title }}</a>
+        <ul class="nav nav-list pull-right right-menu">
+            <li class="search-bar"><div class="search-bar"></div></li>
+			<li class="dropdown">
+				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no" data-toggle="dropdown" aria-expanded="true">
+					<span class="avatar avatar-sm"><i class="icon icon-lg">notifications</i></span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no" style="min-width: 288px;">
+					<div class="tile">
+						<div class="tile-inner text-black">
+							<strong>Notifications</strong>
+						</div>
+					</div>
+					<a class="tile waves-attach" href="javascript:void(0)">
+						<div class="tile-side pull-left">
+							<div class="avatar avatar-sm">
+								<img src="/plugins/backend_ui_material/static/css/images/persian.jpg">
+							</div>
+						</div>
+						<div class="tile-inner text-black">
+							<span>Lorem ipsum dolor sit amet.</span>
+						</div>
+					</a>
+					<a class="tile waves-attach" href="javascript:void(0)">
+						<div class="tile-side pull-left">
+							<div class="avatar avatar-sm">
+								<img src="/plugins/backend_ui_material/static/css/images/persian.jpg">
+							</div>
+						</div>
+						<div class="tile-inner text-black">
+							<span>Consectetur adipiscing elit.</span>
+						</div>
+					</a>
+					<a class="tile waves-attach" href="javascript:void(0)">
+						<div class="tile-side pull-left">
+							<div class="avatar avatar-sm">
+								<img src="/plugins/backend_ui_material/static/css/images/persian.jpg">
+							</div>
+						</div>
+						<div class="tile-inner text-black">
+							<span>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+						</div>
+					</a>
+					<a class="tile waves-attach" href="javascript:void(0)">
+						<div class="tile-inner text-black text-right">
+							<span>Show All</span>
+							<i class="icon icon-lg">navigate_next</i>
+						</div>
+					</a>
+				</div>
+			</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no" data-toggle="dropdown">
+                    <span class="avatar avatar-sm"><i class="icon icon-lg">more_vert</i></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a class="waves-attach" href="javascript:iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
+                    <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
+                    {% if dashboard_name == "admin" %}<li><a class="waves-attach" href="/admin/log" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>{% endif %}
+                    <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
+                </ul>
+            </li>
+		</ul>
+	</header>
+	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">
+		<div class="menu-scroll">
+			<div class="menu-content">
+				<a class="menu-logo gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a>
+				<div class="user-box">
+					<div class="avatar"></div>
+					<div class="user-name">{{ application_user_name }}</div>
+				</div>
+                <div class="btn-group op-mode">
+                    <a class="btn btn-flat btn-brand waves-attach enter-edit-mode" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-view-mode" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-sorting-mode" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-delete-mode" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
+{#                    <span class="view-mode">檢視模式</span>#}
+{#                    <span class="edit-mode">編輯模式</span>#}
+{#                    <span class="delete-mode">刪除模式</span>#}
+{#                    <span class="sorting-mode">排序模式</span>#}
+                </div>
+                <div class=" scrollDiv">
+				<ul class="nav">
+                    <li class="hidden">
+                        <a class="waves-attach m collapsed" data-toggle="collapse" href="#menu_usually">常用項目
+                            <i class="icon material-icons float-icon">keyboard_arrow_right</i>
+                        </a>
+						<ul class="menu-collapse collapse" id="menu_usually"></ul>
+                    </li>
+                    {% set menu_n = 0 %}
+                    {% for item in menus -%}
+                    {%- if item.submenu -%}
+                    {% set menu_n = menu_n + 1 %}
+                    <li>
+                        <a class="waves-attach collapsed" data-toggle="collapse" href="#menu_{{ menu_n }}">{{ item.text }}
+                            <i class="icon material-icons float-icon">keyboard_arrow_right</i>
+                        </a>
+						<ul class="menu-collapse collapse" id="menu_{{ menu_n }}">
+                            {%- for subitem in item.submenu %}
+                            <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
+                            {%- endfor %}
+                        </ul>
+                    </li>
+                    {%- else -%}
+                    <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
+                    {% endif %}
+                    {%- endfor %}
+				</ul>
+                </div>
+			</div>
+		</div>
+	</nav>
+	<main class="content">
+        <div class="iframe_mask" style="top: 56px;bottom: 0;left: 0;right: 0;background: rgba(119, 119, 119, 0.0);position: absolute;"></div>
+        <iframe name="content_iframe" id="content_iframe" width="100%" height="100%" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
+	</main>
+    <iframe name="aside_iframe" id="aside_iframe" height="100%" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
+	<footer class="ui-footer" style="display: none;">
+		<div class="container gf-title">
+			<p>{{ backend_title }}</p>
+		</div>
+	</footer>
+    <div style="display: none;"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
+	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
+    <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/components/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="/static/components/keymaster/keymaster.js"></script>
+    <script type="text/javascript" src="/static/components/push.js/push.min.js"></script>
+	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
+	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/project.min.js?run={{ framework.app_version }}"></script>
+	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/console.js?run={{ framework.app_version }}"></script>
+    {% block javascritp %}{% endblock %}
+</body>
+</html>

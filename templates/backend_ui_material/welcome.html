@@ -1,0 +1,68 @@
+{% import "backend/macros.html" as s with context %}
+{% extends s.layout() %}
+
+{% block layout_content %}
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="p-xs">
+        <div class="pull-left m-r-md">
+            <i class="fa fa-globe text-navy mid-icon"></i>
+        </div>
+        <h2>{{ backend_title }}</h2>
+        <span>請點擊左側功能開始作業。</span>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>聯絡資訊 - {{ information.manager_company }}</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div class="panel-body">
+                        <p><i class="fa fa-user"></i> 聯絡人：{{ information.manager_person }}</p>
+                        <p><i class="fa fa-phone"></i> 　電話：{{ information.manager_telephone }}</p>
+                        <p><i class="fa fa-phone"></i> 　手機：{{ information.manager_mobile }}</p>
+                        <p><i class="fa fa-send"></i> E-mail：{{ information.manager_email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>伺服器租用相關訊息</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div class="panel-body">
+                        <p><i class="fa fa-server"></i> 伺服器等級：{{ information.space_rental_level }}</p>
+                        <p><i class="fa fa-calendar-check-o"></i> 起始日：{{ information.space_rental_date }}</p>
+                        <p><i class="fa fa-calendar-minus-o"></i> 到期日：{{ information.space_expiration_date }}</p>
+                        <p><i class="fa fa-money"></i> 　價格：{{ information.space_rental_price }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>網域註冊相關訊息</h5>
+                </div>
+                <div class="ibox-content no-padding">
+                    <div class="panel-body">
+                        <p><i class="icon">edit</i> 註冊於：{{ information.domain_registration }}</p>
+                        <p><i class="fa fa-calendar-check-o"></i> 起始日：{{ information.domain_registration_date }}</p>
+                        <p><i class="fa fa-calendar-minus-o"></i> 到期日：{{ information.domain_expiration_date }}</p>
+                        <p><i class="fa fa-money"></i> 　價格：{{ information.domain_registration_price }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{%- endblock %}
+{% block layout_scripts -%}
+{% endblock %}
