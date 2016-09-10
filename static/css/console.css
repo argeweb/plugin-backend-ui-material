@@ -5,6 +5,10 @@
 html, body, main.content{
     height: 100%;
 }
+body{
+    margin-right: -3px;
+    overflow: hidden;
+}
 main.content{
     padding-top: 56px;
     overflow-scrolling: touch;
