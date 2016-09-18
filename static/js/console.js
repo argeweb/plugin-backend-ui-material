@@ -346,8 +346,7 @@ var iframe = {
         this.loading_lock = true;
         clearTimeout(this.loading_timer);
         this.loading_timer = setTimeout(function(){
-            iframe.loading_lock = false;
-            message.quick_show("連線逾時");
+            iframe.instance.contentWindow.showTimeout();
         }, 25000);
         this.last_url = url;
         this.pushState(url , text, referer_page);
@@ -452,7 +451,7 @@ var aside = {
         clearTimeout(this.loading_timer);
         this.loading_timer = setTimeout(function(){
             aside.loading_lock = false;
-            message.quick_show("連線逾時");
+            aside.instance.contentWindow.showTimeout();
         }, 250000);
 
         this.last_url = url;
@@ -539,6 +538,7 @@ var shortcut = {
                 case 'ctrl+s': target_window.save_form(); break;
                 case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
                     target_window.change_lang(parseInt(shortcut_key.replace('alt+', '')));
+                    target_window.change_lang(parseInt(shortcut_key.replace('alt+', ''))-1);
                     break;
             }
         }

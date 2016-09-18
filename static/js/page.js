@@ -154,25 +154,30 @@ function create_editor(id){
     });
     ed.render();
 }
+function showTimeout(callback){
+    hideHeader('<div style="margin: 100px auto; width: 40%; font-size: 18px;">連線逾時</div>', callback);
+}
 function showLoading(callback){
-    var on_loading_html = '<div id="onLoad">' +
+    hideHeader('<div id="onLoad">' +
         '<div class="sk-spinner sk-spinner-chasing-dots">' +
         '<div class="sk-dot1"></div>' +
         '<div class="sk-dot2"></div>' +
         '</div>' +
-        '</div>';
-
+        '</div>', callback)
+}
+function hideHeader(after_hide_html, callback){
     $('.aside-header').stop().animate({
         top: -70
     });
-    $('header').stop().animate({
-        top: -70
-    }, 250, function(){
-        $('body').addClass("body-hide").html(on_loading_html);
-        if (typeof callback === "function") callback();
-    });
     if ($('header').length == 0 && typeof callback === "function"){
         callback();
+    }else{
+        $('header').stop().animate({
+            top: -70
+        }, 250, function(){
+            $('body').addClass("body-hide").html(after_hide_html);
+            if (typeof callback === "function") callback();
+        });
     }
 }
 var currentView = "edit";
