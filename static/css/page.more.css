@@ -128,12 +128,16 @@ body{
 }
 .img_selector_div input{
     border-right: 0;width: calc( 100% - 0px );
+    margin-top: 5px;
+    float: left;
 }
 .img_selector_div .input-group-btn{
-    width: 160px;
+    width: 1%;
+    display: table-cell;
 }
 .img_selector_div .filepicker{
     width: 100px;border-left: 0;
+    display: table-cell;
 }
 .img_selector_item_none {
     border: 0 !important;
@@ -500,4 +504,15 @@ body.in-delete-mode .edit-mode, body.in-delete-mode .view-mode{
     .aside .scrollDiv{
         margin-top: 10px !important;
     }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 0), not all {
+    select.form-control, select.picker__select--month, select.picker__select--year {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFW…4FvMgtHgGekGE8CsyQaTwDWGQZzwIwAEJAPbsC0nMIMADa5XjRmvnODAAAAABJRU5ErkJggg==);
+        background-position: 98% 11px;
+    }
+}
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
+    margin-top: -8px !important;
+    position: relative;
+    float: left !important;
 }
