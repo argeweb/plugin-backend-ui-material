@@ -9,6 +9,5 @@
 
 plugins_helper = {
     "title": u"Material Backend",
-    "desc": u"Material Backend",
-    "plugins_controller": "backend_ui_material"
+    "desc": u"Material Backend"
 }
