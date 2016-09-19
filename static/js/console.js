@@ -247,20 +247,20 @@ var iframe = {
         window["close_msg_nav"] = function(){ $("header").click(); };
         this.history = JSON.parse(localStorage.getItem('iframe.history'));
         if (this.history == null || this.history == "null") this.history = [];
-        //TODO 顯示常用的項目
-        var sort_list = [];
-        var $menu_usually = $("#menu_usually");
-        $menu_usually.parent().addClass("hidden");
-        $.map(iframe.history, function(n) { if (n.visit > 10){ sort_list.push(n); }});
-        sort_list.sort(function(a, b) { return a.visit < b.visit; });
-        var count = 0;
-        $.map(sort_list, function(n){
-            if (count < 5){
-                count++;
-                $menu_usually.append('<li><a class="waves-attach" href="'+ n.href +'" target="content_iframe">'+ n.text +'</a></li>');
-                $menu_usually.parent().removeClass("hidden");
-            }
-        });
+        //  常用項目
+        //var sort_list = [];
+        //var $menu_usually = $("#menu_usually");
+        //$menu_usually.parent().addClass("hidden");
+        //$.map(iframe.history, function(n) { if (n.visit > 10){ sort_list.push(n); }});
+        //sort_list.sort(function(a, b) { return a.visit < b.visit; });
+        //var count = 0;
+        //$.map(sort_list, function(n){
+        //    if (count < 5){
+        //        count++;
+        //        $menu_usually.append('<li><a class="waves-attach" href="'+ n.href +'" target="content_iframe">'+ n.text +'</a></li>');
+        //        $menu_usually.parent().removeClass("hidden");
+        //    }
+        //});
         // ====
         var $linkList = $("a[target=content_iframe]");
         $linkList.click(function(event){
@@ -537,7 +537,6 @@ var shortcut = {
                 case 'ctrl+shift+s': target_window.save_and_exit(); break;
                 case 'ctrl+s': target_window.save_form(); break;
                 case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
-                    target_window.change_lang(parseInt(shortcut_key.replace('alt+', '')));
                     target_window.change_lang(parseInt(shortcut_key.replace('alt+', ''))-1);
                     break;
             }
@@ -633,4 +632,22 @@ $(function(){
     $(".enter-view-mode").click(function(){ view.change("view")});
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
+    $(".menu-link").click(function(){
+        var target_id = $(this).attr("href");
+        if ($(target_id).hasClass("in")){
+            $(target_id).removeClass("in").animate({"left": -300}, function(){
+                //$(this).css({"position": "relative", "top": "0"});
+                //$(target_id);
+            });
+            $("#main-nav").show().animate({"left": 0});
+        }else{
+            $(target_id).animate({"left": 0}, function(){
+                //$(this).css({"position": "relative", "top": "0"});
+                $(target_id).addClass("in");
+            });
+            $("#main-nav").animate({"left": -300}, function(){
+                $(this).hide();
+            });
+        }
+    });
 });

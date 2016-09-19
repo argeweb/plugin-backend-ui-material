@@ -99,7 +99,7 @@
 {#                    <span class="sorting-mode">排序模式</span>#}
                 </div>
                 <div class=" scrollDiv">
-				<ul class="nav">
+				<ul class="nav" id="main-nav">
                     <li class="hidden">
                         <a class="waves-attach m collapsed" data-toggle="collapse" href="#menu_usually">常用項目
                             <i class="icon material-icons float-icon">keyboard_arrow_right</i>
@@ -111,20 +111,39 @@
                     {%- if item.submenu -%}
                     {% set menu_n = menu_n + 1 %}
                     <li>
-                        <a class="waves-attach collapsed" data-toggle="collapse" href="#menu_{{ menu_n }}">{{ item.text }}
+                        <a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}">{{ item.text }}
                             <i class="icon material-icons float-icon">keyboard_arrow_right</i>
                         </a>
-						<ul class="menu-collapse collapse" id="menu_{{ menu_n }}">
-                            {%- for subitem in item.submenu %}
-                            <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
-                            {%- endfor %}
-                        </ul>
                     </li>
                     {%- else -%}
-                    <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
+                        {% if item.text == "br" %}
+                            <li class="br"></li>
+                        {% else %}
+                            <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
+                        {% endif %}
                     {% endif %}
                     {%- endfor %}
 				</ul>
+                    {% set menu_n = 0 %}
+                    {% for item in menus -%}
+                    {%- if item.submenu -%}
+                    {% set menu_n = menu_n + 1 %}
+                    <div class="nav menu-box"  id="menu_box_{{ menu_n }}">
+						<ul class="menu-collapse collapse in" id="menu_{{ menu_n }}">
+                            <li class="menu-back">
+                                <a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a>
+                            </li>
+                            {%- for subitem in item.submenu %}
+                            {% if subitem.text == "br" %}
+                                <li class="br"></li>
+                            {% else %}
+                                <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
+                            {% endif %}
+                            {%- endfor %}
+                        </ul>
+                     </div>
+                    {% endif %}
+                    {%- endfor %}
                 </div>
 			</div>
 		</div>
