@@ -88,11 +88,11 @@
 					<div class="avatar"></div>
 					<div class="user-name">{{ application_user_name }}</div>
 				</div>
-                <div class="btn-group op-mode">
-                    <a class="btn btn-flat btn-brand waves-attach enter-edit-mode" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-view-mode" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-sorting-mode" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-delete-mode" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
+                <div class="btn-group op-mode">{% block op_mode %}
+                    <a class="btn btn-flat btn-brand waves-attach enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
+                    <a class="btn btn-flat btn-brand waves-attach enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
 {#                    <span class="view-mode">檢視模式</span>#}
 {#                    <span class="edit-mode">編輯模式</span>#}
 {#                    <span class="delete-mode">刪除模式</span>#}
@@ -137,7 +137,11 @@
                             {% if subitem.text == "br" %}
                                 <li class="br"></li>
                             {% else %}
-                                <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
+                                {% if subitem.text == "gt" %}
+                                    <li class="gt">{{ subitem.group_title }}</li>
+                                {% else %}
+                                    <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
+                                {% endif %}
                             {% endif %}
                             {%- endfor %}
                         </ul>

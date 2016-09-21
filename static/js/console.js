@@ -509,10 +509,19 @@ function print(){
 }
 var shortcut = {
     keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, ' +
-    'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/, s, e, v, d, 1, 2, 3, 4',
+    'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
     timer: null,
     lock: false,
     "init": function(){
+        var s = [];
+        var n = 1;
+        $(".op-mode a").each(function(){
+            s.push($(this).data("view-key"));
+            s.push(n.toString());
+            n++;
+        });
+        shortcut.keys += ", " + s.join(", ");
+        console.log(shortcut.keys);
         key.filter = function(event){
             var tagName = (event.target || event.srcElement).tagName;
             key.setScope(/^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? 'input' : 'doc');
@@ -542,28 +551,20 @@ var shortcut = {
             }
         }
         if (scope != "input"){
+            var s = [];
+            var n = 1;
+            $(".op-mode a").each(function(){
+                if (shortcut_key == $(this).data("view-key") || shortcut_key == n.toString()){
+                    view.change($(this).data("view"));
+                }
+                n++;
+            });
             switch (shortcut_key) {
                 case '/':
                     console.log("search");
                     break;
                 case 'shift+/':
                     console.log("help");
-                    break;
-                case '1':
-                case 'e':
-                    view.change("edit");
-                    break;
-                case '2':
-                case 'v':
-                    view.change("view");
-                    break;
-                case '3':
-                case 's':
-                    view.change("sort");
-                    break;
-                case '4':
-                case 'd':
-                    view.change("delete");
                     break;
                 case '`':
                     if (aside.is_open)
@@ -632,15 +633,19 @@ $(function(){
     $(".enter-view-mode").click(function(){ view.change("view")});
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
-    $(".menu-link").click(function(){
+    $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
+            event.stopPropagation();
+            event.preventDefault();
             $(target_id).removeClass("in").animate({"left": -300}, function(){
                 //$(this).css({"position": "relative", "top": "0"});
                 //$(target_id);
             });
             $("#main-nav").show().animate({"left": 0});
         }else{
+            event.stopPropagation();
+            event.preventDefault();
             $(target_id).animate({"left": 0}, function(){
                 //$(this).css({"position": "relative", "top": "0"});
                 $(target_id).addClass("in");
