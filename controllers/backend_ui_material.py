@@ -69,7 +69,7 @@ class BackendUiMaterial(Controller):
         self.context["server_name"] = self.server_name
         self.context["namespace"] = self.namespace
         themes_list = []
-        dir_themes = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'templates', 'themes'))
+        dir_themes = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
         # TODO：　如果　dir_themes (/templates/themes/)　不存在引起的錯話
         for dirPath in os.listdir(dir_themes):
             if dirPath.find(".") < 0:

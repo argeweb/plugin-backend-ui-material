@@ -14,15 +14,12 @@
                 <a href="{{ uri_action_link('sort_down', item) }}" class="btn-json"><i class="icon icon-2x">keyboard_arrow_down</i></a>{% endif %}
         </td>
         {% for property in scaffolding.display_properties_in_list -%}
-            <td>{%- if property.find("is_") >= 0 %}
-                <div class="checkbox switch">
-                    <label for="{{ print_key(item) }}">
-                        <input class="access-hide" {% if item[property] %}checked{% endif %} id="{{ print_key(item) }}"
-                               name="{{ print_key(item) }}" type="checkbox"><span
-                            class="switch-toggle"></span>{{ s.scaffold_field_name("short_" + property) }}
-                    </label>
-                </div>
-            {% else -%}{{ print_value(item[property]) }}{%- endif -%}
+            <td>
+                {%- if property.find("is_") >= 0 %}
+                    {{ s.scaffold_field_boolean(item, property) }}
+                {% else -%}
+                    {{ print_value(item[property]) }}
+                {%- endif -%}
             </td>
         {% endfor -%}
         <td class="text-right print-hide"></td>

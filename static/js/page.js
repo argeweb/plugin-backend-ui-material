@@ -270,6 +270,22 @@ $(function(){
         if ($(this).attr("id") == "avatar"){
             backend.set_avatar(location.href, val);
         }
+    }).on("change", ".record_item td .btn-checkbox-json", function(){
+        if ($(this).is(":checked")){
+            var enable_text = $(this).data("enable-text");
+            json($(this).data("enable-url"), null, function(data){
+                if (data.info == "success"){
+                    backend.message.quick_info(enable_text+"...");
+                }
+            });
+        }else{
+            var disable_text = $(this).data("disable-text");
+            json($(this).data("disable-url"), null, function(data){
+                if (data.info == "success"){
+                    backend.message.quick_info(disable_text+"...");
+                }
+            });
+        }
     });
 
     key.filter = function(event){
@@ -409,6 +425,7 @@ function pageInit(new_html) {
         makeListOp();
         checkNavItemAndShow();
         $(".sortable-list").removeClass("hidden");
+        $(".fixed-table-loading").hide();
     }).bootstrapTable();
 
     setTimeout(function(){

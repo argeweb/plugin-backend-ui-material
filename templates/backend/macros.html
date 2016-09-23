@@ -48,3 +48,17 @@
 </ul>
 {%- endif %}
 {%- endmacro %}
+
+{# Boolean 欄位 #}
+{% macro scaffold_field_boolean(item, field_name) -%}
+    <div class="checkbox checkbox-success">
+        <input type="checkbox" {% if item.is_enable %}checked{% endif %} id="{{ print_key(item) }}"
+               class="btn-checkbox-json"
+               data-enable-url="{{ uri_action_link('set_boolean_field', item)}}?field={{ field_name }}&value=true"
+               data-disable-url="{{ uri_action_link('set_boolean_field', item)}}?field={{ field_name }}&value=false"
+               data-enable-text="已啟用"
+               data-disable-text="已停用"
+        >
+        <label for="{{ print_key(item) }}"></label>
+    </div>
+{%- endmacro %}
