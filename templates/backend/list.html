@@ -1,7 +1,6 @@
 {%- import 'backend/macros.html' as s with context -%}
 {%- extends s.layout() -%}
 {%- block header -%}
-    {{s.next_page_link()}}
     {%- if scaffolding %}
         {% block partial_related_area %}{{s.partial_include('partial_related_area.html')}}{% endblock %}
         {% block partial_list_area %}{{s.partial_include('partial_nav_list.html')}}{% endblock %}
@@ -25,7 +24,9 @@
                     {% block partial_tr_item %}{{s.partial_include('partial_tr_item.html')}}{% endblock %}
                 </tbody>
             </table>
-            {% block partial_box_header %}{{s.partial_include('partial_records_footer.html')}}{% endblock %}
+            {% block partial_records_footer %}
+                {{s.next_page_link()}}
+                {{s.partial_include('partial_records_footer.html')}}{% endblock %}
         </div>
     </div>
 </div>

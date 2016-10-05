@@ -20,10 +20,10 @@
         <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
            data-toggle="dropdown">
             <span><i class="icon icon-lg">arrow_drop_down</i></span>
-            　相關操作　
+            <span>相關操作</span>
         </a>
         <ul class="dropdown-menu folder-list ">
-            <li style="padding: 6px 10px; background: #efefef;">頁面</li>
+            <li class="dropdown-menu-group">頁面</li>
             {%- if route.action != 'view' -%}
             <li><a href="javascript: save_form();"><i class="icon">save</i>{{submit_text}}
                     <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
@@ -41,7 +41,7 @@
             {% endif -%}
             {% endfor -%}
             {% if scaffolding.scaffold_language %}
-            <li style="padding: 6px 10px; background: #efefef;">語系欄位切換</li>
+            <li class="dropdown-menu-group">語系欄位切換</li>
                 {%- set lang_count = 1 %}
                 {%- for item in scaffolding.scaffold_language %}
                     <li><a class="waves-attach waves-effect btn-lang" data-lang="{{ item.lang }}" href="#"> <i class="fa fa-flag-o"></i>{{ item.lang }}, {{ item.title }}

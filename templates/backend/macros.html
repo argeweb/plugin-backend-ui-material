@@ -37,14 +37,14 @@
 {# 分頁按鈕 #}
 {% macro next_page_link() -%}
 {%- if paging -%}
-<ul class="nav nav-list margin-no pull-right">
-    <li><span style="float: left;line-height: 36px;margin-right: 10px;"> <i class="hidden-xs">第</i> <i>{{paging.page}}</i> <i class="hidden-xs">頁</i> </span></li>
-    <li>
+<ul class="nav nav-list margin-no pull-left paging">
+    <li class="paging-btn">
         {% if paging.previous_cursor is defined %}<a href="{{ uri(_pass_all=True, cursor=paging.previous_cursor)}}" class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_left</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_left</i></a>{% endif %}
     </li>
-    <li>
+    <li class="paging-btn">
         {% if paging.next_cursor %}<a href="{{ uri(_pass_all=True, cursor=paging.next_cursor)}}"  class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_right</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_right</i></a>{% endif %}
     </li>
+    <li><span style="float: left;line-height: 36px;margin-right: 10px;"> <i class="hidden-xs">第</i> <i>{{paging.page}}</i> <i class="hidden-xs">頁</i> </span></li>
 </ul>
 {%- endif %}
 {%- endmacro %}

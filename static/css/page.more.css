@@ -179,7 +179,13 @@ body{
 }
 .list-operations>a:first-child>span {
     float: right;
-    margin-right: 4px;
+    margin-right: 3px;
+    margin-left: 1px;
+}
+.list-operations>a:first-child>span+span {
+    float: right;
+    margin-right: 3px;
+    margin-left: 10px;
 }
 .lang-operations li{
     min-width: 288px;
@@ -515,4 +521,15 @@ body.in-delete-mode .edit-mode, body.in-delete-mode .view-mode{
     height: 18px;
     width: 18px;
     margin: 0 auto !important;
+}
+.dropdown-menu-group{
+    padding: 6px 10px; background: rgba(3, 169, 244, 0.2);
+}
+.paging-btn{
+    width: 31px;
+}
+.paging-btn a i{
+    background: #fff;
+    border: solid 1px #dedede;
+    border-radius: 2px;
 }

@@ -4595,6 +4595,9 @@ a.compose-mail {
     padding: 0;
     margin-bottom: 20px
 }
+.sortable-list.mail-box{
+    background: transparent;
+}
 
 .mail-box-header {
     background-color: #fff;
