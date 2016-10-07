@@ -58,9 +58,9 @@ class BackendUiMaterial(Controller):
         self.context["menus"] = menus
         self.context["backend_version"] = backend_version
         self.context["application_user_name"] = self.application_user.name
-        namespace_manager.set_namespace("shared.information")
-        self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
-        namespace_manager.set_namespace(self.host_info.namespace)
+        # namespace_manager.set_namespace("shared.information")
+        # self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
+        # namespace_manager.set_namespace(self.host_info.namespace)
 
     @route_with("/admin/setup")
     def setup(self):
@@ -104,14 +104,6 @@ class BackendUiMaterial(Controller):
         self.settings.set_theme(self.host_info.host, namespace, theme)
         return self.redirect("/")
 
-    @route_with("/admin/application_user_init")
-    def application_user_init(self):
-        prohibited_actions = settings.get("application_user_prohibited_actions", u"")
-        from plugins.application_user import application_user_init, has_record
-        application_user_init(u"管理員", "admin", "qwER12#$", prohibited_actions,
-                             "/plugins/backend_ui_material/static/img/profile_small.jpg")
-        return self.redirect("/")
-
     @route_with("/admin/welcome")
     def admin_welcome(self):
         try:
@@ -121,9 +113,9 @@ class BackendUiMaterial(Controller):
         except:
             self.context["backend_title"] = u"網站後台"
         self.context["backend_version"] = backend_version
-        namespace_manager.set_namespace("shared.information")
-        self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
-        namespace_manager.set_namespace(self.host_info.namespace)
+        # namespace_manager.set_namespace("shared.information")
+        # self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
+        # namespace_manager.set_namespace(self.host_info.namespace)
 
     @route_with("/admin/aa")
     def admin_aa(self):
@@ -153,10 +145,10 @@ class BackendUiMaterial(Controller):
         }
         if self.request.method != "POST":
             return
-        from plugins.application_user import login, has_record, application_user_init
+        from plugins.application_user import get_user, has_record, application_user_init
         input_account = self.params.get_string("account")
         input_password = self.params.get_string("password")
-        application_user = login(input_account, input_password)
+        application_user = get_user(input_account, input_password)
         if application_user is None:
             if has_record():
                 return

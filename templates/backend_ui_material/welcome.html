@@ -13,6 +13,8 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
+    {%- set information = function("ge_information", framework.hostname) %}
+    {% if information %}
     <div class="row">
         <div class="col-sm-6">
             <div class="ibox float-e-margins">
@@ -62,6 +64,7 @@
         </div>
 
     </div>
+    {% endif %}
 </div>
 {%- endblock %}
 {% block layout_scripts -%}
