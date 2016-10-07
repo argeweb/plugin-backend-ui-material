@@ -16,6 +16,15 @@ main.content{
     position: relative
 }
 
+h3.header-page-name{
+    left: 231px;
+    background-color: #1A77C9;
+    color: #fff;
+    border-bottom: 0;
+    position: fixed;
+    margin: 16px 0;
+    font-size: 18px;
+}
 body.anonymous .login-backdrop {
   opacity: .5;
 }
@@ -69,6 +78,9 @@ body.anonymous .btn-flat.btn-brand {
         top: 10px;
         left: 10px;
         right: 10px;
+    }
+    h3.header-page-name{
+        display: none;
     }
 }
 .login-backdrop {
@@ -286,4 +298,7 @@ body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-col
 }
 li.menu-back + li.gt {
     border-top: solid 0px #ccc;
+}
+.nav-justified>li>a {
+    margin-bottom: 0px;
 }

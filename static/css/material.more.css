@@ -404,7 +404,7 @@ header .header-logo{
         /*display: flex;*/
         min-width: 250px;
     }
-    header .header-logo{
+    header .nav+.header-logo{
         display: none;
     }
     header .right-menu {

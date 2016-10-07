@@ -3,7 +3,7 @@
 <head>
     {%- set aside = params.get_header("Aside") -%}
     {%- set is_ajax = params.get_header("Is-Ajax") -%}
-    <title>{%- block layout_head_title -%}{{inflector.humanize(route.action)}}{%- endblock -%}</title>
+    <title>{%- block layout_head_title -%}{%- if scaffolding and s %}{{ s.scaffold_title(route.action) }}{% endif %}{%- endblock -%}</title>
     {%- if is_ajax != "true" %}
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
 	<link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">

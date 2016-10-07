@@ -428,10 +428,13 @@ var iframe = {
             iframe.load(s.href, s.text, s.is_list);
             window.history.replaceState( s , s.text, "#" + s.href);
         }
+    },
+    "setPageTitle": function(title){
+        $(".header-page-name").text(title);
     }
 };
 var aside = {
-    "instance": null,
+"instance": null,
     "is_open": false,
     "last_url": null,
     "is_init": false,

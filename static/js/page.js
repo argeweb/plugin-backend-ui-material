@@ -320,6 +320,8 @@ function pageInit(new_html) {
         page_header_top = 56;
         scrollDiv_top = 71;
         $("body").addClass("aside");
+    }else{
+        backend.iframe.setPageTitle($(".aside-header h3").text());
     }
     $(".aside-header").stop().animate({
         top: nav_var_top

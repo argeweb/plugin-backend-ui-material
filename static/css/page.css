@@ -4595,8 +4595,11 @@ a.compose-mail {
     padding: 0;
     margin-bottom: 20px
 }
-.sortable-list.mail-box{
+.mail-box{
     background: transparent;
+}
+.mail-box .table{
+    margin-bottom: 0;
 }
 
 .mail-box-header {
