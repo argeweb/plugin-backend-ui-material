@@ -318,7 +318,7 @@ function pageInit(new_html) {
     if (window.name == "aside_iframe"){
         nav_var_top = 0;
         page_header_top = 56;
-        scrollDiv_top = 71;
+        scrollDiv_top = 56;
         $("body").addClass("aside");
     }else{
         backend.iframe.setPageTitle($(".aside-header h3").text());

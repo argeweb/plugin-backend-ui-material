@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.more.css?run={{ framework.app_version }}">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
 </head>
-<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}">
+<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}" style="height: 101%;">
 	<header class="header header-transparent header-waterfall ui-header">
 		<ul class="nav nav-list pull-left"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
 		<a class="header-logo {% if page_title == backend_title %}header-affix-hide{% else %}{% endif %} margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != '{{ backend_title }}' %}{{ backend_title }}{% endif %}</a>

@@ -7122,3 +7122,6 @@ main.content{
     display: flex;flex-direction: column;
     margin-bottom: 50px;
 }
+.record_item{
+    cursor: pointer;
+}

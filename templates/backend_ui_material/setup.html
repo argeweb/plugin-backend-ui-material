@@ -7,12 +7,14 @@
     <meta name="keywords" content="ArgeWeb Framework Google App Engine">
     <meta name="description" content="ArgeWeb Framework 是一個 Google App Engine 網站系統，可以快速的在 Google App Engine 上建立起網站">
     <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/font-awesome.min.css?v=4.4.0">
-    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/plugins/steps/jquery.steps.css">
-    <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/animate.min.css">
+    <link rel="stylesheet" href="/static/components/jquery.steps/demo/css/jquery.steps.css">
+    <link rel="stylesheet" href="/static/components/animate.css/animate.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/page.css?v=4.1.0">
     <link href='https://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
     <style>
+        .wizard > .steps{
+                left: 1px;
+        }
         .wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active {
             background: #eee;
             margin-left: 5px;
@@ -55,6 +57,7 @@
             margin-top: 0;
             border-top-left-radius: 0;
             height: 280px;
+            min-height: 280px;
         }
 
         .wizard {
@@ -93,7 +96,7 @@
             padding: 50px 10px; background: transparent; display: none;
         }
         .ibox-title{
-            border: 0;margin-top: -98px; background: transparent;
+            border: 0;margin-top: -108px; background: transparent;
         }
         .wizard > .content > .body label {
             line-height: 25px;
@@ -106,10 +109,13 @@
             display: inline-block;
             margin: 5px 0 0 0;
         }
+        body{
+            background: #888;
+        }
     </style>
 </head>
 
-<body class="gray-bg">
+<body>
 <div class="wrapper wrapper-content">
     <div class="visible-md visible-lg head_180"></div>
     <div class="visible-sm visible-xs head_125">
@@ -127,7 +133,7 @@
                             <h4>ArgeWeb Framework 讓您快速的在 Google App Engine 上建立起網站</h4>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label class="col-xs-2 control-label">目標網域</label>
+                                <label class="col-xs-2 control-label">目前網域</label>
                                 <div class="col-xs-10">
                                     <input type="text" class="form-control" name="namespace" value="{{ server_name }}" readonly>
                                     <span class="help-block m-b-none">若有多個網域使用相同資料，請指定相同的命名空間</span>
@@ -137,7 +143,7 @@
                             <div class="form-group">
                                 <label class="col-xs-2 control-label">命名空間</label>
                                 <div class="col-xs-10">
-                                    <input type="text" class="form-control required" name="name_space" value="{{ namespace }}">
+                                    <input type="text" class="form-control required" name="name_space" value="{{ namespace }}" readonly>
                                     <span class="help-block m-b-none">將被 DataStore、Cache、Task queue、Search 所使用</span>
                                 </div>
                             </div>
@@ -211,11 +217,9 @@
 </div>
 <script src="/static/components/jquery/dist/jquery.min.js"></script>
 <script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-<script src="/plugins/backend_ui_material/static/js/plugins/staps/jquery.steps.min.js"></script>
-<script src="/plugins/backend_ui_material/static/js/plugins/validate/jquery.validate.min.js"></script>
-<script src="/plugins/backend_ui_material/static/js/plugins/validate/messages_zh_tw.min.js"></script>
-
+<script src="/static/components/jquery.steps/build/jquery.steps.min.js"></script>
+<script src="/static/components/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="/static/components/jquery-validation/src/localization/messages_zh_TW.js"></script>
 <script>
     $(document).ready(function () {
         $("#wizard").steps({
