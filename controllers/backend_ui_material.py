@@ -20,8 +20,6 @@ import logging
 import time
 import json
 import os
-from plugins.web_information.models.web_information_model import WebInformationModel
-
 
 backend_version = "0.0.12"
 
@@ -58,9 +56,6 @@ class BackendUiMaterial(Controller):
         self.context["menus"] = menus
         self.context["backend_version"] = backend_version
         self.context["application_user_name"] = self.application_user.name
-        # namespace_manager.set_namespace("shared.information")
-        # self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
-        # namespace_manager.set_namespace(self.host_info.namespace)
 
     @route_with("/admin/setup")
     def setup(self):
@@ -69,15 +64,25 @@ class BackendUiMaterial(Controller):
         self.context["server_name"] = self.server_name
         self.context["namespace"] = self.namespace
         themes_list = []
-        dir_themes = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
-        # TODO：　如果　dir_themes (/templates/themes/)　不存在引起的錯話
-        for dirPath in os.listdir(dir_themes):
+        themes_dir = None
+        dirs = []
+        try:
+            themes_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
+            dirs = os.listdir(themes_dir)
+        except:
+            pass
+        for dirPath in dirs:
             if dirPath.find(".") < 0:
-                file_path = os.path.join(dir_themes, dirPath, "theme.json")
+                file_path = os.path.join(themes_dir, dirPath, "theme.json")
                 if os.path.exists(file_path):
                     f = open(file_path, 'r')
                     data = json.load(f)
                     themes_list.append({"theme_name": dirPath, "theme_title": data["name"]})
+        if len(themes_list) is 0:
+            themes_list = [
+                {"theme_name": "none", "theme_title": u"無" }
+            ]
         self.context["themes_list"] = themes_list
 
     @route_with("/admin/setup_save")
@@ -113,9 +118,7 @@ class BackendUiMaterial(Controller):
         except:
             self.context["backend_title"] = u"網站後台"
         self.context["backend_version"] = backend_version
-        # namespace_manager.set_namespace("shared.information")
-        # self.context["information"] = WebInformationModel.get_by_name(self.host_info.host)
-        # namespace_manager.set_namespace(self.host_info.namespace)
+        self.context["information"] = self.host_info
 
     @route_with("/admin/aa")
     def admin_aa(self):
@@ -145,7 +148,7 @@ class BackendUiMaterial(Controller):
         }
         if self.request.method != "POST":
             return
-        from plugins.application_user import get_user, has_record, application_user_init
+        from plugins.application_user import get_user, has_record
         input_account = self.params.get_string("account")
         input_password = self.params.get_string("password")
         application_user = get_user(input_account, input_password)
@@ -269,6 +272,10 @@ class BackendUiMaterial(Controller):
         self.context["first_link"] = 'size=%s&log_level=%s' % (size, log_level)
         self.context["next_link"] = next_link
         self.context["this_link"] = 'size=%s&offset=%s' % (size, current_offset)
+
+    @route_with('/admin/backend_ui_material/set_domain')
+    def admin_set_domain(self):
+        return "aaa"
 
     @route_with('/admin/backend_ui_material/plugins_check')
     def admin_plugins_check(self):
