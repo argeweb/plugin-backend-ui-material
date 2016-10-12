@@ -229,7 +229,8 @@ $(function(){
     }
 
     $(document).on('click', function(e){
-        backend.close_msg_nav();
+        backend.ui.closeSearchBox();
+        backend.ui.closeMessageBox();
     }).on("click", ".record_item td", function(e){
         if (e.target.outerHTML.indexOf('switch-toggle') > 0 || e.target.outerHTML.indexOf('input') > 0){
             return;

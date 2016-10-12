@@ -435,6 +435,45 @@ div.search-bar {
     -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.07), 0 2px 1px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.06);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.07), 0 2px 1px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.06);
 }
+div.search-bar input{
+    background: transparent;
+    border: 0;
+    color: rgba(42, 84, 121, 0.9);
+    padding: 10px;
+    outline: none;
+}
+div.search-bar i{
+    background: transparent;
+    border: 0;
+    color: rgba(42, 84, 121, 0.9);
+    outline: none;
+    height: 38px;
+    line-height: 39px;
+    width: 32px;
+    padding-left: 8px;
+}
+
+div.search-bar input {
+    width: 100%;
+}
+div.search-bar.on input, div.search-bar.on i{
+    background: #fff;
+    border: 0;
+    color: #222;
+}
+div.page-overlay {
+    display: none;
+}
+div.page-overlay.on{
+    position: absolute;
+    top: 56px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .2);
+    z-index: 9;
+    display: block;
+}
 @media only screen and (max-width: 992px) {
     .slimScrollDiv, .slimScroll {
         width: 280px !important;

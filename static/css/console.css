@@ -277,7 +277,7 @@ body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-col
 }
 .menu-box.in {
     position: relative;
-    z-index: 999;
+    z-index: 8;
     top: 0;
 }
 .menu-back{

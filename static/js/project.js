@@ -29,6 +29,7 @@
 	function updateViewsForKeyboard() {
         is_focus = $("input").is(":focus") == true;
 		if (is_keyboard && is_focus) {
+			console.log("here ?");
 			$("body").addClass("has-keyboard");
 		} else {
 			$("body").removeClass("has-keyboard");

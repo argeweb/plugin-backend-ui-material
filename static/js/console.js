@@ -18,6 +18,7 @@ function affix(pos){
 
 var message = {
     "list": [],
+    "snackbarText": 1,
     "quick_show": function(msg, timeout){
         if (timeout !== undefined){
             swal({
@@ -35,7 +36,7 @@ var message = {
             alive: sec,
 			content: msg,
 			show: function () {
-				snackbarText++;
+				message.snackbarText++;
 			}
 		});
     },
@@ -244,7 +245,6 @@ var iframe = {
         //$(selector).on("load", function(){
         //});
         window.onpopstate = this.popState;
-        window["close_msg_nav"] = function(){ $("header").click(); };
         this.history = JSON.parse(localStorage.getItem('iframe.history'));
         if (this.history == null || this.history == "null") this.history = [];
         //  常用項目
@@ -434,7 +434,7 @@ var iframe = {
     }
 };
 var aside = {
-"instance": null,
+    "instance": null,
     "is_open": false,
     "last_url": null,
     "is_init": false,
@@ -564,8 +564,8 @@ var shortcut = {
             });
             switch (shortcut_key) {
                 case '/':
-                    console.log("search");
-                    break;
+                    ui.showSearchBox();
+                    return false;
                 case 'shift+/':
                     console.log("help");
                     break;
@@ -589,6 +589,13 @@ var shortcut = {
                     break;
             }
         }
+        if (scope == "input"){
+            switch (shortcut_key) {
+                case 'esc':
+                    ui.closeSearchBox();
+                    return false;
+            }
+        }
         if (jQuery.inArray(shortcut_key, ['ctrl+shift+s', 'ctrl+s', 'ctrl+r', 'ctrl+f5', 'f5', 'ctrl+p']) >-1){
             return false;
         }
@@ -610,6 +617,11 @@ var view = {
             }
         }
     }
+};
+var ui = {
+    "closeMessageBox": function(){ $("header").click(); },
+    "showSearchBox": function(){ $("#keyword").click().focus();},
+    "closeSearchBox": function(){ $(".page-overlay a").focus(); $(".page-overlay").click(); }
 };
 
 $(function(){
@@ -636,6 +648,8 @@ $(function(){
     $(".enter-view-mode").click(function(){ view.change("view")});
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
+    $(".page-overlay").click(function(){$("div.search-bar, .page-overlay").removeClass("on");});
+    $("#keyword").focus(function(){ui.closeMessageBox();$("div.search-bar, .page-overlay").addClass("on");});
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
