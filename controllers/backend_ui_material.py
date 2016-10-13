@@ -90,7 +90,7 @@ class BackendUiMaterial(Controller):
         }
         if self.request.method != "POST":
             return
-        from plugins_information.application_user import get_user, has_record
+        from plugins.application_user import get_user, has_record
         input_account = self.params.get_string("account")
         input_password = self.params.get_string("password")
         application_user = get_user(input_account, input_password)
@@ -262,7 +262,7 @@ class BackendUiMaterial(Controller):
         self.host_information.namespace = namespace
         self.host_information.site_name = site_name
         self.host_information.put()
-        from plugins_information.application_user import application_user_init, has_record
+        from plugins.application_user import application_user_init, has_record
         prohibited_actions = settings.get("application_user_prohibited_actions", u"")
 
         if not has_record():
