@@ -663,12 +663,11 @@ $(function(){
         }else{
             event.stopPropagation();
             event.preventDefault();
-            $(target_id).animate({"left": 0}, function(){
-                //$(this).css({"position": "relative", "top": "0"});
-                $(target_id).addClass("in");
-            });
             $("#main-nav").animate({"left": -300}, function(){
                 $(this).hide();
+            });
+            $(target_id).animate({"left": 0}, function(){
+                $(target_id).addClass("in");
             });
         }
     });

@@ -35,7 +35,7 @@ class BackendUiMaterial(Controller):
         self.context["now"] = datetime.datetime.now()
         self.context["dashboard_name"] = "admin"
         try:
-            self.context["backend_title"] = self.host_info.site_name
+            self.context["backend_title"] = self.host_information.site_name
             if self.context["backend_title"] is None:
                 self.context["backend_title"] = u"網站後台"
         except:
@@ -57,68 +57,13 @@ class BackendUiMaterial(Controller):
         self.context["backend_version"] = backend_version
         self.context["application_user_name"] = self.application_user.name
 
-    @route_with("/admin/setup")
-    def setup(self):
-        if self.theme != "install" and self.theme != u"install":
-            return self.abort(404)
-        self.context["server_name"] = self.server_name
-        self.context["namespace"] = self.namespace
-        themes_list = []
-        themes_dir = None
-        dirs = []
-        try:
-            themes_dir = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
-            dirs = os.listdir(themes_dir)
-        except:
-            pass
-        for dirPath in dirs:
-            if dirPath.find(".") < 0:
-                file_path = os.path.join(themes_dir, dirPath, "theme.json")
-                if os.path.exists(file_path):
-                    f = open(file_path, 'r')
-                    data = json.load(f)
-                    themes_list.append({"theme_name": dirPath, "theme_title": data["name"]})
-        if len(themes_list) is 0:
-            themes_list = [
-                {"theme_name": "none", "theme_title": u"無" }
-            ]
-        self.context["themes_list"] = themes_list
-
-    @route_with("/admin/setup_save")
-    def setup_save(self):
-        if self.theme != "install":
-            return self.abort(404)
-        namespace = self.params.get_string("name_space")
-        account_name = self.params.get_string("account_name")
-        account = self.params.get_string("account")
-        password = self.params.get_string("password")
-        site_name = self.params.get_string("site_name")
-        theme = self.params.get_string("theme")
-        if u"" in [namespace, account, password, site_name, theme]:
-            return self.redirect(u"/admin/setup?error=none")
-        self.host_info.namespace = namespace
-        self.host_info.site_name = site_name
-        self.host_info.put()
-        from plugins.application_user import application_user_init, has_record
-        prohibited_actions = settings.get("application_user_prohibited_actions", u"")
-
-        if not has_record():
-            application_user_init(account_name, account, password, prohibited_actions,
-                                 "/plugins/backend_ui_material/static/img/profile_small.jpg")
-        self.settings.set_theme(self.host_info.host, namespace, theme)
-        return self.redirect("/")
-
     @route_with("/admin/welcome")
     def admin_welcome(self):
-        try:
-            self.context["backend_title"] = self.host_info.site_name
-            if self.context["backend_title"] is None:
-                self.context["backend_title"] = u"網站後台"
-        except:
-            self.context["backend_title"] = u"網站後台"
+        self.context["backend_title"] = u"網站後台"
+        if self.host_information is not None:
+            self.context["backend_title"] = self.host_information.site_name
+            self.context["information"] = self.host_information
         self.context["backend_version"] = backend_version
-        self.context["information"] = self.host_info
 
     @route_with("/admin/aa")
     def admin_aa(self):
@@ -132,12 +77,9 @@ class BackendUiMaterial(Controller):
 
     @route_with("/admin/login")
     def login(self):
-        try:
-            self.context["backend_title"] = self.host_info.site_name
-            if self.context["backend_title"] is None:
-                self.context["backend_title"] = u"網站後台"
-        except:
-            self.context["backend_title"] = u"網站後台"
+        self.context["backend_title"] = u"網站後台"
+        if self.host_information is not None:
+            self.context["backend_title"] = self.host_information.site_name
 
     @route_with("/admin/login.json")
     @route_with("/dashboard/login.json")
@@ -148,7 +90,7 @@ class BackendUiMaterial(Controller):
         }
         if self.request.method != "POST":
             return
-        from plugins.application_user import get_user, has_record
+        from plugins_information.application_user import get_user, has_record
         input_account = self.params.get_string("account")
         input_password = self.params.get_string("password")
         application_user = get_user(input_account, input_password)
@@ -277,9 +219,62 @@ class BackendUiMaterial(Controller):
     def admin_set_domain(self):
         return "aaa"
 
+    @route_with("/admin/setup")
+    def setup(self):
+        if self.theme != "install" and self.theme != u"install":
+            return self.abort(404)
+        self.context["server_name"] = self.server_name
+        self.context["namespace"] = self.namespace
+        themes_list = []
+        themes_dir = None
+        dirs = []
+        try:
+            themes_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
+            dirs = os.listdir(themes_dir)
+        except:
+            pass
+        for dirPath in dirs:
+            if dirPath.find(".") < 0:
+                file_path = os.path.join(themes_dir, dirPath, "theme.json")
+                if os.path.exists(file_path):
+                    f = open(file_path, 'r')
+                    data = json.load(f)
+                    themes_list.append({"theme_name": dirPath, "theme_title": data["name"]})
+        if len(themes_list) is 0:
+            themes_list = [
+                {"theme_name": "none", "theme_title": u"無" }
+            ]
+        self.context["themes_list"] = themes_list
+
+    @route_with("/admin/setup_save")
+    def setup_save(self):
+        if self.theme != "install":
+            return self.abort(404)
+        theme = self.params.get_string("theme")
+        account = self.params.get_string("account")
+        password = self.params.get_string("password")
+        site_name = self.params.get_string("site_name")
+        namespace = self.params.get_string("name_space")
+        account_name = self.params.get_string("account_name")
+        if u"" in [namespace, account, password, site_name, theme]:
+            return self.redirect(u"/admin/setup?error=none")
+        self.host_information.namespace = namespace
+        self.host_information.site_name = site_name
+        self.host_information.put()
+        from plugins_information.application_user import application_user_init, has_record
+        prohibited_actions = settings.get("application_user_prohibited_actions", u"")
+
+        if not has_record():
+            application_user_init(account_name, account, password, prohibited_actions,
+                                 "/plugins/backend_ui_material/static/img/profile_small.jpg")
+        self.settings.set_theme(self.host_information.host, namespace, theme)
+        return self.redirect("/")
+
     @route_with('/admin/backend_ui_material/plugins_check')
     def admin_plugins_check(self):
         self.meta.change_view('jsonp')
         self.context['data'] = {
             'status': "enable"
         }
+

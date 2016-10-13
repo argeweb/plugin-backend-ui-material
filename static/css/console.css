@@ -126,19 +126,29 @@ body.anonymous .btn-flat.btn-brand {
     height: 100%;
 }
 .scrollDiv {
-    height: calc(100% - 238px);
+    height: calc(100% - 161px);
     overflow: hidden;
     padding-right: 0;
     margin-top: 0;
     width: calc(100% + 4px);
 }
 .scrollDiv.on {
-    height: calc(100% - 238px);
+    height: calc(100% - 161px);
     overflow-y: scroll;
     overflow-x: hidden;
     overflow-scrolling: touch;
 }
-
+.menu-content .scrollDiv{
+    position: relative;
+}
+#main-nav{
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.scrollDiv.on #main-nav{
+    width: calc(100% + 5px);
+}
 .scrollDiv::-webkit-scrollbar {
     width: 0;
 }
@@ -222,6 +232,12 @@ body.in-edit-mode .edit-mode, body.in-view-mode .view-mode, body.in-delete-mode 
     padding: 3px 10px;
     box-shadow: none !important;
 }
+.btn-group.op-mode .btn+.btn{
+    border-left: solid 1px #e8e8e8;
+}
+.btn-group.op-mode .btn:first-child {
+    margin-left: -3px;
+}
 .btn-group.op-mode .btn:hover, .btn-group.op-mode .btn:focus, .btn-group.op-mode .btn:after {
     background: transparent !important;
     outline: none;
@@ -270,7 +286,7 @@ body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-col
 }
 .menu-box{
     position: absolute;
-    top: 252px;
+    top: 0;
     left: -300px;
     z-index: 2;
     background: #fff;
