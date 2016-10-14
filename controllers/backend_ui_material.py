@@ -270,11 +270,3 @@ class BackendUiMaterial(Controller):
                                  "/plugins/backend_ui_material/static/img/profile_small.jpg")
         self.settings.set_theme(self.host_information.host, namespace, theme)
         return self.redirect("/")
-
-    @route_with('/admin/backend_ui_material/plugins_check')
-    def admin_plugins_check(self):
-        self.meta.change_view('jsonp')
-        self.context['data'] = {
-            'status': "enable"
-        }
-
