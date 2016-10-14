@@ -7121,6 +7121,7 @@ header .fbtn-container span.icon{
 main.content{
     display: flex;flex-direction: column;
     margin-bottom: 50px;
+    height: 100%;
 }
 .record_item{
     cursor: pointer;

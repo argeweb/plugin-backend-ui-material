@@ -131,6 +131,7 @@ body.anonymous .btn-flat.btn-brand {
     padding-right: 0;
     margin-top: 0;
     width: calc(100% + 4px);
+    background: #f3f3f4;
 }
 .scrollDiv.on {
     height: calc(100% - 161px);
@@ -138,6 +139,7 @@ body.anonymous .btn-flat.btn-brand {
     overflow-x: hidden;
     overflow-scrolling: touch;
 }
+
 .menu-content .scrollDiv{
     position: relative;
 }
@@ -289,7 +291,7 @@ body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-col
     top: 0;
     left: -300px;
     z-index: 2;
-    background: #fff;
+    background: #f3f3f4;
 }
 .menu-box.in {
     position: relative;
