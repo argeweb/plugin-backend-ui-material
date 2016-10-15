@@ -3871,10 +3871,10 @@ input[type="checkbox"]:checked + .switch-toggle-red:active:after, input[type="ra
 
 .tab-nav-brand .nav > li > a:after,
 .tab-nav-brand .nav > li > .a:after {
-  border-bottom-color: #3f51b5;
+  border-bottom-color: #1a77c9;
 }
 .tab-nav-brand .tab-nav-indicator.animate {
-  background-color: #3f51b5;
+  background-color: #1a77c9;
 }
 
 .tab-nav-green .nav > li > a:after,

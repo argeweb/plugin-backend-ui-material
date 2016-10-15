@@ -8,6 +8,7 @@ var is_saving = false;
 var timeout_lock_saving = null;
 var backend = parent;
 var backToList = backend.iframe.backToList;
+var page = {};
 
 function showBackToListButton(){
     $(".backToList").show();
@@ -306,6 +307,7 @@ $(function(){
 
 //  ajax 載入時，需再執行一次
 function pageInit(new_html) {
+    page = {};
     if (new_html){
         try{
             $("body").html(new_html);
