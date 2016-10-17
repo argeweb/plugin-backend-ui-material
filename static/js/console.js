@@ -28,7 +28,7 @@ var message = {
               showConfirmButton: false
             }).done();
         }else{
-            swal(msg)
+            swal(msg).done();
         }
     },
     "quick_info": function(msg, sec){
@@ -431,6 +431,22 @@ var iframe = {
     },
     "setPageTitle": function(title){
         $(".header-page-name").text(title);
+    },
+    "search": function(keyword){
+        var url = "";
+        var current = this.last_url;
+        if (keyword != undefined && keyword != ""){
+            url = replaceParam(current, "query", keyword);
+            url = replaceParam(url, "cursor", "");
+            url = url.replace("?cursor=none", "?");
+            url = url.replace("&cursor=none", "");
+            this.load(url);
+        }
+        if (keyword == ""){
+            url = replaceParam(current, "query", "");
+            url = url.replace("query=", "");
+            this.load(url);
+        }
     }
 };
 var aside = {
@@ -621,7 +637,20 @@ var view = {
 var ui = {
     "closeMessageBox": function(){ $("header").click(); },
     "showSearchBox": function(){ $("#keyword").click().focus();},
-    "closeSearchBox": function(){ $(".page-overlay a").focus(); $(".page-overlay").click(); }
+    "closeSearchBox": function(){ $(".page-overlay a").focus(); $(".page-overlay").click(); },
+    "setUserInformation": function(name, blob_url){
+        var href = iframe.last_url;
+        if (href.indexOf('/admin/application_user/%3A') >= 0) {
+            if (href.indexOf($("body").data("user")) > 0) {
+                $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
+                $(".user-name a").text(name);
+            }
+        }
+        if (href.indexOf('/admin/application_user/profile') >= 0){
+            $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
+            $(".user-name a").text(name);
+        }
+    },
 };
 
 $(function(){
@@ -649,7 +678,12 @@ $(function(){
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
     $(".page-overlay").click(function(){$("div.search-bar, .page-overlay").removeClass("on");});
-    $("#keyword").focus(function(){ui.closeMessageBox();$("div.search-bar, .page-overlay").addClass("on");});
+    $("#keyword").focus(function(){ui.closeMessageBox();$("div.search-bar, .page-overlay").addClass("on");}).keyup(function(event){
+        if (event.which == 13) {
+            event.preventDefault();
+            iframe.search($(this).val());
+        }
+    });
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){

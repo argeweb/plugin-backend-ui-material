@@ -128,22 +128,21 @@ function create_editor(id){
     statusbar: false,
     menubar: false,
     setup : function(ed) {
-        if (typeof filepicker != 'undefined'){
-            ed.addButton('upload_image', {
-                title : '插入圖片',
-                image : '/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/themes/upload_image.png',
-                onclick : function() {
-                    var $target_editor = ed;
-                    start_filepicker($target_editor, true)
-                }
-            });
-        }
+        ed.addButton('upload_image', {
+            title : '插入圖片',
+            image : '/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/themes/upload_image.png',
+            onclick : function() {
+                var $target_editor = ed;
+                start_filepicker($target_editor, true)
+            }
+        });
 
         ed.addButton('custom_fullscreen', {
             title: '擴大編輯區',
             image : '/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/themes/fullscreen.png',
             onclick : function() {
                 ed.execCommand('mceFullScreen');
+                $(".aside-header").toggle();
             }
         });
         ed.on('init', function (e) {
@@ -270,7 +269,7 @@ $(function(){
         var val = $(this).val();
         $(this).parents(".img_selector_div").find(".img_selector_item").css("background-image", "url(" + val + ")");
         if ($(this).attr("id") == "avatar"){
-            backend.set_avatar(location.href, val);
+            backend.ui.setUserInformation($("#name").val(), val);
         }
     }).on("change", ".record_item td .btn-checkbox-json", function(){
         if ($(this).is(":checked")){
@@ -346,7 +345,7 @@ function pageInit(new_html) {
     });
 
     $(".scrollDiv").stop().animate({
-        "margin-top": scrollDiv_top
+        "margin-top": scrollDiv_top,
     }, 300).hover(function(){
         scrollDiv();
     }, function(){
@@ -355,7 +354,7 @@ function pageInit(new_html) {
         scrollDiv();
     }).mouseleave(function() {
         $(this).removeClass("on");
-    });
+    }).css({"height": "calc(100% - " + scrollDiv_top +"px)"});
     //TODO if input has val addClass control-highlight
     if (window == top) {
         return;
@@ -391,6 +390,7 @@ function pageInit(new_html) {
                 }else{
                     show_message(msg[j["response_method"]], 1800);
                 }
+                backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
                 if (j["response_method"] == "add" || j["response_method"] == "edit"){
                     backend.iframe.reload(true);
                 }

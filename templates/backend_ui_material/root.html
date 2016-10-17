@@ -85,8 +85,8 @@
 			<div class="menu-content">
 				<a class="menu-logo gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a>
 				<div class="user-box">
-					<div class="avatar"></div>
-					<div class="user-name">{{ application_user_name }}</div>
+					<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>
+					<div class="user-name"><a href="/admin/application_user/profile" target="content_iframe">{{ application_user_name }}</a></div>
 				</div>
 				<div class="page-overlay"></div>
                 <div class="btn-group op-mode">{% block op_mode %}

@@ -55,6 +55,7 @@ class BackendUiMaterial(Controller):
         self.context["controllers"] = controllers
         self.context["menus"] = menus
         self.context["backend_version"] = backend_version
+        self.context["application_user"] = self.application_user
         self.context["application_user_name"] = self.application_user.name
 
     @route_with("/admin/welcome")
@@ -267,6 +268,6 @@ class BackendUiMaterial(Controller):
 
         if not has_record():
             application_user_init(account_name, account, password, prohibited_actions,
-                                 "/plugins/backend_ui_material/static/img/profile_small.jpg")
+                                 "/plugins/backend_ui_material/static/css/images/persian.jpg")
         self.settings.set_theme(self.host_information.host, namespace, theme)
         return self.redirect("/")

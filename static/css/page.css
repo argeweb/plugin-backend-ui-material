@@ -7057,11 +7057,15 @@ header .fbtn-container span.icon{
 .nav > li > a {
     color: #a7b1c2;
     font-weight: 600;
-    padding: 5px 5px 0 0;
     line-height: 36px;
     height: 36px !important;
     max-height: 36px;
     min-height: 36px;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    box-shadow: none;
+    margin-top: 4px;
 }
 
 .scrollDiv {
@@ -7120,7 +7124,7 @@ header .fbtn-container span.icon{
 }
 main.content{
     display: flex;flex-direction: column;
-    /*margin-bottom: 50px;*/
+    /*padding-bottom: 100px;*/
     height: 100%;
     width: 100%;
 }
@@ -7774,4 +7778,10 @@ li.file-menu.active a{
     content: "/";
     position: relative;
     left: -8px;
+}
+#current_path {
+    padding-left: 11px;margin-bottom: 0;
+}
+.control-label {
+    line-height: 31px;
 }

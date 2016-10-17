@@ -32,8 +32,8 @@
         {%- set lang_class = ' '.join(lang_classes) -%}
 
         <{{container_element}} class='form-group form-group-{{ field.id }} {{ lang_class }} {% if field.errors %}has-error{% endif %}'>
-            {{ field.label(class='col-sm-3 control-label') }}
-            <div class="col-sm-8 {{ css_class_outsides }}">
+            {{ field.label(class='col-xs-3 text-right control-label') }}
+            <div class="col-xs-8 {{ css_class_outsides }}">
                 {{ field(class=css_class, **kwargs) }}
                 <p class="help-block">
                     {%- if field.description %}{{field.description}}{% endif %}
