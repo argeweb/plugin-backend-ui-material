@@ -8,13 +8,6 @@ function json(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST
 function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",cache: false,dataType:"json",data:data,async:1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(d.message):errorCallback(d.message)}})};
 function replaceParam(a,b,c){a=a.replace("#/","");var d="";var m=a.substring(0,a.indexOf("?"));var s=a.substring(a.indexOf("?"),a.length);var j=0;if(a.indexOf("?")>=0){var i=s.indexOf(b+"=");if(i>=0){j=s.indexOf("&",i);if(j>=0){d=s.substring(i+b.length+1,j);s=a.replace(b+"="+d,b+"="+c)}else{d=s.substring(i+b.length+1,s.length);s=a.replace(b+"="+d,b+"="+c)}}else{s=a+"&"+b+"="+c}}else{s=a+"?"+b+"="+c}return s};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
-function affix(pos){
-    if (pos > 0){
-        $("header").addClass("affix");
-    }else{
-        $("header").removeClass("affix").addClass("affix-top");
-    }
-}
 
 var message = {
     "list": [],
@@ -350,7 +343,6 @@ var iframe = {
         }, 25000);
         this.last_url = url;
         this.pushState(url , text, referer_page);
-        affix(0);
         iframe.instance.contentWindow.showLoading(function(){
             ajax(url, null, function(page){
                 var data = iframe.getState();

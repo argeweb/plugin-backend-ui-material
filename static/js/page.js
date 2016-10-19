@@ -130,7 +130,7 @@ function create_editor(id){
     setup : function(ed) {
         ed.addButton('upload_image', {
             title : '插入圖片',
-            image : '/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/themes/upload_image.png',
+            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
             onclick : function() {
                 var $target_editor = ed;
                 start_filepicker($target_editor, true)
@@ -139,7 +139,7 @@ function create_editor(id){
 
         ed.addButton('custom_fullscreen', {
             title: '擴大編輯區',
-            image : '/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/themes/fullscreen.png',
+            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
             onclick : function() {
                 ed.execCommand('mceFullScreen');
                 $(".aside-header").toggle();
@@ -334,9 +334,6 @@ function pageInit(new_html) {
         $("header").stop().animate({
             top: page_header_top
         }, 300);
-        if (window.name != "aside_iframe" && nav_var_top>=0){
-            backend.affix(100);
-        }
     }else{
         $("body").addClass("no-header");
     }
