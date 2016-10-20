@@ -244,7 +244,7 @@ class BackendUiMaterial(Controller):
                     themes_list.append({"theme_name": dirPath, "theme_title": data["name"]})
         if len(themes_list) is 0:
             themes_list = [
-                {"theme_name": "none", "theme_title": u"無" }
+                {"theme_name": "default", "theme_title": u"預設樣式" }
             ]
         self.context["themes_list"] = themes_list
 

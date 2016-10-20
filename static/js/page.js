@@ -119,7 +119,7 @@ function change_lang(index){
 function create_editor(id){
     var ed = tinyMCE.createEditor(id, {
     theme : 'modern',
-    content_css : ["/plugins/backend_ui_fuscata/static/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
+    content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
     height: 400,
     plugins: [
     "link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
