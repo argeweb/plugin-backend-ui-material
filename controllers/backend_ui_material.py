@@ -231,7 +231,7 @@ class BackendUiMaterial(Controller):
         dirs = []
         try:
             themes_dir = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), '..', '..', '..', 'application', 'templates', 'themes'))
+                os.path.join(os.path.dirname(__file__), '..', '..', '..', 'themes'))
             dirs = os.listdir(themes_dir)
         except:
             pass
