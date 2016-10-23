@@ -167,7 +167,7 @@ var uploader = {
     },
     "addFile": function(file, target_id, callback){
         var message_id = message.insert("info", "準備上傳", "等待中....", undefined, true);
-        json_async("/admin/web_file/get.json", null, function(data){
+        json_async("/admin/user_file/get.json", null, function(data){
             uploader.upload({
                 "message_id": message_id,
                 "upload_url": data["url"],
