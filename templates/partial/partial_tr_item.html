@@ -2,9 +2,9 @@
 {%- set list = context[scaffolding.plural] -%}
 {% for item in list -%}
     <tr id="node_{{ item.sort }}" class="record_item"
-        {% if uri_exists_with_permission(action="view") %}data-view-url="{{ uri_action_link('view', item) }}"{% endif %}
-        {% if uri_exists_with_permission(action="edit") %}data-edit-url="{{ uri_action_link('edit', item) }}"{% endif %}
-        {% if uri_exists_with_permission(action="delete") %}data-delete-url="{{ uri_action_link('delete', item) }}"{% endif %}
+        {% if uri_exists_with_permission(action="view", item=item) %}data-view-url="{{ uri_action_link('view', item) }}"{% endif %}
+        {% if uri_exists_with_permission(action="edit", item=item) %}data-edit-url="{{ uri_action_link('edit', item) }}"{% endif %}
+        {% if uri_exists_with_permission(action="delete", item=item) %}data-delete-url="{{ uri_action_link('delete', item) }}"{% endif %}
         data-id="{{ print_key(item) }}">
         <td class="text-center sorting-mode move-headline">
             {% if uri_exists_with_permission(action="sort_up") %}
