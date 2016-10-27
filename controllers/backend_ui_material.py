@@ -241,7 +241,7 @@ class BackendUiMaterial(Controller):
                 if os.path.exists(file_path):
                     f = open(file_path, 'r')
                     data = json.load(f)
-                    themes_list.append({"theme_name": dirPath, "theme_title": data["name"]})
+                    themes_list.append({"theme_name": dirPath, "theme_title": data["name"], "author": data["author"]})
         if len(themes_list) is 0:
             themes_list = [
                 {"theme_name": "default", "theme_title": u"預設樣式" }
@@ -259,7 +259,7 @@ class BackendUiMaterial(Controller):
         namespace = self.params.get_string("name_space")
         account_name = self.params.get_string("account_name")
         if u"" in [namespace, account, password, site_name, theme]:
-            return self.redirect(u"/admin/setup?error=none")
+            return self.redirect("/admin/setup?error=none")
         self.host_information.namespace = namespace
         self.host_information.site_name = site_name
         self.host_information.put()

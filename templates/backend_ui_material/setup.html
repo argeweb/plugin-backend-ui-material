@@ -166,7 +166,7 @@
                                 <div class="col-xs-10">
                                     <select class="form-control m-b required" name="theme">
                                         {% for item in themes_list %}
-                                        <option value="{{ item.theme_name }}">{{ item.theme_title }} - {{ item.theme_name }}</option>
+                                        <option value="{{ item.theme_name }}">{{ item.theme_title }} - 作者 {{ item.author }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
