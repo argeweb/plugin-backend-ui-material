@@ -9,6 +9,38 @@ function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type
 function replaceParam(a,b,c){a=a.replace("#/","");var d="";var m=a.substring(0,a.indexOf("?"));var s=a.substring(a.indexOf("?"),a.length);var j=0;if(a.indexOf("?")>=0){var i=s.indexOf(b+"=");if(i>=0){j=s.indexOf("&",i);if(j>=0){d=s.substring(i+b.length+1,j);s=a.replace(b+"="+d,b+"="+c)}else{d=s.substring(i+b.length+1,s.length);s=a.replace(b+"="+d,b+"="+c)}}else{s=a+"&"+b+"="+c}}else{s=a+"?"+b+"="+c}return s};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
 
+var progress_bar = {
+    "dom": $(".progress-bar"),
+    "set": function(n){
+        setTimeout(function(){ progress_bar.dom.width(n + "%"); }, 0);
+        if (n==100){
+            setTimeout(function(){ progress_bar.dom.width(0); }, 2500);
+        }
+    }
+};
+
+var consoleDOD = {
+    "visual_timer": 3,
+    "onDragStart": function(evt){
+        evt.preventDefault();
+        evt.stopPropagation();
+        iframe.focus();
+    },
+    "onDragEnd": function (evt){
+        evt.preventDefault();
+        evt.stopPropagation();
+    },
+    "onDragOver": function (evt){
+        evt.preventDefault();
+        evt.stopPropagation();
+        iframe.focus();
+    },
+    "onDrop": function (evt){
+        evt.preventDefault();
+        evt.stopPropagation();
+        iframe.focus();
+    }
+};
 var message = {
     "list": [],
     "snackbarText": 1,
@@ -117,14 +149,18 @@ var message = {
                 var pid = "#" + p.message_id;
                 if ($(pid).length == 0){
                     var insertHtml =
-                        '<li class="msg" id="' + p.message_id + '">' +
-                            '<div class="alert">' +
-                                '<div class="alert-tag" style="background-size: cover;"></div>' +
+                        '<a class="tile waves-attach" id="' + p.message_id + '" href="javascript:void(0)">' +
+                            '<div class="tile-side pull-left">' +
+                                '<div class="avatar avatar-sm">' +
+                                    '<div class="alert-tag" style="background-size: cover;"></div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="tile-inner text-black">' +
                                 '<span class="alert-moment"></span>' +
                                 '<span class="alert-title"></span>' +
                                 '<span class="alert-text"></span>' +
                             '</div>' +
-                        '</li>';
+                        '</a>';
                     $("#message-box").prepend(insertHtml);
                 }
                 $(pid).find(".alert-tag").html(tag).removeClass("alert-info alert-warning alert-danger alert-success")
@@ -140,6 +176,19 @@ var message = {
         }
     }
 };
+Object.defineProperty(message.list, "push", {
+    configurable: false,
+    enumerable: false, // hide from for...in
+    writable: false,
+    value: function () {
+        for (var i = 0, n = this.length, l = arguments.length; i < l; i++, n++) {
+            this[n] = arguments[i];
+            message.afterInsert(); // assign/raise your event
+        }
+        return n;
+    }
+});
+
 var uploader = {
     "init": function(){
         $(document).on('change','#image-file-picker' , function(){
@@ -166,8 +215,10 @@ var uploader = {
         });
     },
     "addFile": function(file, target_id, callback){
+        progress_bar.set(10);
         var message_id = message.insert("info", "準備上傳", "等待中....", undefined, true);
         json_async("/admin/user_file/get.json", null, function(data){
+            progress_bar.set(20);
             uploader.upload({
                 "message_id": message_id,
                 "upload_url": data["url"],
@@ -176,6 +227,7 @@ var uploader = {
                 "callback": callback
             });
         }, function(data){
+            progress_bar.set(0);
             message.change(message_id, "danger", "發生錯誤", "無法取得上傳的路徑，請稍候再試一次");
         });
     },
@@ -185,6 +237,7 @@ var uploader = {
         reader.readAsDataURL(upload_target.file);
         reader.onload = function(e){
             this.reader_info.image = this.result;
+            progress_bar.set(30);
             message.change(this.reader_info.message_id, "info", "正在上傳", "等待中....", this.reader_info.image, true);
             var fd = new FormData();
             var xhr = new XMLHttpRequest();
@@ -192,6 +245,7 @@ var uploader = {
             xhr.upload.upload_info = this.reader_info;
             xhr.open('POST', this.reader_info.upload_url);
             xhr.onload = function(data) {
+                progress_bar.set(100);
                 message.quick_info("上傳完成");
                 message.change(this.xhr_info.message_id, "success", "上傳完成", "100 %, 上傳完成", this.xhr_info.image, true);
                 if (typeof this.xhr_info.callback === "function"){
@@ -204,6 +258,7 @@ var uploader = {
             };
             xhr.onerror = function(e) {
                 message.change(this.xhr_info.message_id, "danger", "上傳失敗", "請重整頁面後再試一次", this.xhr_info.image, true);
+                progress_bar.set(0);
             };
             xhr.upload.onprogress = function (evt) {
                 if (evt.lengthComputable) {
@@ -211,7 +266,12 @@ var uploader = {
                     if(100==complete){
                         complete=99.9;
                     }
-                    message.change(this.upload_info.message_id, "info", "正在上傳", complete + ' %', this.upload_info.image, true);
+                    var the_xhr = this;
+                    setTimeout(function(){
+                        message.change(the_xhr.upload_info.message_id, "info", "正在上傳", complete + ' %', the_xhr.upload_info.image, true);
+                    }, 0);
+                    progress_bar.set(complete);
+
                 }
             };
             fd.append('file_name', this.reader_info.file.name);
