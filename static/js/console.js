@@ -19,27 +19,10 @@ var progress_bar = {
     }
 };
 
-var consoleDOD = {
-    "visual_timer": 3,
-    "onDragStart": function(evt){
-        evt.preventDefault();
-        evt.stopPropagation();
-        iframe.focus();
-    },
-    "onDragEnd": function (evt){
-        evt.preventDefault();
-        evt.stopPropagation();
-    },
-    "onDragOver": function (evt){
-        evt.preventDefault();
-        evt.stopPropagation();
-        iframe.focus();
-    },
-    "onDrop": function (evt){
-        evt.preventDefault();
-        evt.stopPropagation();
-        iframe.focus();
-    }
+var consoleDOD = function(evt){
+    evt.preventDefault();
+    evt.stopPropagation();
+    iframe.focus();
 };
 var message = {
     "list": [],
