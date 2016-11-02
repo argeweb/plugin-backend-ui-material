@@ -376,6 +376,7 @@ function pageInit(new_html) {
                 "add": "記錄已新增",
                 "edit": "記錄已儲存",
                 "profile": "資料已更新",
+                "config": "設定已變更",
                 "undefined": "未定義的訊息"
             };
             if (j["response_info"] == "success"){
