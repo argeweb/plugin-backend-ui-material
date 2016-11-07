@@ -66,11 +66,6 @@ class BackendUiMaterial(Controller):
             self.context["information"] = self.host_information
         self.context["backend_version"] = backend_version
 
-    @route_with("/admin/aa")
-    def admin_aa(self):
-        self.session["advanced_admin"] = True
-        return self.redirect("/admin")
-
     @route_with("/admin/jump_to_login")
     @route_with("/dashboard/jump_to_login")
     def jump_to_login(self):
@@ -98,7 +93,7 @@ class BackendUiMaterial(Controller):
         if application_user is None:
             if has_record():
                 return
-        self.session["application_user_key"] = application_user.key
+        self.session["application_admin_user_key"] = application_user.key
         self.context['data'] = {
             'is_login': 'true'
         }
@@ -106,8 +101,8 @@ class BackendUiMaterial(Controller):
     @route_with("/admin/logout")
     def logout(self):
         self.session["already_login"] = False
-        self.session["application_user_key"] = None
-        self.session["application_user_level"] = None
+        self.session["application_admin_user_key"] = None
+        self.session["application_admin_user_level"] = None
         return self.redirect("/admin")
 
     @route_with("/admin/record/sort.json")
