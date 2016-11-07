@@ -24,7 +24,7 @@
                 {% block form_actions %}
                 <div class="btn-group pull-right">
                     <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
-                    <a href="javascript: backToList();" class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
+                    <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
                 </div>
                 {% endblock %}
                 {% block partial_box_header %}{{s.partial_include('partial_box_header.html')}}{% endblock %}
@@ -42,7 +42,6 @@
                         {% block submit_button -%}
                         {%- endblock %}
 {#                        {% block submit_and_exit_button -%}<a class="btn submit_and_exit"><i class="icon">save</i> {% block submit_and_exit_text_f %}{% endblock %}</a>{%- endblock %}#}
-{#                        {% block cancel_button -%}<a href="javascript: backToList();" class="btn backToList"><i class="icon">close</i> {% block cancel_text %}Cancel{% endblock %}</a>{%- endblock %}#}
                     </div>
                     {%- endblock %}
                 </div>

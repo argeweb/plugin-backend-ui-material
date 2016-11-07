@@ -7,12 +7,7 @@ var dom_is_ready = false;
 var is_saving = false;
 var timeout_lock_saving = null;
 var backend = parent;
-var backToList = backend.iframe.backToList;
 var page = {};
-
-function showBackToListButton(){
-    $(".backToList").show();
-}
 
 function show_message(msg, timeout){
     backend.message.quick_show(msg, timeout);

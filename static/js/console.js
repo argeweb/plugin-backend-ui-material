@@ -345,10 +345,6 @@ var iframe = {
         });
         $(".iframe_mask").hover(iframe.focus, function(){ iframe.need_focus = false; }).mouseover(iframe.focus).mouseenter(iframe.focus).click(iframe.focus)
     },
-    "backToList": function(){
-        var data = iframe.getState(location.hash.replace("#", ""));
-        iframe.load(data.referer_page);
-    },
     "focus": function(){
         $(".iframe_mask").hide();
         iframe.need_focus = true;
@@ -365,8 +361,8 @@ var iframe = {
         iframe.need_focus = true;
         $(".iframe_mask").hide();
     },
-    "reload": function(keey_aside){
-        if (!(keey_aside && keey_aside == true)) aside.closeUi();
+    "reload": function(keep_aside){
+        if (!(keep_aside && keep_aside == true)) aside.closeUi();
         var last_page = this.getState();
         if (last_page != null) {
             iframe.load(last_page.href, last_page.text, last_page.referer_page);

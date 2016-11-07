@@ -7134,9 +7134,6 @@ main.content{
 .record_item{
     cursor: pointer;
 }
-.backToList{
-    display: none;
-}
 .dropping body{
     overflow: hidden;
 }
@@ -7788,6 +7785,9 @@ li.file-menu.active a{
 :hover ul{
     list-style: none;
 }
+#sortableListsBase{
+    cursor: -webkit-grabbing;
+}
 .swal2-modal h2 {
     font-size: 28px;
 }
@@ -7804,13 +7804,14 @@ li.file-menu.active a{
     margin-right: 0;
 }
 
-li div {
+#sTree2 li div {
     color: #fff;
 	padding:7px;
     background-color: rgba(34, 34, 34, 0.28);
+    cursor: -webkit-grab;
 }
 
-li, ul, div { border-radius: 3px; }
+#sTree2 li,#sTree2 ul,#sTree2 div { border-radius: 3px; }
 
 .c1 { color:#b5e853; }
 .c2 { color:#63c0f5; }
@@ -7858,3 +7859,17 @@ img.descPicture {
 img.descPicture.descPictureClose { width:150px; }
 
 #sTree2, #sTreePlus { margin:10px auto; }
+.float-right{float: right}
+.float-left{float: left}
+.mg-top-s-3{margin-top: -3px;}
+.sortableListsOpener{    float: left;
+    display: inline-block;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-top: -3px;
+    font-size: 22px;}
+.small-list .m-l-xs .material-icons{
+    font-size: 15px;
+    padding: 1px 0 0 0;
+    float: left;
+}
