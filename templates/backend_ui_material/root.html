@@ -92,8 +92,8 @@
                         </a>
                     </li>
                     {%- else -%}
-                        {% if item.text == "br" %}
-                            <li class="br"></li>
+                        {% if item.text == "hr" %}
+                            <li class="hr"></li>
                         {% else %}
                             <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
                         {% endif %}
@@ -110,8 +110,8 @@
                                 <a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a>
                             </li>
                             {%- for subitem in item.submenu %}
-                            {% if subitem.text == "br" %}
-                                <li class="br"></li>
+                            {% if subitem.text == "hr" %}
+                                <li class="hr"></li>
                             {% else %}
                                 {% if subitem.text == "gt" %}
                                     <li class="gt">{{ subitem.group_title }}</li>

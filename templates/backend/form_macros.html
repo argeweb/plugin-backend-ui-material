@@ -6,7 +6,6 @@
         {%- set _ = kwargs.setdefault('tabindex', 0) -%}
         {%- set css_classes = [kwargs.pop('class','form-control')] -%}
         {%- set css_classes_outsides = [] -%}
-
         {%- if field.widget.__class__.__name__ in ('TextInput', 'Select', 'Text', 'PasswordInput', 'FileInput', 'TextArea', 'EditorTextProperty') -%}
             {%- set _ = css_classes.append('field-control') -%}
         {%- endif -%}
@@ -25,11 +24,14 @@
         {%- set css_class = ' '.join(css_classes) -%}
         {%- set css_class_outsides = ' '.join(css_classes_outsides) -%}
 
-        {%- set lang_classes = [] -%}
+        {%- set container_classes = [] -%}
         {%- if field.id.find("_lang_")>0 -%}
-            {%- set _ = lang_classes.append('lang lang-' + field.id.split("_lang_")[0] + ' lang-' + field.id.split("_lang_")[1] ) -%}
+            {%- set _ = container_classes.append('lang lang-' + field.id.split("_lang_")[0] + ' lang-' + field.id.split("_lang_")[1] ) -%}
         {%- endif -%}
-        {%- set lang_class = ' '.join(lang_classes) -%}
+        {%- if field.name in scaffolding.hidden_properties_in_edit %}
+            {%- set _ = container_classes.append('hidden') -%}
+        {% endif -%}
+        {%- set lang_class = ' '.join(container_classes) -%}
 
         <{{container_element}} class='form-group form-group-{{ field.id }} {{ lang_class }} {% if field.errors %}has-error{% endif %}'>
             {{ field.label(class='col-xs-3 text-right control-label') }}

@@ -785,14 +785,14 @@ body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-col
 .touchevents .move-headline>i{
     display: none !important;
 }
-.nav li.br {
+.nav li.hr {
     height: 1px;
     background: #aaa;
     border-bottom: solid 1px #ccc;
     box-shadow: 1px 1px 2px #fefefe;
     margin: 4px 0;
 }
-.nav li ul li.br {
+.nav li ul li.hr {
     height: 1px;
     background: #aaa;
     border-bottom: solid 1px #ccc;

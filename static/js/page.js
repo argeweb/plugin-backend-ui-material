@@ -7,12 +7,7 @@ var dom_is_ready = false;
 var is_saving = false;
 var timeout_lock_saving = null;
 var backend = parent;
-var backToList = backend.iframe.backToList;
 var page = {};
-
-function showBackToListButton(){
-    $(".backToList").show();
-}
 
 function show_message(msg, timeout){
     backend.message.quick_show(msg, timeout);
@@ -376,6 +371,7 @@ function pageInit(new_html) {
                 "add": "記錄已新增",
                 "edit": "記錄已儲存",
                 "profile": "資料已更新",
+                "config": "設定已變更",
                 "undefined": "未定義的訊息"
             };
             if (j["response_info"] == "success"){
