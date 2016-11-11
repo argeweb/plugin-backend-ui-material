@@ -130,6 +130,19 @@ class BackendUiMaterial(Controller):
     def auth_redirect(self):
         self.context["auth_redirect_to"] = self.params.get_string("to")
 
+    @route_with("/sysinfo")
+    def sysinfo(self):
+        self.json({
+            "server_name": self.server_name,
+            "namespace": self.namespace,
+            "application_user": self.application_user,
+            "prohibited_actions": self.prohibited_actions,
+            "prohibited_controllers": self.prohibited_controllers,
+            "plugins": self.plugins.get_all_plugin(),
+            "site_name": self.host_information.site_name,
+            "theme": self.host_information.theme,
+        })
+
     @route_with("/admin/log")
     def admin_log(self):
         def get_logs(offset=None, log_level=1):
