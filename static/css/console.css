@@ -11,7 +11,6 @@ body:before {
     position: absolute;
     left: 0;
     top: 0;
-    background-color: #1A77C9;
 }
 .page-brand .header-transparent:before {
     background-color: #1A77C9;
@@ -35,7 +34,6 @@ body:before {
 
 .menu-content > .menu-logo:first-child {
     margin-top: 0;
-    background-color: #1A77C9;
     color: #fff;
     margin-bottom: 0;
     border-bottom: 0;
@@ -46,8 +44,8 @@ body:before {
 }
 
 .user-box {
-    margin-top: 5px;
   border: 2px solid rgba(255, 255, 255, 0.8);
+    background-size: cover;
 }
 .offline .user-box{
     border: solid 2px #9b9b9b;
@@ -106,10 +104,6 @@ main.content {
         -webkit-transform: translateX(0);
         transform: translateX(0)
     }
-}
-
-.page-brand .ui-header {
-    background-color: #1A77C9;
 }
 
 .ui-footer {
@@ -371,10 +365,6 @@ main.content {
     margin-top: 10px;
 }
 
-.btn-brand {
-    background-color: #1A77C9;
-}
-
 .btn-flat {
     background-color: transparent;
     box-shadow: none;
@@ -420,8 +410,14 @@ header .right-menu{
 header li.search-bar{
     width: calc(100% - 70px);
 }
+.header .nav > li > a, .header .nav > li > .a {
+    height: 26px;
+    min-height: 26px;
+    line-height: 34px;
+    margin-top: 5px;
+}
 div.search-bar {
-    width: 96%;
+    width: 100%;
     margin: 8px 0 8px 0;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -444,7 +440,7 @@ div.search-bar input{
 div.search-bar i{
     background: transparent;
     border: 0;
-    color: rgba(42, 84, 121, 0.9);
+    color: rgba(255, 255, 255, 0.3);
     outline: none;
     height: 38px;
     line-height: 39px;
@@ -527,8 +523,7 @@ main.content{
 }
 
 .left-search{
-    left: 226px;
-    background-color: #1A77C9;
+    left: 230px;
     color: #fff;
     border-bottom: 0;
     position: fixed;
@@ -750,15 +745,6 @@ body.in-edit-mode .edit-mode, body.in-view-mode .view-mode, body.in-delete-mode 
     color: #000 !important;
 }
 
-body.in-edit-mode .edit-color, body.in-view-mode .view-color, body.in-delete-mode .delete-color, body.in-sort-mode .sorting-color,
-body.in-edit-mode .btn:hover .edit-color, body.in-view-mode .btn:hover .view-color, body.in-delete-mode .btn:hover .delete-color, body.in-sort-mode .btn:hover .sorting-color
-{
-    color: #03a9f4 !important;
-}
-body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-delete-mode .enter-delete-mode, body.in-sort-mode .enter-sorting-mode
-{
-    background: #fff;
-}
 .btn-group.op-mode .icon-2x{
     font-size: 20px;
 }
@@ -815,14 +801,13 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
     border-bottom: solid 1px #ccc;
 }
 li.menu-back + li.gt {
-    border-top: solid 0px #ccc;
+    border-top: solid 0 #ccc;
 }
 .nav-justified>li>a {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .op-mode{
-    padding: 95px 0px 10px 5px;
-        background-color: #1A77C9;
+    padding: 95px 0 10px 10px;
 }
 .op-mode .btn .waves-wrap, .op-mode .btn .waves-wrapping{
     border-radius: 50%;
@@ -843,4 +828,43 @@ li.menu-back + li.gt {
 .w32h32{
     width: 32px;
     height: 32px;
+}
+.op-mode .btn-flat:after{
+    border-radius: 50%;
+}
+body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-delete-mode .enter-delete-mode, body.in-sort-mode .enter-sorting-mode
+{
+    background: #fff;
+}
+body.in-edit-mode .btn-flat.btn-brand, body.in-edit-mode .edit-color{
+    color: #1A77C9 !important;
+}
+body.in-edit-mode:before,body.in-edit-mode .page-brand .header-transparent:before,
+body.in-edit-mode .menu-content > .menu-logo:first-child,body.in-edit-mode.page-brand .ui-header,
+body.in-edit-mode .op-mode{
+    background-color: #1A77C9;
+}
+body.in-view-mode .btn-flat.btn-brand, body.in-view-mode .view-color{
+    color: #23c6c8 !important;
+}
+body.in-view-mode:before,body.in-view-mode .page-brand .header-transparent:before,
+body.in-view-mode .menu-content > .menu-logo:first-child,body.in-view-mode.page-brand .ui-header,
+body.in-view-mode .op-mode{
+    background-color: #23c6c8;
+}
+body.in-sort-mode .btn-flat.btn-brand, body.in-sort-mode .sort-color{
+    color: #f8ac59 !important;
+}
+body.in-sort-mode:before,body.in-sort-mode .page-brand .header-transparent:before,
+body.in-sort-mode .menu-content > .menu-logo:first-child,body.in-sort-mode.page-brand .ui-header,
+body.in-sort-mode .op-mode{
+    background-color: #f8ac59
+}
+body.in-delete-mode .btn-flat.btn-brand, body.in-delete-mode .delete-color{
+    color: #ed5565 !important;
+}
+body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:before,
+body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
+body.in-delete-mode .op-mode{
+    background-color: #ed5565;
 }

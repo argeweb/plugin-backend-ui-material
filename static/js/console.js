@@ -659,8 +659,9 @@ var view = {
             }else{
                 iframe.removeClass("in-sort-mode");
             }
+            iframe.instance.contentWindow.changeView();
             if (aside.is_open){
-                aside.instance.contentWindow.changeView();
+                aside.instance.contentWindow.changeViewAndReload();
             }
         }
     }

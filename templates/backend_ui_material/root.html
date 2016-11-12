@@ -22,7 +22,12 @@
         </ul>
         <ul class="nav nav-list pull-right right-menu">
 			<li class="dropdown">
-				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" aria-expanded="true">
+				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" href="/" target="_blank" title="檢視前台畫面">
+					<span class="w32h32"><i class="icon icon-lg">aspect_ratio</i></span>
+				</a>
+            </li>
+			<li class="dropdown">
+				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" aria-expanded="true" title="訊息">
 					<span class="w32h32"><i class="icon icon-lg">notifications</i></span>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no" style="min-width: 288px;">
@@ -43,18 +48,17 @@
 				</div>
 			</li>
             <li class="dropdown">
-                <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown">
+                <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定">
                     <span class="w32h32"><i class="icon icon-lg">more_vert</i></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right" style="top: 100%;">
-                    <li><a class="waves-attach" href="/" target="_blank"><i class="material-icons">aspect_ratio</i>&nbsp;檢視前台畫面</a></li>
                     <li><a class="waves-attach" href="javascript:iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     {% if dashboard_name == "admin" %}<li><a class="waves-attach" href="/admin/log" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>{% endif %}
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
-            <li><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></li>
+            <li><a href="/admin/application_user/profile" target="content_iframe"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>
 		</ul>
 	</header>
 	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">
@@ -67,10 +71,10 @@
 				<!--</div>-->
 				<div class="page-overlay"></div>
                 <div class="op-mode">{% block op_mode %}
-                    <a class="btn btn-flat btn-brand waves-attach enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
-                    <a class="btn btn-flat btn-brand waves-attach enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
+                    <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
+                    <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
+                    <a class="btn btn-flat btn-brand enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
+                    <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
 {#                    <span class="view-mode">檢視模式</span>#}
 {#                    <span class="edit-mode">編輯模式</span>#}
 {#                    <span class="delete-mode">刪除模式</span>#}

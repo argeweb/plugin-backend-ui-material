@@ -177,7 +177,10 @@ function hideHeader(after_hide_html, callback){
 }
 var currentView = "edit";
 function changeView(){
-    console.log(backend.view.current);
+    var view_name = backend.view.current;
+    $("body").removeClass("in-view-mode").removeClass("in-edit-mode").removeClass("in-delete-mode").removeClass("in-sort-mode").addClass("in-"+view_name+"-mode");
+}
+function changeViewAndReload(){
     if (currentView != backend.view.current){
         currentView = backend.view.current;
         if (currentView == "edit" || currentView == "view"){
