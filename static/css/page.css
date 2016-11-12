@@ -3009,10 +3009,6 @@ video {
     padding: 0 20px
 }
 
-.wrapper-content {
-    padding: 20px
-}
-
 #page-wrapper {
     padding: 0 15px;
     position: inherit;
@@ -3434,7 +3430,9 @@ code {
     clear: both;
     margin-bottom: 25px;
     margin-top: 0;
-    padding: 0
+    padding: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 .ibox.collapsed .ibox-content {
@@ -6830,16 +6828,19 @@ body.skin-3 {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f5f5f5
+    background-color: #f5f5f5;
 }
 
 ::-webkit-scrollbar {
     width: 6px;
-    background-color: #f5f5f5
+    background-image: linear-gradient( #1A77C9, #1A77C9 40px, #f5f5f5 10px, #f5f5f5 100%);
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #999
+}
+.sortable-list .table{
+    box-shadow: none;
 }
 
 .gohome {
@@ -6940,12 +6941,6 @@ body.skin-3 {
     left: auto
 }
 
-@media (min-width: 698px) {
-    .wrapper-content {
-        padding: 20px
-    }
-}
-
 #quick_info {
     position: absolute;
     top: 26px;
@@ -7018,7 +7013,6 @@ body.skin-3 {
 }
 
 #onLoad {
-    background-color: #f3f3f4;
     width: 100%;
     height: 100%;
     padding: 18% 1%;
@@ -7037,9 +7031,7 @@ body.skin-3 {
     padding-bottom: 27px;
 }
 header{
-    padding: 10px 10px 0 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.12);
-    /*display: flex;*/
+    padding: 20px 10px 0 32px;
     min-width: 360px;
 }
 header a, header a.btn, header span{
@@ -7047,12 +7039,6 @@ header a, header a.btn, header span{
 }
 header .fbtn-container span.icon{
     color: #fff;
-}
-.iframe-page header.affix,
-.iframe-page header.affix:before,
-.iframe-page header.header-transparent,
-.iframe-page header.header-transparent:before {
-    background-color: #fff !important;
 }
 .nav > li > a {
     color: #a7b1c2;
@@ -7088,7 +7074,10 @@ header .fbtn-container span.icon{
     /*margin-top: 60px;*/
 }
 .scrollDiv::-webkit-scrollbar {
+    margin-top: 10px;
     width: 0;
+    position: fixed;
+    top: 50px;
 }
 
 .scrollDiv.on::-webkit-scrollbar {
@@ -7105,7 +7094,7 @@ header .fbtn-container span.icon{
     -webkit-border-radius: 0;
     border-radius: 0;
     width: 3px;
-    background: rgba(70, 70, 70, 0.7);
+    background: transparent;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -7120,16 +7109,22 @@ header .fbtn-container span.icon{
     background: rgba(70, 70, 70, 0.3);
 }
 .ibox-content.m-b-sm.border-bottom{
-    margin:0 -10px 10px -10px;
+    margin:12px 0 10px 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 main.content{
     display: flex;flex-direction: column;
     /*padding-bottom: 100px;*/
     height: 100%;
-    width: 100%;
+    width: 97%;
+    margin-right: calc(1.5% + 5px);
+    margin-left: calc(1.5% - 5px);
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .scrollDiv.on main.content{
-    width: calc(100% + 5px);
+    width: calc(97% + 5px);
 }
 .record_item{
     cursor: pointer;
@@ -7153,7 +7148,7 @@ main.content{
     }
 }
 body{
-    background-color: #f3f3f4;
+    background-color: transparent;
 }
 .text-center{
     text-align: center;
@@ -7304,7 +7299,7 @@ body{
 .list-operations>a:first-child{
     flex: 1 0;
     border: solid 1px #fcfcfc;
-    padding: 8px 10px 8px 10px;
+    padding: 0;
     display: inline-block;
     min-width: 80px;
 }
@@ -7347,12 +7342,6 @@ height: 34px;
     margin-top: 0px;
     margin-bottom: 0px;
 }
- #onLoad {
-    background-color: #f3f3f4;
-    width: 100%;
-    height: 100%;
-    padding: 18% 31%;
- }
 .ui-state-highlight {padding: 8px; width:calc(100% - 60px); min-height: 56px; height: 56px; line-height: 56px; background-color: #1ab394; border: solid 1px #1ab394; }
 .ui-state-highlight td{background-color: #1ab394;}
 .ui-sortable-helper .sortable-hide{ display: none;}
@@ -7514,8 +7503,11 @@ height: 34px;
 .mail-box.table-responsive{
     border: 0 !important;
 }
-.bootstrap-table .table {
-    background-color: #f3f3f4;
+.bootstrap-table .table , .tableFloatingHeaderOriginal{
+    background: rgb(115, 172, 222);
+}
+.fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner{
+    color: #fff;
 }
 .table-responsive{
     box-shadow: none;
@@ -7524,7 +7516,6 @@ height: 34px;
     outline: none;
     font-size: 14px;
     font-weight: 400;
-    background-color: #f5f5f5;
     /*border: solid 1px #f00;*/
 }
 .fixed-table-container tbody td{

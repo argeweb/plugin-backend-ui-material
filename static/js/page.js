@@ -520,6 +520,7 @@ function linkClickProcess(){
 }
 // 可以排序的表格
 function makeSortTable(){
+    $("table").stickyTableHeaders({scrollableArea: $('.scrollDiv')});
     try{
         $(".sortable-list tbody").sortable({
             placeholder: "ui-state-highlight",

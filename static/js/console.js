@@ -30,7 +30,7 @@ var message = {
     "quick_show": function(msg, timeout){
         if (timeout !== undefined){
             swal({
-              title: msg,
+              title: "",
               html: msg,
               timer: timeout,
               showConfirmButton: false

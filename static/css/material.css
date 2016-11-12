@@ -739,10 +739,10 @@
   border-radius: 50%;
   color: inherit;
   display: block;
-  height: 40px;
-  line-height: 40px;
+  height: 32px;
+  line-height: 32px;
   text-align: center;
-  width: 40px;
+  width: 32px;
 }
 .avatar[href]:focus, .avatar[href]:hover {
   color: inherit;
@@ -3962,7 +3962,7 @@ input[type="checkbox"]:checked + .switch-toggle-red:active:after, input[type="ra
 
 .table-responsive {
   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06), 0 0 3px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.18);
-  margin-top: 24px;
+  margin-top: 0;
   margin-bottom: 24px;
   min-height: 0.01%;
   overflow-x: auto;
@@ -4686,7 +4686,6 @@ html.no-touchevents .tile-action-show {
 }
 
 .menu-scroll {
-  background-color: #ffffff;
   height: 100%;
   min-width: 210px;
   max-width: 85%;
@@ -4819,7 +4818,6 @@ html.no-touchevents .tile-action-show {
     margin-right: 240px;
   }
   .nav-drawer.nav-drawer-md .menu-scroll {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     -webkit-transform: none;
             transform: none;
     width: 240px;
