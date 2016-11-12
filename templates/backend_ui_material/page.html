@@ -37,6 +37,7 @@
         </div>
         <div class="scrollDiv" style="height: calc(100% - 56px);">
             <header class="header header-transparent header-waterfall affix-top animated fadeInDown print-hide" style="top: -70px">
+                {%- if scaffolding and s %}<h1>{{ s.scaffold_title(route.action) }}</h1>{% endif %}
                 {% block header %}{% endblock %}
             </header>
             <main class="content">

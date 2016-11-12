@@ -278,6 +278,7 @@ var iframe = {
         if (this.is_init) return;
         this.is_init = true;
         this.instance = $(selector).get(0);
+        this.instance.contentWindow.setBodyClass("iframe");
         //$(selector).on("load", function(){
         //});
         window.onpopstate = this.popState;
@@ -460,9 +461,6 @@ var iframe = {
             window.history.replaceState( s , s.text, "#" + s.href);
         }
     },
-    "setPageTitle": function(title){
-        $(".header-page-name").text(title);
-    },
     "search": function(keyword){
         var url = "";
         var current = this.last_url;
@@ -491,6 +489,7 @@ var aside = {
         if (this.is_init) return;
         this.is_init = true;
         this.instance = $(selector).get(0);
+        this.instance.contentWindow.setBodyClass("aside");
         $(window).resize(function(){
             $("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "52%"}, 200);
         })

@@ -300,7 +300,9 @@ $(function(){
         //remove items from localStorage
     };
 });
-
+function setBodyClass(class_name){
+    $("body").addClass(class_name);
+}
 //  ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
@@ -320,7 +322,7 @@ function pageInit(new_html) {
         scrollDiv_top = 56;
         $("body").addClass("aside");
     }else{
-        backend.iframe.setPageTitle($(".aside-header h3").text());
+        //backend.iframe.setPageTitle($(".aside-header h3").text());
     }
     $(".aside-header").stop().animate({
         top: nav_var_top

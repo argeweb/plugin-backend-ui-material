@@ -3429,11 +3429,10 @@ code {
 
 .ibox {
     clear: both;
-    margin-bottom: 25px;
-    margin-top: 0;
     padding: 0;
     border-radius: 2px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    margin: 0 5px 25px 5px;
 }
 
 .ibox.collapsed .ibox-content {
@@ -3471,6 +3470,7 @@ code {
 }
 
 .ibox-content {
+    border-radius: 2px;
     background-color: #fff;
     color: inherit;
     padding: 15px 20px 20px;
@@ -3481,7 +3481,6 @@ code {
     border-style: solid solid none;
     border-width: 1px 0;
     clear: both;
-    margin: 0 5px;
 }
 
 table.table-mail tr td {
@@ -4972,11 +4971,6 @@ table.issue-tracker tbody tr td {
     width: 42px;
     height: 42px;
     margin-bottom: 5px
-}
-
-.sortable-list {
-    padding: 10px 0;
-    margin: 0 20px;
 }
 
 .agile-list {
@@ -7031,13 +7025,23 @@ body.skin-3 {
     padding-bottom: 27px;
 }
 header{
-    padding: 18px 44px;
+    padding: 18px 25px 0 15px;
     min-width: 360px;
+    width: 97%;
+    margin: 0 1.5%;
 }
+
+header h1 {
+    display: inline-block;
+    margin: 0;
+    font-size: 18px;
+    line-height: 30px;
+}
+
 header a, header a.btn, header span{
     color: #333;
 }
-header .fbtn-container span.icon{
+header .fbtn-container span.icon, header h1{
     color: #fff;
 }
 .nav > li > a {
@@ -7112,6 +7116,7 @@ header .fbtn-container span.icon{
     margin: 12px 5px 10px 5px;
     border-radius: 2px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    z-index: 1;
 }
 main.content{
     display: flex;flex-direction: column;
@@ -7281,7 +7286,9 @@ body{
     float: left;
 }
 .sortable-list {
-    padding: 0;
+    margin: 0;
+    padding: 0 20px;
+    border: 0 !important;
 }
 .folder-list li {
     border-bottom: 1px solid #e7eaec;
@@ -7877,4 +7884,49 @@ img.descPicture.descPictureClose { width:150px; }
 }
 .in-delete-mode .bootstrap-table .table,.in-delete-mode .tableFloatingHeaderOriginal{
     background: rgb(244, 154, 163);
+}
+body.iframe:before{
+    content: '';
+    height: 100px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+body.in-edit-mode .btn-flat.btn-brand, body.in-edit-mode .edit-color{
+    color: #1A77C9 !important;
+}
+body.in-edit-mode .sk-spinner-chasing-dots .sk-dot1, body.in-edit-mode .sk-spinner-chasing-dots .sk-dot2,
+body.in-edit-mode:before,body.in-edit-mode .page-brand .header-transparent:before,
+body.in-edit-mode .menu-content > .menu-logo:first-child,body.in-edit-mode.page-brand .ui-header,
+body.in-edit-mode .op-mode{
+    background-color: #1A77C9;
+}
+body.in-view-mode .btn-flat.btn-brand, body.in-view-mode .view-color{
+    color: #23c6c8 !important;
+}
+body.in-view-mode .sk-spinner-chasing-dots .sk-dot1, body.in-view-mode .sk-spinner-chasing-dots .sk-dot2,
+body.in-view-mode:before,body.in-view-mode .page-brand .header-transparent:before,
+body.in-view-mode .menu-content > .menu-logo:first-child,body.in-view-mode.page-brand .ui-header,
+body.in-view-mode .op-mode{
+    background-color: #23c6c8;
+}
+body.in-sort-mode .btn-flat.btn-brand, body.in-sort-mode .sort-color{
+    color: #f8ac59 !important;
+}
+body.in-sort-mode .sk-spinner-chasing-dots .sk-dot1, body.in-sort-mode .sk-spinner-chasing-dots .sk-dot2,
+body.in-sort-mode:before,body.in-sort-mode .page-brand .header-transparent:before,
+body.in-sort-mode .menu-content > .menu-logo:first-child,body.in-sort-mode.page-brand .ui-header,
+body.in-sort-mode .op-mode{
+    background-color: #f8ac59
+}
+body.in-delete-mode .btn-flat.btn-brand, body.in-delete-mode .delete-color{
+    color: #ed5565 !important;
+}
+body.in-delete-mode .sk-spinner-chasing-dots .sk-dot1, body.in-delete-mode .sk-spinner-chasing-dots .sk-dot2,
+body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:before,
+body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
+body.in-delete-mode .op-mode{
+    background-color: #ed5565;
 }

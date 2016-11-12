@@ -4334,10 +4334,6 @@ html.no-touchevents .tile-action-show {
   color: inherit;
   z-index: 1;
 }
-.header .nav {
-  margin-top: 0;
-  margin-bottom: 0;
-}
 .header .nav > li > a,
 .header .nav > li > .a {
   height: 56px;

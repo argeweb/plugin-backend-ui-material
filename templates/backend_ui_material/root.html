@@ -13,13 +13,14 @@
 <body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}" style="height: 101%;"
       ondragover="consoleDOD(event)" ondrop="consoleDOD(event)" ondragenter="consoleDOD(event)" ondragleave="consoleDOD(event)">
 	<header class="header header-transparent header-waterfall ui-header">
-		<ul class="nav nav-list pull-left"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
+		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
 		<a class="header-logo {% if page_title == backend_title %}header-affix-hide{% else %}{% endif %} margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != '{{ backend_title }}' %}{{ backend_title }}{% endif %}</a>
         <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != backend_title %}．{% endif %}</a>
         <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{{ page_title }}</a>
         <ul class="nav nav-list pull-right left-search">
             <li class="search-bar"><div class="search-bar"><i class="icon icon icon-lg">search</i><input type="text" id="keyword" /></div></li>
         </ul>
+        <div class="page-overlay"></div>
         <ul class="nav nav-list pull-right right-menu">
 			<li class="dropdown">
 				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" href="/" target="_blank" title="檢視前台畫面">
@@ -65,11 +66,11 @@
 		<div class="menu-scroll">
 			<div class="menu-content">
 				<a class="menu-logo gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a>
+				<div class="page-overlay"></div>
 				<!--<div class="user-box">-->
 					<!--<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>-->
 					<!--<div class="user-name"><a href="/admin/application_user/profile" target="content_iframe">{{ application_user_name }}</a></div>-->
 				<!--</div>-->
-				<div class="page-overlay"></div>
                 <div class="op-mode">{% block op_mode %}
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
                     <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>

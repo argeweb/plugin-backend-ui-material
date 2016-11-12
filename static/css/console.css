@@ -385,16 +385,13 @@ header.header{
     height: 66px;
 }
 header .header-logo{
-    display: flex;
+    margin-top: 13px;
 }
 @media screen and (max-width: 420px){
 
     header.header{
         /*display: flex;*/
         min-width: 250px;
-    }
-    header .nav+.header-logo{
-        display: none;
     }
     header .right-menu {
         width: calc(100% - 60px) !important;
@@ -408,7 +405,7 @@ header .right-menu{
 
 /* 搜尋框  右側 60px */
 header li.search-bar{
-    width: calc(100% - 70px);
+    width: 100%;
 }
 .header .nav > li > a, .header .nav > li > .a {
     height: 26px;
@@ -461,11 +458,11 @@ div.page-overlay {
 }
 div.page-overlay.on{
     position: absolute;
-    top: 56px;
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .2);
+    background-color: rgba(0, 0, 0, .42);
     z-index: 9;
     display: block;
 }
@@ -506,7 +503,7 @@ div.page-overlay.on{
 }
 .gf-title {
     font-family: 'Jura', sans-serif;
-    z-index: 99;
+    z-index: 9;
 }
 html, body, main.content{
     height: 100%;
@@ -523,14 +520,15 @@ main.content{
 }
 
 .left-search{
-    left: 230px;
+    left: calc(210px + 1.3%);
     color: #fff;
     border-bottom: 0;
     position: fixed;
     margin: 12px 0 0 15px !important;
     font-size: 18px;
     line-height: 22px;
-    width: calc( 100% - 420px);
+    width: calc(100% - 450px);
+    z-index: 10;
 }
 body.anonymous .login-backdrop {
   opacity: .5;
@@ -832,6 +830,9 @@ li.menu-back + li.gt {
 .op-mode .btn-flat:after{
     border-radius: 50%;
 }
+.header-transparent ul.small-title {
+    margin-left: 1.5%;
+}
 body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-delete-mode .enter-delete-mode, body.in-sort-mode .enter-sorting-mode
 {
     background: #fff;
@@ -867,4 +868,14 @@ body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:b
 body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
 body.in-delete-mode .op-mode{
     background-color: #ed5565;
+}
+@media screen and (max-width: 680px) {
+    header .nav + .header-logo {
+        display: none;
+    }
+    .left-search {
+        left: 42px;
+        min-width: 125px;
+        width: calc(100% - 260px)
+    }
 }
