@@ -7893,40 +7893,42 @@ body.iframe:before{
     left: 0;
     top: 0;
 }
-
-body.in-edit-mode .btn-flat.btn-brand, body.in-edit-mode .edit-color{
+.btn.brand-bg-color.filepicker{
+    color: #fff;
+}
+body.in-edit-mode .btn-flat.btn-brand, body.in-edit-mode .edit-color, body.in-edit-mode .brand-text-color{
     color: #1A77C9 !important;
 }
 body.in-edit-mode .sk-spinner-chasing-dots .sk-dot1, body.in-edit-mode .sk-spinner-chasing-dots .sk-dot2,
 body.in-edit-mode:before,body.in-edit-mode .page-brand .header-transparent:before,
 body.in-edit-mode .menu-content > .menu-logo:first-child,body.in-edit-mode.page-brand .ui-header,
-body.in-edit-mode .op-mode{
+body.in-edit-mode .op-mode, body.in-edit-mode .brand-bg-color{
     background-color: #1A77C9;
 }
-body.in-view-mode .btn-flat.btn-brand, body.in-view-mode .view-color{
+body.in-view-mode .btn-flat.btn-brand, body.in-view-mode .view-color, body.in-view-mode .brand-text-color{
     color: #23c6c8 !important;
 }
 body.in-view-mode .sk-spinner-chasing-dots .sk-dot1, body.in-view-mode .sk-spinner-chasing-dots .sk-dot2,
 body.in-view-mode:before,body.in-view-mode .page-brand .header-transparent:before,
 body.in-view-mode .menu-content > .menu-logo:first-child,body.in-view-mode.page-brand .ui-header,
-body.in-view-mode .op-mode{
+body.in-view-mode .op-mode, body.in-view-mode .brand-bg-color{
     background-color: #23c6c8;
 }
-body.in-sort-mode .btn-flat.btn-brand, body.in-sort-mode .sort-color{
+body.in-sort-mode .btn-flat.btn-brand, body.in-sort-mode .sort-color, body.in-sort-mode .brand-text-color{
     color: #f8ac59 !important;
 }
 body.in-sort-mode .sk-spinner-chasing-dots .sk-dot1, body.in-sort-mode .sk-spinner-chasing-dots .sk-dot2,
 body.in-sort-mode:before,body.in-sort-mode .page-brand .header-transparent:before,
 body.in-sort-mode .menu-content > .menu-logo:first-child,body.in-sort-mode.page-brand .ui-header,
-body.in-sort-mode .op-mode{
+body.in-sort-mode .op-mode, body.in-sort-mode .brand-bg-color{
     background-color: #f8ac59
 }
-body.in-delete-mode .btn-flat.btn-brand, body.in-delete-mode .delete-color{
+body.in-delete-mode .btn-flat.btn-brand, body.in-delete-mode .delete-color, body.in-delete-mode .brand-text-color{
     color: #ed5565 !important;
 }
 body.in-delete-mode .sk-spinner-chasing-dots .sk-dot1, body.in-delete-mode .sk-spinner-chasing-dots .sk-dot2,
 body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:before,
 body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
-body.in-delete-mode .op-mode{
+body.in-delete-mode .op-mod, body.in-delete-mode .brand-bg-color{
     background-color: #ed5565;
 }
