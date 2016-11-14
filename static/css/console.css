@@ -827,6 +827,9 @@ li.menu-back + li.gt {
     width: 32px;
     height: 32px;
 }
+.top100-12{
+    top: calc(100% + 12px) !important;
+}
 .op-mode .btn-flat:after{
     border-radius: 50%;
 }
