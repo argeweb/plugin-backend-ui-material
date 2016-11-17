@@ -3,6 +3,7 @@
 body {
     padding-bottom: 4px;
     background-color: #f3f3f4;
+    height: 101%;
 }
 body:before {
     content: '';
@@ -11,6 +12,7 @@ body:before {
     position: absolute;
     left: 0;
     top: 0;
+    transition: background-color 1.1s ease-in-out;
 }
 .page-brand .header-transparent:before {
     background-color: #1A77C9;

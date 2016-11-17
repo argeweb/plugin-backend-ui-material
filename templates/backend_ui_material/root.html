@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
 </head>
-<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}" style="height: 101%;"
+<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}"
       ondragover="consoleDOD(event)" ondrop="consoleDOD(event)" ondragenter="consoleDOD(event)" ondragleave="consoleDOD(event)">
 	<header class="header header-transparent header-waterfall ui-header">
 		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
@@ -34,15 +34,13 @@
 				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no top100-12" style="min-width: 288px;">
 					<div class="tile">
 						<div class="tile-inner text-black">
-							<strong>Notifications</strong>
+							<strong>通知</strong>
 						</div>
 					</div>
-					<div id="message-box">
-
-					</div>
+					<div id="message-box"></div>
 					<a class="tile waves-attach" href="javascript:void(0)">
 						<div class="tile-inner text-black text-right">
-							<span>Show All</span>
+							<span>顯示全部</span>
 							<i class="icon icon-lg">navigate_next</i>
 						</div>
 					</a>
@@ -59,7 +57,7 @@
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
-            <li><a href="/admin/application_user/profile" target="content_iframe"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>
+            <li><a href="/admin/application_user/profile" target="content_iframe" title="{{ application_user_name }}"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>
 		</ul>
 	</header>
 	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">
@@ -67,19 +65,11 @@
 			<div class="menu-content">
 				<a class="menu-logo gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a>
 				<div class="page-overlay"></div>
-				<!--<div class="user-box">-->
-					<!--<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>-->
-					<!--<div class="user-name"><a href="/admin/application_user/profile" target="content_iframe">{{ application_user_name }}</a></div>-->
-				<!--</div>-->
                 <div class="op-mode">{% block op_mode %}
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
                     <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
                     <a class="btn btn-flat btn-brand enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
                     <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
-{#                    <span class="view-mode">檢視模式</span>#}
-{#                    <span class="edit-mode">編輯模式</span>#}
-{#                    <span class="delete-mode">刪除模式</span>#}
-{#                    <span class="sorting-mode">排序模式</span>#}
                 </div>
                 <div class=" scrollDiv">
 				<ul class="nav" id="main-nav">

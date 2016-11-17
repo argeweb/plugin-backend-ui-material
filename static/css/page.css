@@ -7809,21 +7809,6 @@ li.file-menu.active a{
 
 #sTree2 li,#sTree2 ul,#sTree2 div { border-radius: 3px; }
 
-.c1 { color:#b5e853; }
-.c2 { color:#63c0f5; }
-.c3 { color: #f77720; }
-.c4 { color: #888; }
-.c5 { color: #666667; }
-.c6 { color: #888; }
-
-.bgC1, .gray { background-color:#ccc; }
-.bgC2, .yellow { background-color:#ff8; }
-.bgC3, .red { background-color:#ff9999; }
-.bgC4, .blue { background-color:#aaaaff;}
-.bgC5, .green { background-color:#99ff99; }
-.bgC6, .gree2 { background-color:#bbffbb; }
-.bgC7, .brown { background-color:#c26b2b; }
-
 .pT20 { padding-top:20px; }
 
 .pV10 { padding-top:10px; padding-bottom:10px; }
