@@ -27,7 +27,7 @@
     {% endif %}
     {%- block layout_head -%}{{events.layout_head()}}{%- endblock %}
 </head>
-<body class="iframe-page action-{{ route.action }} {{ aside }} in-edit-mode"
+<body class="iframe-page {{ aside }} in-edit-mode"
       ondragover="pageDOD.onDragOver(event)" ondrop="pageDOD.onDrop(event)"
       ondragenter="pageDOD.onDragStart(event)" ondragleave="pageDOD.onDragEnd(event)">
     <div class="aside-page">

@@ -7041,9 +7041,14 @@ header h1 {
 header a, header a.btn, header span{
     color: #333;
 }
+
 header .fbtn-container span.icon, header h1{
     color: #fff;
 }
+.aside header h1{
+    display: none;
+}
+
 .nav > li > a {
     color: #a7b1c2;
     font-weight: 600;
@@ -7652,7 +7657,8 @@ body.in-delete-mode .edit-mode, body.in-delete-mode .view-mode{
     margin: 0 auto !important;
 }
 .dropdown-menu-group{
-    padding: 6px 10px; background: rgba(3, 169, 244, 0.2);
+    padding: 3px 7px !important;
+    background: rgba(3, 169, 244, 0.2);
 }
 .paging-btn{
     width: 31px;
@@ -7916,4 +7922,31 @@ body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:b
 body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
 body.in-delete-mode .op-mod, body.in-delete-mode .brand-bg-color{
     background-color: #ed5565;
+}
+.btn-group-vertical>.btn, .btn-group>.btn {
+    padding: 6px 10px 5px 9px;
+    margin-top: 1px;
+}
+.aside .header-transparent {
+    background-color: #fff;
+    width: 100%;
+    margin: 0;
+}
+.aside main.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+     padding-left: 0px;
+     padding-right: 0px;
+}
+.aside .scrollDiv.on main.content{
+    width: calc(100% + 5px);
+}
+.aside header .dropdown-menu i.icon {
+    font-size: 18px;
+    line-height: 25px;
+    height: 21px;
 }

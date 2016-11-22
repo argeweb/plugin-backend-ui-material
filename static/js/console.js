@@ -254,11 +254,10 @@ var uploader = {
                         message.change(the_xhr.upload_info.message_id, "info", "正在上傳", complete + ' %', the_xhr.upload_info.image, true);
                     }, 0);
                     progress_bar.set(complete);
-
                 }
             };
-            fd.append('file_name', this.reader_info.file.name);
-            fd.append('file_type', this.reader_info.file.type);
+            fd.append('name', this.reader_info.file.name);
+            fd.append('content_type', this.reader_info.file.type);
             fd.append('file', this.reader_info.file);
             xhr.send(fd);//開始上傳
         };
