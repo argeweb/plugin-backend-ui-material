@@ -3432,7 +3432,7 @@ code {
     padding: 0;
     border-radius: 2px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    margin: 0 5px 25px 5px;
+    margin: 0 0 25px 0;
 }
 
 .ibox.collapsed .ibox-content {
@@ -7118,7 +7118,7 @@ header .fbtn-container span.icon, header h1{
     background: rgba(70, 70, 70, 0.3);
 }
 .ibox-content.m-b-sm.border-bottom{
-    margin: 12px 5px 10px 5px;
+    margin: 12px 0 10px 0;
     border-radius: 2px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     z-index: 1;

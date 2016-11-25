@@ -224,12 +224,12 @@ class BackendUiMaterial(Controller):
         self.context["next_link"] = next_link
         self.context["this_link"] = 'size=%s&offset=%s' % (size, current_offset)
 
-    @route_with('/admin/backend_ui_material/set_domain')
+    @route
     def admin_set_domain(self):
         return "aaa"
 
-    @route_with("/admin/setup")
-    def setup(self):
+    @route
+    def admin_setup(self):
         if self.theme != "install" and self.theme != u"install":
             return self.abort(404)
         self.context["server_name"] = self.server_name
