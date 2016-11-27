@@ -228,9 +228,9 @@ class BackendUiMaterial(Controller):
     def admin_set_domain(self):
         return "aaa"
 
-    @route
-    def admin_setup(self):
-        if self.theme != "install" and self.theme != u"install":
+    @route_with("/admin/setup")
+    def setup(self):
+        if u"" + self.theme != u"install":
             return self.abort(404)
         self.context["server_name"] = self.server_name
         self.context["namespace"] = self.namespace

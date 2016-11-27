@@ -520,6 +520,7 @@ function linkClickProcess(){
                 backend.iframe.load($(this).attr("href"), t, location.pathname);
             }
             e.preventDefault();
+            e.stopPropagation();
         }
     });
 }

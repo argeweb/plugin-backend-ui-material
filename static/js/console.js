@@ -278,8 +278,6 @@ var iframe = {
         this.is_init = true;
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("iframe");
-        //$(selector).on("load", function(){
-        //});
         window.onpopstate = this.popState;
         this.history = JSON.parse(localStorage.getItem('iframe.history'));
         if (this.history == null || this.history == "null") this.history = [];
@@ -398,9 +396,6 @@ var iframe = {
                 "is_ajax": "true"
             });
         });
-        //contents.find("head").append(
-        //    $("<link/>", { rel: "stylesheet", href: '/plugins/backend_ui_material/static/css/style.min.css?v=4.1.0', type: "text/css" })
-        //);
     },
     "addClass": function(class_name){
         var contents = null;
@@ -680,7 +675,7 @@ var ui = {
             $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
             $(".user-name a").text(name);
         }
-    },
+    }
 };
 
 $(function(){
