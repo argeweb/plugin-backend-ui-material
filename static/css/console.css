@@ -87,6 +87,9 @@ main.content {
 }
 
 @media only screen and (min-width: 992px) {
+    header .header-logo{
+        display: none;
+    }
     .menu-backdrop.in {
         display: none !important;
     }
