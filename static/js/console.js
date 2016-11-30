@@ -18,7 +18,13 @@ var progress_bar = {
         }
     }
 };
-
+var affix = function(top){
+    if (top >= 25){
+        $("header.header").addClass("affix");
+    }else{
+        $("header.header").removeClass("affix");
+    }
+}
 var consoleDOD = function(evt){
     evt.preventDefault();
     evt.stopPropagation();
@@ -372,6 +378,7 @@ var iframe = {
         return this.last_url;
     },
     "load": function(url, text, referer_page){
+        affix(0);
         if (this.loading_lock == true) return false;
         this.loading_lock = true;
         clearTimeout(this.loading_timer);

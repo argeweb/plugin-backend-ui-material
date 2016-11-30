@@ -350,7 +350,13 @@ function pageInit(new_html) {
         scrollDiv();
     }).mouseleave(function() {
         $(this).removeClass("on");
-    }).css({"height": "calc(100% - " + scrollDiv_top +"px)"});
+    }).css({
+        "height": "calc(100% - " + scrollDiv_top +"px)"
+    }).scroll(function() {
+        if (window.name == "content_iframe"){
+            backend.affix($(this).scrollTop());
+        }
+    });
     //TODO if input has val addClass control-highlight
     if (window == top) {
         return;

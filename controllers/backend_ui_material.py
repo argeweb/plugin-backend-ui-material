@@ -89,6 +89,7 @@ class BackendUiMaterial(Controller):
         from plugins.application_user import get_user, has_record
         input_account = self.params.get_string("account")
         input_password = self.params.get_string("password")
+        self.logging.info(input_account + input_password)
         application_user = get_user(input_account, input_password)
         if application_user is None:
             if has_record():

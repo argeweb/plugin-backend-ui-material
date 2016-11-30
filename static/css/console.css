@@ -7,15 +7,15 @@ body {
 }
 body:before {
     content: '';
-    height: 155px;
+    height: 60px;
     width: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    transition: background-color 1.1s ease-in-out;
+    /*transition: background-color 0.2s ease-in-out;*/
 }
 .page-brand .header-transparent:before {
-    background-color: #1A77C9;
+    background-color: transparent;
 }
 
 .ui-content-header {
@@ -28,10 +28,10 @@ body:before {
 }
 
 .page-brand .ui-content-header {
-    background-image: url(./images/bg/header.jpg);
+    /*background-image: url(./images/bg/header.jpg);*/
     background-size: 540px 320px;
     background-position: 100% 0;
-    background-color: #1e87e5;
+    /*background-color: #1e87e5;*/
 }
 
 .menu-content > .menu-logo:first-child {
@@ -41,8 +41,8 @@ body:before {
     border-bottom: 0;
     position: fixed;
     top: 0;
-    padding-top: 25px;
-    padding-bottom: 13px;
+    padding-top: 18px;
+    padding-bottom: 14px;
 }
 
 .user-box {
@@ -68,9 +68,6 @@ body:before {
 
 main.content {
     transition: all .3s ease-in-out;
-}
-.menu-scroll{
-    background: #f3f3f4;
 }
 
 @media only screen and (max-width: 479px) {
@@ -382,15 +379,15 @@ main.content {
 }
 
 .menu-content > .menu-logo:first-child {
-    width: 210px;
+    width: 215px;
 }
 
 header.header{
     min-width: 420px;
-    height: 66px;
+    height: 60px;
 }
 header .header-logo{
-    margin-top: 13px;
+    margin-top: 4px;
 }
 @media screen and (max-width: 420px){
 
@@ -399,13 +396,14 @@ header .header-logo{
         min-width: 250px;
     }
     header .right-menu {
-        width: calc(100% - 60px) !important;
+        width: calc(100% - 180px) !important;
     }
 }
 header .right-menu{
     justify-content: flex-end;
     padding-right: calc(1.5% + 18px);
-    margin-top: 20px !important;
+    margin-top: 14px !important;
+    width: 250px;
 }
 
 /* 搜尋框  右側 60px */
@@ -487,9 +485,6 @@ div.page-overlay.on{
     nav.in .menu-content > .menu-logo:first-child {
         width: 100%;
     }
-    header .right-menu{
-        width: calc(100% - 200px);
-    }
 }
 
 @media only screen and (min-width: 992px) {
@@ -518,7 +513,7 @@ body{
     overflow: hidden;
 }
 main.content{
-    padding-top: 55px;
+    padding-top: 60px;
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     position: relative
@@ -529,7 +524,7 @@ main.content{
     color: #fff;
     border-bottom: 0;
     position: fixed;
-    margin: 12px 0 0 15px !important;
+    margin: 5px 0 0 15px !important;
     font-size: 18px;
     line-height: 22px;
     width: calc(100% - 450px);
@@ -634,14 +629,14 @@ body.anonymous .btn-flat.btn-brand {
     overflow: hidden;
 }
 .scrollDiv {
-    height: calc(100% - 161px);
+    height: calc(100% - 142px);
     overflow: hidden;
     padding-right: 0;
     margin-top: 0;
     width: calc(100% + 4px);
 }
 .scrollDiv.on {
-    height: calc(100% - 161px);
+    height: calc(100% - 142px);
     overflow-y: scroll;
     overflow-x: hidden;
     overflow-scrolling: touch;
@@ -810,7 +805,7 @@ li.menu-back + li.gt {
     margin-bottom: 0;
 }
 .op-mode{
-    padding: 95px 0 10px 10px;
+    padding: 65px 0 10px 10px;
 }
 .op-mode .btn .waves-wrap, .op-mode .btn .waves-wrapping{
     border-radius: 50%;
@@ -825,7 +820,7 @@ li.menu-back + li.gt {
     width: 42px;
     font-size: 11px;
     line-height: 35px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(181, 181, 181, 0.2);
     margin: 0 0 0 5px;
 }
 .w32h32{
@@ -839,42 +834,38 @@ li.menu-back + li.gt {
     border-radius: 50%;
 }
 .header-transparent ul.small-title {
-    margin-left: 1.5%;
+    margin: 16px 0 0 1.5%;
 }
 body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-delete-mode .enter-delete-mode, body.in-sort-mode .enter-sorting-mode
 {
     background: #fff;
 }
-body.in-edit-mode .btn-flat.btn-brand, body.in-edit-mode .edit-color, body.in-edit-mode .brand-text-color{
+body.in-edit-mode .edit-color, body.in-edit-mode .brand-text-color{
     color: #1A77C9 !important;
 }
 body.in-edit-mode:before,body.in-edit-mode .page-brand .header-transparent:before,
-body.in-edit-mode .menu-content > .menu-logo:first-child,body.in-edit-mode.page-brand .ui-header,
-body.in-edit-mode .op-mode, body.in-edit-mode .brand-bg-color{
+body.in-edit-mode .menu-content > .menu-logo:first-child{
     background-color: #1A77C9;
 }
-body.in-view-mode .btn-flat.btn-brand, body.in-view-mode .view-color, body.in-view-mode .brand-text-color{
+body.in-view-mode .view-color, body.in-view-mode .brand-text-color{
     color: #23c6c8 !important;
 }
 body.in-view-mode:before,body.in-view-mode .page-brand .header-transparent:before,
-body.in-view-mode .menu-content > .menu-logo:first-child,body.in-view-mode.page-brand .ui-header,
-body.in-view-mode .op-mode, body.in-view-mode .brand-bg-color{
+body.in-view-mode .menu-content > .menu-logo:first-child{
     background-color: #23c6c8;
 }
-body.in-sort-mode .btn-flat.btn-brand, body.in-sort-mode .sort-color, body.in-sort-mode .brand-text-color{
+body.in-sort-mode .sorting-color, body.in-sort-mode .brand-text-color{
     color: #f8ac59 !important;
 }
 body.in-sort-mode:before,body.in-sort-mode .page-brand .header-transparent:before,
-body.in-sort-mode .menu-content > .menu-logo:first-child,body.in-sort-mode.page-brand .ui-header,
-body.in-sort-mode .op-mode, body.in-sort-mode .brand-bg-color{
+body.in-sort-mode .menu-content > .menu-logo:first-child{
     background-color: #f8ac59
 }
-body.in-delete-mode .btn-flat.btn-brand, body.in-delete-mode .delete-color, body.in-delete-mode .brand-text-color{
+body.in-delete-mode .delete-color, body.in-delete-mode .brand-text-color{
     color: #ed5565 !important;
 }
 body.in-delete-mode:before,body.in-delete-mode .page-brand .header-transparent:before,
-body.in-delete-mode .menu-content > .menu-logo:first-child,body.in-delete-mode.page-brand .ui-header,
-body.in-delete-mode .op-mode, body.in-delete-mode .brand-bg-color{
+body.in-delete-mode .menu-content > .menu-logo:first-child{
     background-color: #ed5565;
 }
 @media screen and (max-width: 680px) {
@@ -886,4 +877,17 @@ body.in-delete-mode .op-mode, body.in-delete-mode .brand-bg-color{
         min-width: 125px;
         width: calc(100% - 260px)
     }
+}
+header.header .page-overlay{
+    left: calc(100% - 250px);
+    background-color: rgba(15, 69, 117, 0.19);
+}
+header.header.affix{
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+}
+header.header.affix:after{
+    box-shadow: none;
+}
+.menu.in .menu-scroll {
+    background: #f3f3f4;
 }
