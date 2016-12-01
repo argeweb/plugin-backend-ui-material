@@ -6745,9 +6745,6 @@ header .fbtn-container span.icon{
 .no-header .scrollDiv, .no-header .scrollDiv.on {
     margin-top: 0;
 }
-.has-header .scrollDiv, .has-header .scrollDiv.on {
-    /*margin-top: 60px;*/
-}
 .scrollDiv::-webkit-scrollbar {
     margin-top: 10px;
     width: 0;
@@ -6791,8 +6788,8 @@ header .fbtn-container span.icon{
 }
 main.content{
     display: flex;flex-direction: column;
-    /*padding-bottom: 100px;*/
-    height: 100%;
+    padding-bottom: 100px;
+    height: 90%;
     width: 97%;
     margin-right: calc(1.5% + 5px);
     margin-left: calc(1.5% - 5px);

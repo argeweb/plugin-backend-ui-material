@@ -328,18 +328,24 @@ function pageInit(new_html) {
         top: nav_var_top
     }, 300);
     if($("header").text().trim() != ""){
-        scrollDiv_top += 60;
+        scrollDiv_top += 0;
         $("body").addClass("has-header");
         $("header").stop().animate({
             top: page_header_top
         }, 300);
     }else{
         $("body").addClass("no-header");
+        if (window.name == "content_iframe"){
+            $("header").hide();
+        }
     }
     $(".aside-close").click(function(){
         backend.aside.closeUi();
     });
 
+    if (window.name == "content_iframe"){
+        scrollDiv_top = 0;
+    }
     $(".scrollDiv").stop().animate({
         "margin-top": scrollDiv_top,
     }, 300).hover(function(){

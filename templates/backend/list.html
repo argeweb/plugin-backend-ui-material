@@ -1,6 +1,7 @@
 {%- import 'backend/macros.html' as s with context -%}
 {%- extends s.layout() -%}
 {%- block header -%}
+    {%- if scaffolding and s %}<h1>{{ s.scaffold_title(route.action) }}</h1>{% endif %}
     {%- if scaffolding %}
         {% block partial_related_area %}{{s.partial_include('partial_related_area.html')}}{% endblock %}
         {% block partial_list_area %}{{s.partial_include('partial_nav_list.html')}}{% endblock %}
