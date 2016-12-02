@@ -709,8 +709,12 @@ $(function(){
     $(".enter-view-mode").click(function(){ view.change("view")});
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
-    $(".page-overlay").click(function(){$("div.search-bar, .page-overlay").removeClass("on");});
-    $("#keyword").focus(function(){ui.closeMessageBox();$("div.search-bar, .page-overlay").addClass("on");}).keyup(function(event){
+    $(".page-overlay").click(function(){$("div.search-bar, .page-overlay").removeClass("on");$("body").removeClass("on-search");});
+    $("#keyword").focus(function(){
+        ui.closeMessageBox();
+        $("div.search-bar, .page-overlay").addClass("on");
+        $("body").addClass("on-search");
+    }).keyup(function(event){
         if (event.which == 13) {
             event.preventDefault();
             iframe.search($(this).val());
