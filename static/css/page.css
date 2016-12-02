@@ -7606,3 +7606,6 @@ body.in-delete-mode .op-mod, body.in-delete-mode .brand-bg-color{
     line-height: 25px;
     height: 21px;
 }
+.blueimp-gallery{
+    background: rgb(243, 243, 244) !important;
+}

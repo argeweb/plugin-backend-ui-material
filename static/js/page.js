@@ -503,6 +503,10 @@ function linkClickProcess(){
             });
             return;
         }
+        if ($(this).hasClass("gallery-item")) {
+            e.preventDefault();
+            return;
+        }
         // Json 操作
         if ($(this).hasClass("btn-json")) {
             e.preventDefault();
