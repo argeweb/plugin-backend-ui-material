@@ -63,8 +63,7 @@
 	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">
 		<div class="menu-scroll">
 			<div class="menu-content">
-				<a class="menu-logo gf-title anonymous-high-light" href="/{{ dashboard_name }}/"><div class="page-overlay"></div>{{ backend_title }}</a>
-				<div class="page-overlay"></div>
+				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a><div class="page-overlay"></div></div>
                 <div class="op-mode">{% block op_mode %}
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
                     <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
@@ -72,50 +71,38 @@
                     <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
                 </div>
                 <div class=" scrollDiv">
-				<ul class="nav" id="main-nav">
-                    <li class="hidden">
-                        <a class="waves-attach m collapsed" data-toggle="collapse" href="#menu_usually">常用項目
-                            <i class="icon material-icons float-icon">keyboard_arrow_right</i>
-                        </a>
-						<ul class="menu-collapse collapse" id="menu_usually"></ul>
-                    </li>
-                    {% set menu_n = 0 %}
-                    {% for item in menus -%}
-                    {%- if item.submenu -%}
-                    {% set menu_n = menu_n + 1 %}
-                    <li>
-                        <a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}">{{ item.text }}
-                            <i class="icon material-icons float-icon">keyboard_arrow_right</i>
-                        </a>
-                    </li>
-                    {%- else -%}
-                        {% if item.text == "hr" %}
-                            <li class="hr"></li>
-                        {% else %}
+                    <ul class="nav" id="main-nav">
+                        <li class="hidden">
+                            <a class="waves-attach m collapsed" data-toggle="collapse" href="#menu_usually">常用項目
+                                <i class="icon material-icons float-icon">keyboard_arrow_right</i>
+                            </a>
+                            <ul class="menu-collapse collapse" id="menu_usually"></ul>
+                        </li>
+                        {%- set menu_n = 0 -%}
+                        {% for item in menus -%}
+                        {%- if item.submenu -%}
+                        {%- set menu_n = menu_n + 1 -%}
+                            {%- if item.need_hr_parent %}<li class="hr"></li>{% endif -%}
+                            <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>
+                        {% else -%}
                             <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
-                        {% endif %}
-                    {% endif %}
-                    {%- endfor %}
-				</ul>
-                    {% set menu_n = 0 %}
-                    {% for item in menus -%}
+                        {%- endif %}
+                        {%- endfor -%}
+                    </ul>
+                    {% set menu_n = 0 -%}
+                    {%- for item in menus -%}
                     {%- if item.submenu -%}
-                    {% set menu_n = menu_n + 1 %}
+                    {%- set menu_n = menu_n + 1 -%}
                     <div class="nav menu-box"  id="menu_box_{{ menu_n }}">
 						<ul class="menu-collapse collapse in" id="menu_{{ menu_n }}">
-                            <li class="menu-back">
-                                <a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a>
-                            </li>
+                            <li class="menu-back"><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a></li>
                             {%- for subitem in item.submenu %}
-                            {% if subitem.text == "hr" %}
-                                <li class="hr"></li>
-                            {% else %}
+                                {% if subitem.need_hr %}<li class="hr"></li>{% endif %}
                                 {% if subitem.text == "gt" %}
                                     <li class="gt">{{ subitem.group_title }}</li>
                                 {% else %}
                                     <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
                                 {% endif %}
-                            {% endif %}
                             {%- endfor %}
                         </ul>
                      </div>
@@ -146,7 +133,6 @@
     <script type="text/javascript" src="/static/components/moment/min/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/static/components/push.js/push.min.js"></script>
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
-	<!--<script type="text/javascript" src="/plugins/backend_ui_material/static/js/project.min.js?run={{ framework.app_version }}"></script>-->
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/console.js?run={{ framework.app_version }}"></script>
     {% block javascritp %}{% endblock %}
 </body>
