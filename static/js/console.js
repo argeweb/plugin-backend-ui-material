@@ -558,7 +558,7 @@ function print(){
     target_window.print();
 }
 var shortcut = {
-    keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, ' +
+    keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
     'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
     timer: null,
     lock: false,
@@ -615,6 +615,9 @@ var shortcut = {
                     return false;
                 case 'shift+/':
                     console.log("help");
+                    break;
+                case 'alt+s':
+                    $("body").toggleClass("sortTag");
                     break;
                 case '`':
                     if (aside.is_open)

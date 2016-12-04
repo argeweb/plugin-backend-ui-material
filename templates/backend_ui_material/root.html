@@ -83,9 +83,9 @@
                         {%- if item.submenu -%}
                         {%- set menu_n = menu_n + 1 -%}
                             {%- if item.need_hr_parent %}<li class="hr"></li>{% endif -%}
-                            <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>
-                        {% else -%}
-                            <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe">{{ item.text }}</a></li>
+                            <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>
+                            {% else -%}
+                            <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe" data-sort="{{ item.sort }}">{{ item.text }}</a></li>
                         {%- endif %}
                         {%- endfor -%}
                     </ul>
@@ -99,9 +99,9 @@
                             {%- for subitem in item.submenu %}
                                 {% if subitem.need_hr %}<li class="hr"></li>{% endif %}
                                 {% if subitem.text == "gt" %}
-                                    <li class="gt">{{ subitem.group_title }}</li>
+                                    <li class="gt" data-sort="{{ subitem.sort }}">{{ subitem.group_title }}</li>
                                 {% else %}
-                                    <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe">{{ subitem.text }} </a></li>
+                                    <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe" data-sort="{{ subitem.sort }}">{{ subitem.text }}</a></li>
                                 {% endif %}
                             {%- endfor %}
                         </ul>
