@@ -7179,7 +7179,7 @@ height: 34px;
     padding: 0 20px;
     border: 0 !important;
 }
-.fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner{
+.fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner, .table>thead th{
     color: #fff;
 }
 .table-responsive{
@@ -7264,7 +7264,8 @@ body.in-edit-mode .edit-color, body.in-view-mode .view-color, body.in-delete-mod
 }
 body.in-view-mode .edit-mode, body.in-view-mode .delete-mode,
 body.in-edit-mode .view-mode, body.in-edit-mode .delete-mode,
-body.in-delete-mode .edit-mode, body.in-delete-mode .view-mode{
+body.in-sort-mode .view-mode,
+body.in-delete-mode .view-mode{
     display: none;
 }
 .btn-group.op-mode{
@@ -7595,8 +7596,8 @@ body.in-delete-mode .op-mod, body.in-delete-mode .brand-bg-color{
     width: 100%;
     margin-right: 0;
     margin-left: 0;
-     padding-left: 0px;
-     padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
 }
 .aside .scrollDiv.on main.content{
     width: calc(100% + 5px);
@@ -7608,4 +7609,13 @@ body.in-delete-mode .op-mod, body.in-delete-mode .brand-bg-color{
 }
 .blueimp-gallery{
     background: rgb(243, 243, 244) !important;
+}
+.w100p{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 60px;
+}
+textarea.w100p {
+    resize: vertical;
 }
