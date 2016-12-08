@@ -189,6 +189,11 @@ var uploader = {
     "pickup": function($target, ed){
         uploader.pickup_target = $target;
         uploader.pickup_target_is_editor = ed;
+        if ($target.hasClass("image")){
+            $("#image-file-picker").attr("accept", "image/*");
+        }else{
+            $("#image-file-picker").attr("accept", "*");
+        }
         $("#image-file-picker").click();
     },
     "startUpload": function(){

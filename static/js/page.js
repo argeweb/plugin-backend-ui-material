@@ -33,11 +33,11 @@ var pageDOD = {
         evt.preventDefault();
         evt.stopPropagation();
         $("html").addClass("dropping");
-        if ($(".img_selector_div, .imgs_selector_div, .field-type-rich-text-field").length == 0){
+        if ($(".file_picker_div, .imgs_selector_div, .field-type-rich-text-field").length == 0){
             $("#dropping").addClass("no_target");
         }else{
             $("#dropping").removeClass("no_target");
-            $(".img_selector_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+            $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
         }
     },
     "onDragEnd": function (evt){
@@ -51,12 +51,12 @@ var pageDOD = {
         evt.stopPropagation();
         pageDOD.visual_timer=3;
         $("html").addClass("dropping");
-        $(".img_selector_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+        $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
     },
     "removeVisualClass": function (){
         if (pageDOD.visual_timer==0){
             $("html").removeClass("dropping");
-            $(".img_selector_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
+            $(".file_picker_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
             pageDOD.visual_timer = 0;
         }else{
             pageDOD.visual_timer--;
@@ -68,7 +68,7 @@ var pageDOD = {
         evt.preventDefault();
         pageDOD.visual_timer=0;
         $("html").removeClass("dropping");
-        $(".img_selector_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
+        $(".file_picker_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
         if (files.length > 10){
             backend.message.insert("danger", "錯誤", "一次可上傳 10個文件", undefined);
             return;
@@ -95,9 +95,9 @@ var pageDOD = {
         var t = $("*[data-uploadId='" + data.target_id + "']");
         t.find("input").first().val(data.response.url).show();
         if (url == ""){
-            t.find(".img_selector_item").css("background-image", "none").addClass("img_selector_item_none");
+            t.find(".file_picker_item").css("background-image", "none").addClass("file_picker_item_none");
         }else{
-            t.find(".img_selector_item").css("background-image", "url(" + url + ")").removeClass("img_selector_item_none");
+            t.find(".file_picker_item").css("background-image", "url(" + url + ")").removeClass("file_picker_item_none");
         }
     },
     "setEditorValue": function (data){
@@ -262,9 +262,14 @@ $(function(){
                 });
             }
         }
-    }).on("change", ".img_selector_div input", function(){
+    }).on("change", ".file_picker_div input", function(){
         var val = $(this).val();
-        $(this).parents(".img_selector_div").find(".img_selector_item").css("background-image", "url(" + val + ")");
+        if ($(this).parents(".file_picker_div").hasClass("image")){
+            $(this).parents(".file_picker_div").find(".file_picker_item").css("background-image", "url(" + val + ")");
+        }else{
+            console.log(val.split(".")[1]);
+            $(this).parents(".file_picker_div").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
+        }
         if ($(this).attr("id") == "avatar"){
             backend.ui.setUserInformation($("#name").val(), val);
         }
@@ -388,16 +393,21 @@ function pageInit(new_html) {
                 "add": "記錄已新增",
                 "edit": "記錄已儲存",
                 "profile": "資料已更新",
+                "data": "資料已更新",
                 "config": "設定已變更",
                 "undefined": "未定義的訊息"
             };
+            var text = msg[j["response_method"]];
+            if (typeof text === "undefined"){
+                text = msg["undefined"];
+            }
             if (j["response_info"] == "success"){
                 if (save_with_exit){
                     save_with_exit = false;
                     setTimeout(backend.aside.closeUi(), 10);
-                    backend.message.quick_info(msg[j["response_method"]]);
+                    backend.message.quick_info(text);
                 }else{
-                    show_message(msg[j["response_method"]], 1800);
+                    show_message(text, 1800);
                 }
                 backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
                 if (j["response_method"] == "add" || j["response_method"] == "edit"){
@@ -420,7 +430,7 @@ function pageInit(new_html) {
     }
 
     $(".filepicker").click(function(){
-        start_filepicker($(this).parents(".img_selector_div").find("input"))
+        start_filepicker($(this).parents(".input-group").find("input"), false);
     });
 
     tinyMCE.editors=[];

@@ -22,34 +22,15 @@
         </ul>
         <div class="page-overlay"></div>
         <ul class="nav nav-list pull-right right-menu">
-			<li class="dropdown">
-				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" href="/" target="_blank" title="檢視前台畫面">
-					<span class="w32h32"><i class="icon icon-lg">personal_video</i></span>
-				</a>
-            </li>
-			<li class="dropdown">
-				<a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" aria-expanded="true" title="訊息">
-					<span class="w32h32"><i class="icon icon-lg">notifications</i></span>
-				</a>
+			<li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" href="/" target="_blank" title="檢視前台畫面"><span class="w32h32"><i class="icon icon-lg">personal_video</i></span></a></li>
+			<li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" aria-expanded="true" title="訊息"><span class="w32h32"><i class="icon icon-lg">notifications</i></span></a>
 				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no top100-12" style="min-width: 288px;">
-					<div class="tile">
-						<div class="tile-inner text-black">
-							<strong>通知</strong>
-						</div>
-					</div>
+					<div class="tile"><div class="tile-inner text-black"><strong>通知</strong></div></div>
 					<div id="message-box"></div>
-					<a class="tile waves-attach" href="javascript:void(0)">
-						<div class="tile-inner text-black text-right">
-							<span>顯示全部</span>
-							<i class="icon icon-lg">navigate_next</i>
-						</div>
-					</a>
+					<a class="tile waves-attach" href="javascript:void(0)"><div class="tile-inner text-black text-right"><span>顯示全部</span><i class="icon icon-lg">navigate_next</i></div></a>
 				</div>
 			</li>
-            <li class="dropdown">
-                <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定">
-                    <span class="w32h32"><i class="icon icon-lg">more_vert</i></span>
-                </a>
+            <li class="dropdown"><a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
                 <ul class="dropdown-menu dropdown-menu-right top100-12" style="top: 100%;">
                     <li><a class="waves-attach" href="javascript:iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
@@ -64,45 +45,32 @@
 		<div class="menu-scroll">
 			<div class="menu-content">
 				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a><div class="page-overlay"></div></div>
-                <div class="op-mode">{% block op_mode %}
+                <div class="op-mode">
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
                     <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
                     <a class="btn btn-flat btn-brand enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
-                    <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>{% endblock %}
+                    <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
                 </div>
                 <div class=" scrollDiv">
                     <ul class="nav" id="main-nav">
-                        <li class="hidden">
-                            <a class="waves-attach m collapsed" data-toggle="collapse" href="#menu_usually">常用項目
-                                <i class="icon material-icons float-icon">keyboard_arrow_right</i>
-                            </a>
-                            <ul class="menu-collapse collapse" id="menu_usually"></ul>
-                        </li>
-                        {%- set menu_n = 0 -%}
-                        {% for item in menus -%}
-                        {%- if item.submenu -%}
-                        {%- set menu_n = menu_n + 1 -%}
-                            {%- if item.need_hr_parent %}<li class="hr"></li>{% endif -%}
-                            <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>
-                            {% else -%}
-                            <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe" data-sort="{{ item.sort }}">{{ item.text }}</a></li>
-                        {%- endif %}
-                        {%- endfor -%}
+                        {%- set menu_n = 0 -%}{% for item in menus %}
+                        {%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}
+                        {%- if item.need_hr_parent %}
+                        <li class="hr"></li>{% endif %}
+                        <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>{% else %}
+                        <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
+                        {%- endfor %}
                     </ul>
-                    {% set menu_n = 0 -%}
-                    {%- for item in menus -%}
+                    {% set menu_n = 0 -%}{%- for item in menus -%}
                     {%- if item.submenu -%}
                     {%- set menu_n = menu_n + 1 -%}
                     <div class="nav menu-box"  id="menu_box_{{ menu_n }}">
 						<ul class="menu-collapse collapse in" id="menu_{{ menu_n }}">
                             <li class="menu-back"><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a></li>
-                            {%- for subitem in item.submenu %}
-                                {% if subitem.need_hr %}<li class="hr"></li>{% endif %}
-                                {% if subitem.text == "gt" %}
-                                    <li class="gt" data-sort="{{ subitem.sort }}">{{ subitem.group_title }}</li>
-                                {% else %}
-                                    <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe" data-sort="{{ subitem.sort }}">{{ subitem.text }}</a></li>
-                                {% endif %}
+                            {%- for subitem in item.submenu -%}{% if subitem.need_hr %}
+                            <li class="hr"></li>{% endif -%}{% if subitem.text == "gt" -%}
+                            <li class="gt" data-sort="{{ subitem.sort }}">{{ subitem.group_title }}</li>{% else %}
+                            <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe" data-sort="{{ subitem.sort }}">{{ subitem.text }}</a></li>{%- endif -%}
                             {%- endfor %}
                         </ul>
                      </div>
@@ -114,18 +82,12 @@
 	</nav>
 	<div class="page-overlay"><a href="#"></a></div>
 	<main class="content">
-        <div class="page-overlay"></div>
-        <div class="iframe_mask" style="top: 56px;bottom: 0;left: 0;right: 0;background: rgba(119, 119, 119, 0.0);position: absolute;"></div>
+        <div class="page-overlay"></div><div class="iframe_mask" style="top: 56px;bottom: 0;left: 0;right: 0;background: rgba(119, 119, 119, 0.0);position: absolute;"></div>
         <iframe name="content_iframe" id="content_iframe" width="100%" height="100%" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
 	</main>
     <iframe name="aside_iframe" id="aside_iframe" height="100%" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
-	<div class="progress" style="position: absolute;top: 0;width: 100%;height: 4px;z-index: 999;margin: 0;background: transparent;"><div class="progress-bar" style="background-color: rgba(78, 66, 70, 0.47);"><</div></div>
-	<footer class="ui-footer" style="display: none;">
-		<div class="container gf-title">
-			<p>{{ backend_title }}</p>
-		</div>
-	</footer>
-    <div style="display: none;"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
+	<div class="progress"><div class="progress-bar"><</div></div>
+    <div class="hidden"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
     <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="/static/components/sweetalert2/dist/sweetalert2.min.js"></script>

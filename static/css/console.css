@@ -935,3 +935,9 @@ body.sortTag [data-sort]::after{
 body.sortTag .menu-content .nav>li>a[data-sort]::after {
     top: 12px;
 }
+.progress{
+    position: absolute;top: 0;width: 100%;height: 4px;z-index: 999;margin: 0;background: transparent;
+}
+.progress-bar{
+    background-color: rgba(78, 66, 70, 0.47);
+}
