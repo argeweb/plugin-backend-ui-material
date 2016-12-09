@@ -5,8 +5,8 @@
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
 	<title>{{ backend_title }}</title>
-	<link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/static/components/sweetalert2/dist/sweetalert2.min.css">
+	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
 </head>
@@ -89,11 +89,11 @@
 	<div class="progress"><div class="progress-bar"><</div></div>
     <div class="hidden"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
-    <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/components/sweetalert2/dist/sweetalert2.min.js"></script>
-    <script type="text/javascript" src="/static/components/keymaster/keymaster.js"></script>
-    <script type="text/javascript" src="/static/components/moment/min/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="/static/components/push.js/push.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/sweetalert2/sweetalert2.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/keymaster/keymaster.js"></script>
+    <script type="text/javascript" src="/static/vendor/moment/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/push.js/push.min.js"></script>
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/console.js?run={{ framework.app_version }}"></script>
     {% block javascritp %}{% endblock %}

@@ -6,25 +6,25 @@
     <title>{%- block layout_head_title -%}{%- if scaffolding and s %}{{ s.scaffold_title(route.action) }}{% endif %}{%- endblock -%}</title>
     {%- if is_ajax != "true" %}
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
-	<link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/page.css?v=4.1.1&run={{ framework.app_version }}">
-    <link rel="stylesheet" href="/static/components/bootstrap-table/dist/bootstrap-table.min.css">
-    <link rel="stylesheet" href="/static/components/blueimp-gallery/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="/static/vendor/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/vendor/blueimp-gallery/blueimp-gallery.min.css">
 
-    <script type="text/javascript" src="/static/components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/components/keymaster/keymaster.js"></script>
-    <script type="text/javascript" src="/static/components/moment/min/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="/static/components/bootstrap-table/dist/bootstrap-table.min.js"></script>
-    <script type="text/javascript" src="/static/components/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js"></script>
-    <script type="text/javascript" src="/static/components/bootstrap-table/dist/extensions/cookie/bootstrap-table-cookie.min.js"></script>
-    <script type="text/javascript" src="/static/components/bootstrap-table/dist/locale/bootstrap-table-zh-TW.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/keymaster/keymaster.js"></script>
+    <script type="text/javascript" src="/static/vendor/moment/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-export.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-cookie.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-zh-TW.min.js"></script>
 
     <script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/tinymce.min.js?app_version={{ framework.app_version }}&backend_version={{ backend_version }}"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/langs/zh_TW.js"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/js/page.js?v=0.0.1&run={{ framework.app_version }}"></script>
-    <script type="text/javascript" src="/static/components/blueimp-gallery/js/jquery.blueimp-gallery.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
     {% endif %}
     {%- block layout_head -%}{{events.layout_head()}}{%- endblock %}
 </head>

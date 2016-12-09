@@ -14,5 +14,5 @@
     "push.js": "^0.0.11",
     "bootstrap-table": "^1.11.0"
 
-元件的路徑為  **/static/components/**
+元件的路徑為  **/static/vendor/**
 可以利用 core 位於 **/static/** 下的 **bower.json** 進行更新下載
