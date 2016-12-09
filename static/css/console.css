@@ -534,7 +534,7 @@ main.content{
     margin: 5px 0 0 15px !important;
     font-size: 18px;
     line-height: 22px;
-    width: calc(100% - 450px);
+    width: calc(100% - 420px - 2.6%);
     z-index: 10;
 }
 body.anonymous .login-backdrop {
@@ -799,6 +799,10 @@ li.hr + li.hr {
 }
 .menu-back{
     border-bottom: solid 1px #ccc;
+}
+body.on-search .menu-back{
+    border-bottom: solid 1px rgba(68, 62, 62, 0.69);
+    box-shadow: 1px 1px 2px #aea7a7;
 }
 .menu-back i{
     float: left;

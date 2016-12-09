@@ -6,7 +6,6 @@
 
     "bootstrap": "^3.3.7",
     "jquery": "^2.1.4",
-    "jquery-ui": "1.10.4",
     "sweetalert2": "^4.1.9",
     "tinymce": "^4.4.1",
     "codemirror": "^5.18.2",
