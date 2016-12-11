@@ -131,6 +131,7 @@ class BackendUiMaterial(Controller):
     def auth_redirect(self):
         self.context["auth_redirect_to"] = self.params.get_string("to")
 
+    @add_authorizations(auth.check_user)
     @route_with("/sysinfo")
     def sysinfo(self):
         self.json({

@@ -6855,3 +6855,7 @@ textarea.w100p {
 .file_picker_item [data-ext="html"]{
     background-color: #f0ad4e;
 }
+.sTree2 .btn.btn-flat{
+    padding: 0 4px;
+    margin: 0 4px;
+}

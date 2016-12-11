@@ -945,3 +945,6 @@ body.sortTag .menu-content .nav>li>a[data-sort]::after {
 .progress-bar{
     background-color: rgba(78, 66, 70, 0.47);
 }
+.nav li > a, .nav li > .a{
+    outline: none;
+}
