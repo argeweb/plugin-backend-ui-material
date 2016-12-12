@@ -21,7 +21,7 @@ import time
 import json
 import os
 
-backend_version = "0.0.12"
+backend_version = "0.1.12"
 
 
 class BackendUiMaterial(Controller):
@@ -32,28 +32,23 @@ class BackendUiMaterial(Controller):
     @route_with("/admin")
     @add_authorizations(auth.require_admin)
     def root(self):
-        self.context["now"] = datetime.datetime.now()
-        self.context["dashboard_name"] = "admin"
         try:
-            self.context["backend_title"] = self.host_information.site_name
-            if self.context["backend_title"] is None:
-                self.context["backend_title"] = u"網站後台"
+            backend_title = (self.host_information.site_name is None) and \
+                            self.host_information.site_name or u"網站後台"
         except:
-            self.context["backend_title"] = u"網站後台"
-        try:
-            self.context["backend_title_short"] = settings.get("application").get("short_name")
-            if self.context["backend_title_short"] is None:
-                self.context["backend_title_short"] = self.context["backend_title"][:2]
-        except:
-            self.context["backend_title_short"] = self.context["backend_title"][:2]
+            backend_title = u"網站後台"
 
-        if self.request.path.find("/admin") >= 0 and self.application_user.role.get().level >= 999:
-            menus = self.util.get_menu("backend")
-        else:
-            menus = self.util.get_menu("dashboard")
+        role = self.application_user.role.get()
+        menus = dashboard_name = "admin"
+        if self.request.path.find("/admin") >= 0:
+            dashboard_name = "admin"
+        if hasattr(role, "menu") and role.menu != u"":
+            menus = role.menu
 
+        self.context["dashboard_name"] = dashboard_name
+        self.context["backend_title"] = backend_title
         self.context["controllers"] = controllers
-        self.context["menus"] = menus
+        self.context["menus"] = self.util.get_menu(menus)
         self.context["backend_version"] = backend_version
         self.context["application_user"] = self.application_user
         self.context["application_user_name"] = self.application_user.name
@@ -144,6 +139,24 @@ class BackendUiMaterial(Controller):
             "site_name": self.host_information.site_name,
             "theme": self.host_information.theme,
         })
+
+    @route_with("/admin/record/update")
+    def admin_record_update(self):
+        self.meta.change_view("json")
+        item = self.params.get_ndb_record("item")
+        field = self.params.get_string("field")
+        content = self.params.get_string("content")
+        if item is None:
+            self.context["data"] = {
+                "info": "none"
+            }
+            return
+        if hasattr(item, field):
+            setattr(item, field, content)
+            item.put()
+        self.context["data"] = {
+            "info": "save"
+        }
 
     @route_with("/admin/log")
     def admin_log(self):
