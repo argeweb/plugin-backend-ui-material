@@ -3,12 +3,12 @@
 {# Scaffold 頁面標題 #}
 {% macro scaffold_title(action) -%}
     {%- if page_title -%}
-        {{- page_title -}}
+        {{ page_title }}
     {%- else -%}
         {%- if scaffolding -%}
-            {{- scaffolding.scaffold_title[action] -}}
+            {{ scaffolding.scaffold_title[action] }}
         {%- else -%}
-            {{- inflector.humanize(route.action) -}}
+            {{ inflector.humanize(route.action) }}
         {%- endif -%}
     {%- endif -%}
 {%- endmacro %}
@@ -16,7 +16,7 @@
 {# Scaffold 頁面描述 #}
 {% macro scaffold_description(action) -%}
     {%- if scaffolding -%}
-        {{- scaffolding.scaffold_description[action] -}}
+        {{ scaffolding.scaffold_description[action] }}
     {%- endif -%}
 {%- endmacro %}
 
@@ -24,7 +24,7 @@
 {% macro scaffold_field_name(field_name) -%}
     {%- for key,name in scaffolding.scaffold_field_name.items() -%}
         {%- if key == field_name -%}
-            {{- name -}}
+            {{ name }}
         {%- endif -%}
     {%- endfor -%}
 {%- endmacro %}
@@ -39,12 +39,12 @@
 {%- if paging -%}
 <ul class="nav nav-list margin-no pull-left paging">
     <li class="paging-btn">
-        {% if paging.previous_cursor is defined %}<a href="{{ uri(_pass_all=True, cursor=paging.previous_cursor)}}" class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_left</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_left</i></a>{% endif %}
+        {% if paging.previous_cursor is defined %}<a href="{{ uri(_pass_all=True, cursor=paging.previous_cursor) }}" class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_left</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_left</i></a>{% endif %}
     </li>
     <li class="paging-btn">
-        {% if paging.next_cursor %}<a href="{{ uri(_pass_all=True, cursor=paging.next_cursor)}}"  class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_right</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_right</i></a>{% endif %}
+        {% if paging.next_cursor %}<a href="{{ uri(_pass_all=True, cursor=paging.next_cursor) }}"  class="btn btn-white"><i class="icon icon-2x">keyboard_arrow_right</i></a>{% else %}<a><i class="icon icon-2x">keyboard_arrow_right</i></a>{% endif %}
     </li>
-    <li><span style="float: left;line-height: 36px;margin-right: 10px;"> <i class="hidden-xs">第</i> <i>{{paging.page}}</i> <i class="hidden-xs">頁</i> </span></li>
+    <li><span style="float: left;line-height: 36px;margin-right: 10px;"> <i class="hidden-xs">第</i> <i>{{ paging.page }}</i> <i class="hidden-xs">頁</i> </span></li>
 </ul>
 {%- endif %}
 {%- endmacro %}
@@ -54,8 +54,8 @@
     <div class="checkbox checkbox-success">
         <input type="checkbox" {% if item.is_enable %}checked{% endif %} id="{{ print_key(item) }}"
                class="btn-checkbox-json"
-               data-enable-url="{{ uri_action_link('set_boolean_field', item)}}?field={{ field_name }}&value=true"
-               data-disable-url="{{ uri_action_link('set_boolean_field', item)}}?field={{ field_name }}&value=false"
+               data-enable-url="{{ uri_action_link('set_boolean_field', item) }}?field={{ field_name }}&value=true"
+               data-disable-url="{{ uri_action_link('set_boolean_field', item) }}?field={{ field_name }}&value=false"
                data-enable-text="已啟用"
                data-disable-text="已停用"
         >

@@ -3,15 +3,15 @@
 {%- set item = context[scaffolding.singular] -%}
 {%- block header -%}
     {%- if scaffolding %}
-        {% block partial_related_area %}{{s.partial_include('partial_related_area_in_page.html')}}{% endblock %}
-{#        {% block partial_list_area %}{{s.partial_include('partial_nav_lang.html')}}{% endblock %}#}
+        {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
+{#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
     {%- endif %}
 {% endblock %}
 {%- block layout_content -%}
 <div class="wrapper wrapper-content">
     <div class="col-sm-12 animated fadeInUp" style="margin-bottom: 30px;">
         <div class="">
-            {% block partial_box_header %}{{s.partial_include('partial_box_header.html')}}{% endblock %}
+            {% block partial_box_header %}{{ s.partial_include('partial_box_header.html') }}{% endblock %}
         </div>
         <div class="mail-box">
             <table class='table table-striped'>
@@ -24,15 +24,15 @@
                 <tbody>
                 <tr>
                     <td>系統編號</td>
-                    <td><span class='badge' title='{{item.key.urlsafe()}}'>{{item.key.id()}}</span></td>
+                    <td><span class='badge' title='{{ item.key.urlsafe() }}'>{{ item.key.id() }}</span></td>
                 </tr>
                 {% for property in scaffolding.display_properties %}
                 <tr>
                     <td>
-                        {{s.scaffold_field_name(property)}}
+                        {{ s.scaffold_field_name(property) }}
                     </td>
                     <td>
-                        {{print_value(item[property])}}
+                        {{ print_value(item[property]) }}
                     </td>
                 </tr>
                 {% endfor %}
@@ -48,7 +48,7 @@
         {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}
             <div class="fbtn-container">
                 <div class="fbtn-inner">
-                    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{uri_action_link('edit', item)}}" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
+                    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
                 </div>
             </div>
         {%- endif -%}

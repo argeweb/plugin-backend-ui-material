@@ -3,9 +3,9 @@
 {% extends s.layout() %}
 {%- block header -%}
     {%- if scaffolding %}
-{#        {% if uri_exists_with_permission(action="add") -%}<a class="btn btn-red btn-create" href="{{uri_action_link('add') }}"><i class="icon">edit</i>{{ s.scaffold_title("add") }}</a>{%- endif -%}#}
-        {% block partial_related_area %}{{s.partial_include('partial_related_area_in_page.html')}}{% endblock %}
-{#        {% block partial_list_area %}{{s.partial_include('partial_nav_lang.html')}}{% endblock %}#}
+{#        {% if uri_exists_with_permission(action="add") -%}<a class="btn btn-red btn-create" href="{{ uri_action_link('add') }}"><i class="icon">edit</i>{{ s.scaffold_title("add") }}</a>{%- endif -%}#}
+        {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
+{#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
     {%- endif %}
 {% endblock %}
 {% block layout_content %}
@@ -13,9 +13,9 @@
     <iframe name="iframeForm" width="0" height="0" frameborder="0" seamless></iframe>
     {% block form_tag %}
     <form method="POST"
-          action="{{scaffolding.form_action|default(uri(_pass_all=True), True)}}"
+          action="{{ scaffolding.form_action|default(uri(_pass_all=True), True) }}"
           class="form-horizontal"
-          enctype="{{scaffolding.form_encoding|default('application/json', True)}}"
+          enctype="{{ scaffolding.form_encoding|default('application/json', True) }}"
           role="form" accept-charset="UTF-8"
           target="iframeForm">
         {% endblock %}
@@ -27,10 +27,10 @@
                     <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
                 </div>
                 {% endblock %}
-                {% block partial_box_header %}{{s.partial_include('partial_box_header.html')}}{% endblock %}
+                {% block partial_box_header %}{{ s.partial_include('partial_box_header.html') }}{% endblock %}
             </div>
             <div class="ibox-content">
-                {{events.before_form_fields()}}
+                {{ events.before_form_fields() }}
                 <div class="row">
                     {%- block form_fields %}
                     {%- for field in form %}
@@ -45,7 +45,7 @@
                     </div>
                     {%- endblock %}
                 </div>
-                {{events.after_form_fields()}}
+                {{ events.after_form_fields() }}
             </div>
             <input type="hidden" name="returnType" value="json" />
             <input type="hidden" name="routeAction" value="{{ route.action }}" />

@@ -26,7 +26,7 @@
     <script type="text/javascript" src="/plugins/backend_ui_material/static/js/page.js?v=0.0.1&run={{ framework.app_version }}"></script>
     <script type="text/javascript" src="/static/vendor/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
     {% endif %}
-    {%- block layout_head -%}{{events.layout_head()}}{%- endblock %}
+    {%- block layout_head -%}{{ events.layout_head() }}{%- endblock %}
 </head>
 <body class="iframe-page {{ aside }} in-edit-mode"
       ondragover="pageDOD.onDragOver(event)" ondrop="pageDOD.onDrop(event)"
@@ -42,9 +42,9 @@
             </header>
             <main class="content">
                 {%- block layout_body -%}
-                    {% block layout_before_content -%}{{events.layout_before_content() }}{%- endblock -%}
+                    {% block layout_before_content -%}{{ events.layout_before_content() }}{%- endblock -%}
                     {% block layout_content %}{%- endblock %}
-                    {% block layout_after_content -%}{{events.layout_after_content() }}{%- endblock %}
+                    {% block layout_after_content -%}{{ events.layout_after_content() }}{%- endblock %}
                 {%- endblock %}
             </main>
             {% include "backend_ui_material/flash_messages.html" with context -%}

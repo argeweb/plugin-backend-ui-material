@@ -40,7 +40,7 @@
                         <p><i class="fa fa-calendar-minus-o"></i> 到期日：{{ information.domain_expiration_date }}</p>
                         <p><i class="fa fa-money"></i> 　價格：{{ information.domain_registration_price }}</p>
                         {%- endif %}{% endif %}
-                        <a class="btn" href="{{uri_action_link('set_domain') }}" target="aside_iframe">進行網域綁定</a>
+                        <a class="btn" href="{{ uri_action_link('set_domain') }}" target="aside_iframe">進行網域綁定</a>
                     </div>
                 </div>
             </div>

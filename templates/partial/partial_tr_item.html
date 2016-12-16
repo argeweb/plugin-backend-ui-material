@@ -19,9 +19,9 @@
                     {{ s.scaffold_field_boolean(item, property) }}
                 {% else -%}
                     {%- if property.find("image") >= 0 %}
-                        <img src="{{print_value(item[property])}}" height="32" />
+                        <img src="{{ print_value(item[property]) }}" height="32" />
                     {% else -%}
-                        {{print_value(item[property])}}
+                        {{ print_value(item[property]) }}
                     {%- endif -%}
                 {%- endif -%}
             </td>
