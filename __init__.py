@@ -8,8 +8,8 @@
 
 
 plugins_helper = {
-    'title': u"Material Backend",
-    'desc': u"Material Backend",
+    'title': u'Material Backend',
+    'desc': u'Material Backend',
     'controllers': {
         'backend_ui_material': {
             'group': u'網站管理後台',

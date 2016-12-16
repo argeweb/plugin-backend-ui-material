@@ -21,15 +21,15 @@ import time
 import json
 import os
 
-backend_version = "0.1.12"
+backend_version = '0.1.12'
 
 
 class BackendUiMaterial(Controller):
     class Meta:
         components = ()
 
-    @route_with("/admin/")
-    @route_with("/admin")
+    @route_with('/admin/')
+    @route_with('/admin')
     @add_authorizations(auth.require_admin)
     def root(self):
         try:
@@ -40,9 +40,9 @@ class BackendUiMaterial(Controller):
 
         role = self.application_user.role.get()
         menus = dashboard_name = 'admin'
-        if self.request.path.find("/admin") >= 0:
+        if self.request.path.find('/admin') >= 0:
             dashboard_name = 'admin'
-        if hasattr(role, 'menu') and role.menu != u"":
+        if hasattr(role, 'menu') and role.menu != u'':
             menus = role.menu
 
         self.context['dashboard_name'] = dashboard_name
@@ -53,7 +53,7 @@ class BackendUiMaterial(Controller):
         self.context['application_user'] = self.application_user
         self.context['application_user_name'] = self.application_user.name
 
-    @route_with("/admin/welcome")
+    @route_with('/admin/welcome')
     def admin_welcome(self):
         self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
@@ -61,19 +61,19 @@ class BackendUiMaterial(Controller):
             self.context['information'] = self.host_information
         self.context['backend_version'] = backend_version
 
-    @route_with("/admin/jump_to_login")
-    @route_with("/dashboard/jump_to_login")
+    @route_with('/admin/jump_to_login')
+    @route_with('/dashboard/jump_to_login')
     def jump_to_login(self):
         pass
 
-    @route_with("/admin/login")
+    @route_with('/admin/login')
     def login(self):
         self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
             self.context['backend_title'] = self.host_information.site_name
 
-    @route_with("/admin/login.json")
-    @route_with("/dashboard/login.json")
+    @route_with('/admin/login.json')
+    @route_with('/dashboard/login.json')
     def login_json(self):
         self.meta.change_view('json')
         self.context['data'] = {
@@ -94,21 +94,21 @@ class BackendUiMaterial(Controller):
             'is_login': 'true'
         }
 
-    @route_with("/admin/logout")
+    @route_with('/admin/logout')
     def logout(self):
         self.session['already_login'] = False
         self.session['application_admin_user_key'] = None
         self.session['application_admin_user_level'] = None
-        return self.redirect("/admin")
+        return self.redirect('/admin')
 
-    @route_with("/admin/record/sort.json")
-    @route_with("/dashboard/record/sort.json")
+    @route_with('/admin/record/sort.json')
+    @route_with('/dashboard/record/sort.json')
     def record_sort(self):
         node_list = self.params.get_list("node[]")
         str_key_list = self.params.get_list("rec[]")
         sort_list = sorted(node_list, reverse=True)
         j = 0
-        s = ""
+        s = ''
         record_list = []
         for item_key in str_key_list:
             item = self.util.decode_key(item_key).get()
@@ -118,16 +118,16 @@ class BackendUiMaterial(Controller):
         ndb.put_multi(record_list)
         self.json({'action':'sort', 's': s})
 
-    @route_with("/admin/page_init")
+    @route_with('/admin/page_init')
     def admin_page_init(self):
         pass
 
-    @route_with("/auth_redirect")
+    @route_with('/auth_redirect')
     def auth_redirect(self):
         self.context['auth_redirect_to'] = self.params.get_string('to')
 
     @add_authorizations(auth.check_user)
-    @route_with("/sysinfo")
+    @route_with('/sysinfo')
     def sysinfo(self):
         self.json({
             'server_name': self.server_name,
@@ -140,7 +140,7 @@ class BackendUiMaterial(Controller):
             'theme': self.host_information.theme,
         })
 
-    @route_with("/admin/record/update")
+    @route_with('/admin/record/update')
     def admin_record_update(self):
         self.meta.change_view('json')
         item = self.params.get_ndb_record('item')
@@ -158,7 +158,7 @@ class BackendUiMaterial(Controller):
             'info': 'save'
         }
 
-    @route_with("/admin/log")
+    @route_with('/admin/log')
     def admin_log(self):
         def get_logs(offset=None, log_level=1):
             """ 依目前的時間取得記錄 """
@@ -184,14 +184,14 @@ class BackendUiMaterial(Controller):
                     log_message = log.message
                     if log.message.find('This request caused a new process to be started ') >= 0:
                         log_message = u"這個請求啟動了一個新的應用程式個體，需要加載程式，回應時間會稍久一些。"
-                    log_message = log_message.replace(u"Static file referenced by handler not found", u'找不到相對應的靜態文件檔案')
+                    log_message = log_message.replace(u'Static file referenced by handler not found', u'找不到相對應的靜態文件檔案')
                     entry_logs.append({
                         'level': log.level,
                         'type': log_message_level[log.level],
                         'message': log_message
                     })
             end_time = datetime.datetime.fromtimestamp(entry.end_time)
-            end_time_ln = self.util.localize_time(end_time).split(" ")
+            end_time_ln = self.util.localize_time(end_time).split(' ')
             return {
                 'date': end_time_ln[0],
                 'time': end_time_ln[1],
@@ -202,7 +202,7 @@ class BackendUiMaterial(Controller):
             }
 
         log_message_level = [
-            "",
+            '',
             'success',
             'warning',
             'danger',
@@ -219,7 +219,7 @@ class BackendUiMaterial(Controller):
         # Output the { size } logs.
         log = None
         log_list = []
-        next_link = u""
+        next_link = u''
         try:
             for log in islice(logs, size):
                 log_list.append(format_log_entry(log))
@@ -243,9 +243,9 @@ class BackendUiMaterial(Controller):
     def admin_set_domain(self):
         return 'aaa'
 
-    @route_with("/admin/setup")
+    @route_with('/admin/setup')
     def setup(self):
-        if u"" + self.theme != u'install':
+        if u'' + self.theme != u'install':
             return self.abort(404)
         self.context['server_name'] = self.server_name
         self.context['namespace'] = self.namespace
@@ -259,8 +259,8 @@ class BackendUiMaterial(Controller):
         except:
             pass
         for dirPath in dirs:
-            if dirPath.find(".") < 0:
-                file_path = os.path.join(themes_dir, dirPath, "theme.json")
+            if dirPath.find('.') < 0:
+                file_path = os.path.join(themes_dir, dirPath, 'theme.json')
                 if os.path.exists(file_path):
                     f = open(file_path, 'r')
                     data = json.load(f)
@@ -271,7 +271,7 @@ class BackendUiMaterial(Controller):
             ]
         self.context['themes_list'] = themes_list
 
-    @route_with("/admin/setup_save")
+    @route_with('/admin/setup_save')
     def setup_save(self):
         if self.theme != 'install':
             return self.abort(404)
@@ -281,16 +281,16 @@ class BackendUiMaterial(Controller):
         site_name = self.params.get_string('site_name')
         namespace = self.params.get_string('name_space')
         account_name = self.params.get_string('account_name')
-        if u"" in [namespace, account, password, site_name, theme]:
+        if u'' in [namespace, account, password, site_name, theme]:
             return self.redirect("/admin/setup?error=none")
         self.host_information.namespace = namespace
         self.host_information.site_name = site_name
         self.host_information.put()
         from plugins.application_user import application_user_init, has_record
-        prohibited_actions = settings.get('application_user_prohibited_actions', u"")
+        prohibited_actions = settings.get('application_user_prohibited_actions', u'')
 
         if not has_record():
             application_user_init(account_name, account, password, prohibited_actions,
-                                 "/plugins/backend_ui_material/static/css/images/persian.jpg")
+                                 '/plugins/backend_ui_material/static/css/images/persian.jpg')
         self.settings.set_theme(self.host_information.host, namespace, theme)
-        return self.redirect("/")
+        return self.redirect('/')
