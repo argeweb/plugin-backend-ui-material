@@ -34,32 +34,32 @@ class BackendUiMaterial(Controller):
     def root(self):
         try:
             backend_title = (self.host_information.site_name is None) and \
-                            self.host_information.site_name or u"網站後台"
+                            self.host_information.site_name or u'網站後台'
         except:
-            backend_title = u"網站後台"
+            backend_title = u'網站後台'
 
         role = self.application_user.role.get()
-        menus = dashboard_name = "admin"
+        menus = dashboard_name = 'admin'
         if self.request.path.find("/admin") >= 0:
-            dashboard_name = "admin"
-        if hasattr(role, "menu") and role.menu != u"":
+            dashboard_name = 'admin'
+        if hasattr(role, 'menu') and role.menu != u"":
             menus = role.menu
 
-        self.context["dashboard_name"] = dashboard_name
-        self.context["backend_title"] = backend_title
-        self.context["controllers"] = controllers
-        self.context["menus"] = self.util.get_menu(menus)
-        self.context["backend_version"] = backend_version
-        self.context["application_user"] = self.application_user
-        self.context["application_user_name"] = self.application_user.name
+        self.context['dashboard_name'] = dashboard_name
+        self.context['backend_title'] = backend_title
+        self.context['controllers'] = controllers
+        self.context['menus'] = self.util.get_menu(menus)
+        self.context['backend_version'] = backend_version
+        self.context['application_user'] = self.application_user
+        self.context['application_user_name'] = self.application_user.name
 
     @route_with("/admin/welcome")
     def admin_welcome(self):
-        self.context["backend_title"] = u"網站後台"
+        self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
-            self.context["backend_title"] = self.host_information.site_name
-            self.context["information"] = self.host_information
-        self.context["backend_version"] = backend_version
+            self.context['backend_title'] = self.host_information.site_name
+            self.context['information'] = self.host_information
+        self.context['backend_version'] = backend_version
 
     @route_with("/admin/jump_to_login")
     @route_with("/dashboard/jump_to_login")
@@ -68,9 +68,9 @@ class BackendUiMaterial(Controller):
 
     @route_with("/admin/login")
     def login(self):
-        self.context["backend_title"] = u"網站後台"
+        self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
-            self.context["backend_title"] = self.host_information.site_name
+            self.context['backend_title'] = self.host_information.site_name
 
     @route_with("/admin/login.json")
     @route_with("/dashboard/login.json")
@@ -79,26 +79,26 @@ class BackendUiMaterial(Controller):
         self.context['data'] = {
             'is_login': u'false'
         }
-        if self.request.method != "POST":
+        if self.request.method != 'POST':
             return
         from plugins.application_user import get_user, has_record
-        input_account = self.params.get_string("account")
-        input_password = self.params.get_string("password")
+        input_account = self.params.get_string('account')
+        input_password = self.params.get_string('password')
         self.logging.info(input_account + input_password)
         application_user = get_user(input_account, input_password)
         if application_user is None:
             if has_record():
                 return
-        self.session["application_admin_user_key"] = application_user.key
+        self.session['application_admin_user_key'] = application_user.key
         self.context['data'] = {
             'is_login': 'true'
         }
 
     @route_with("/admin/logout")
     def logout(self):
-        self.session["already_login"] = False
-        self.session["application_admin_user_key"] = None
-        self.session["application_admin_user_level"] = None
+        self.session['already_login'] = False
+        self.session['application_admin_user_key'] = None
+        self.session['application_admin_user_level'] = None
         return self.redirect("/admin")
 
     @route_with("/admin/record/sort.json")
@@ -116,7 +116,7 @@ class BackendUiMaterial(Controller):
             record_list.append(item)
             j += 1
         ndb.put_multi(record_list)
-        self.json({"action":"sort", "s": s})
+        self.json({'action':'sort', 's': s})
 
     @route_with("/admin/page_init")
     def admin_page_init(self):
@@ -124,38 +124,38 @@ class BackendUiMaterial(Controller):
 
     @route_with("/auth_redirect")
     def auth_redirect(self):
-        self.context["auth_redirect_to"] = self.params.get_string("to")
+        self.context['auth_redirect_to'] = self.params.get_string('to')
 
     @add_authorizations(auth.check_user)
     @route_with("/sysinfo")
     def sysinfo(self):
         self.json({
-            "server_name": self.server_name,
-            "namespace": self.namespace,
-            "application_user": self.application_user,
-            "prohibited_actions": self.prohibited_actions,
-            "prohibited_controllers": self.prohibited_controllers,
-            "plugins": self.plugins.get_all_plugin(),
-            "site_name": self.host_information.site_name,
-            "theme": self.host_information.theme,
+            'server_name': self.server_name,
+            'namespace': self.namespace,
+            'application_user': self.application_user,
+            'prohibited_actions': self.prohibited_actions,
+            'prohibited_controllers': self.prohibited_controllers,
+            'plugins': self.plugins.get_all_plugin(),
+            'site_name': self.host_information.site_name,
+            'theme': self.host_information.theme,
         })
 
     @route_with("/admin/record/update")
     def admin_record_update(self):
-        self.meta.change_view("json")
-        item = self.params.get_ndb_record("item")
-        field = self.params.get_string("field")
-        content = self.params.get_string("content")
+        self.meta.change_view('json')
+        item = self.params.get_ndb_record('item')
+        field = self.params.get_string('field')
+        content = self.params.get_string('content')
         if item is None:
-            self.context["data"] = {
-                "info": "none"
+            self.context['data'] = {
+                'info': 'none'
             }
             return
         if hasattr(item, field):
             setattr(item, field, content)
             item.put()
-        self.context["data"] = {
-            "info": "save"
+        self.context['data'] = {
+            'info': 'save'
         }
 
     @route_with("/admin/log")
@@ -184,34 +184,34 @@ class BackendUiMaterial(Controller):
                     log_message = log.message
                     if log.message.find('This request caused a new process to be started ') >= 0:
                         log_message = u"這個請求啟動了一個新的應用程式個體，需要加載程式，回應時間會稍久一些。"
-                    log_message = log_message.replace(u"Static file referenced by handler not found", u"找不到相對應的靜態文件檔案")
+                    log_message = log_message.replace(u"Static file referenced by handler not found", u'找不到相對應的靜態文件檔案')
                     entry_logs.append({
-                        "level": log.level,
-                        "type": log_message_level[log.level],
-                        "message": log_message
+                        'level': log.level,
+                        'type': log_message_level[log.level],
+                        'message': log_message
                     })
             end_time = datetime.datetime.fromtimestamp(entry.end_time)
             end_time_ln = self.util.localize_time(end_time).split(" ")
             return {
-                "date": end_time_ln[0],
-                "time": end_time_ln[1],
-                "ip": entry.ip,
-                "method": entry.method,
-                "resource": entry.resource,
-                "logs": entry_logs
+                'date': end_time_ln[0],
+                'time': end_time_ln[1],
+                'ip': entry.ip,
+                'method': entry.method,
+                'resource': entry.resource,
+                'logs': entry_logs
             }
 
         log_message_level = [
             "",
-            "success",
-            "warning",
-            "danger",
-            "danger"
+            'success',
+            'warning',
+            'danger',
+            'danger'
         ]
-        current_offset = self.params.get_string("offset")
-        offset = self.params.get_base64("offset", None)
-        log_level = self.params.get_integer("log_level", 1)
-        size = self.params.get_integer("size", 10)
+        current_offset = self.params.get_string('offset')
+        offset = self.params.get_base64('offset', None)
+        log_level = self.params.get_integer('log_level', 1)
+        size = self.params.get_integer('size', 10)
 
         # Get the logs given the specified offset.
         logs = get_logs(offset=offset, log_level=log_level)
@@ -234,21 +234,21 @@ class BackendUiMaterial(Controller):
             next_link = 'size=%s&log_level=%s&offset=%s' % (size, log_level,
                  format(self.util.encode_base64(offset)))
 
-        self.context["log_list"] = log_list
-        self.context["first_link"] = 'size=%s&log_level=%s' % (size, log_level)
-        self.context["next_link"] = next_link
-        self.context["this_link"] = 'size=%s&offset=%s' % (size, current_offset)
+        self.context['log_list'] = log_list
+        self.context['first_link'] = 'size=%s&log_level=%s' % (size, log_level)
+        self.context['next_link'] = next_link
+        self.context['this_link'] = 'size=%s&offset=%s' % (size, current_offset)
 
     @route
     def admin_set_domain(self):
-        return "aaa"
+        return 'aaa'
 
     @route_with("/admin/setup")
     def setup(self):
-        if u"" + self.theme != u"install":
+        if u"" + self.theme != u'install':
             return self.abort(404)
-        self.context["server_name"] = self.server_name
-        self.context["namespace"] = self.namespace
+        self.context['server_name'] = self.server_name
+        self.context['namespace'] = self.namespace
         themes_list = []
         themes_dir = None
         dirs = []
@@ -264,30 +264,30 @@ class BackendUiMaterial(Controller):
                 if os.path.exists(file_path):
                     f = open(file_path, 'r')
                     data = json.load(f)
-                    themes_list.append({"theme_name": dirPath, "theme_title": data["name"], "author": data["author"]})
+                    themes_list.append({'theme_name': dirPath, 'theme_title': data['name'], 'author': data['author']})
         if len(themes_list) is 0:
             themes_list = [
-                {"theme_name": "default", "theme_title": u"預設樣式" }
+                {'theme_name': 'default', 'theme_title': u'預設樣式' }
             ]
-        self.context["themes_list"] = themes_list
+        self.context['themes_list'] = themes_list
 
     @route_with("/admin/setup_save")
     def setup_save(self):
-        if self.theme != "install":
+        if self.theme != 'install':
             return self.abort(404)
-        theme = self.params.get_string("theme")
-        account = self.params.get_string("account")
-        password = self.params.get_string("password")
-        site_name = self.params.get_string("site_name")
-        namespace = self.params.get_string("name_space")
-        account_name = self.params.get_string("account_name")
+        theme = self.params.get_string('theme')
+        account = self.params.get_string('account')
+        password = self.params.get_string('password')
+        site_name = self.params.get_string('site_name')
+        namespace = self.params.get_string('name_space')
+        account_name = self.params.get_string('account_name')
         if u"" in [namespace, account, password, site_name, theme]:
             return self.redirect("/admin/setup?error=none")
         self.host_information.namespace = namespace
         self.host_information.site_name = site_name
         self.host_information.put()
         from plugins.application_user import application_user_init, has_record
-        prohibited_actions = settings.get("application_user_prohibited_actions", u"")
+        prohibited_actions = settings.get('application_user_prohibited_actions', u"")
 
         if not has_record():
             application_user_init(account_name, account, password, prohibited_actions,
