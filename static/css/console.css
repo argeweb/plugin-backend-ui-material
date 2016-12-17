@@ -912,3 +912,6 @@ body.sortTag .menu-content .nav>li>a[data-sort]::after {
 .nav li > a, .nav li > .a{
     outline: none;
 }
+.swal2-modal h2{
+    font-size: 28px;
+}

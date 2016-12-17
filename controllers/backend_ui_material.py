@@ -33,10 +33,10 @@ class BackendUiMaterial(Controller):
     @add_authorizations(auth.require_admin)
     def root(self):
         try:
-            backend_title = (self.host_information.site_name is None) and \
+            self.context['backend_title'] = (self.host_information.site_name is not None) and \
                             self.host_information.site_name or u'網站後台'
         except:
-            backend_title = u'網站後台'
+            self.context['backend_title'] = u'網站後台'
 
         role = self.application_user.role.get()
         menus = dashboard_name = 'admin'
@@ -46,7 +46,6 @@ class BackendUiMaterial(Controller):
             menus = role.menu
 
         self.context['dashboard_name'] = dashboard_name
-        self.context['backend_title'] = backend_title
         self.context['controllers'] = controllers
         self.context['menus'] = self.util.get_menu(menus)
         self.context['backend_version'] = backend_version
@@ -55,7 +54,11 @@ class BackendUiMaterial(Controller):
 
     @route_with('/admin/welcome')
     def admin_welcome(self):
-        self.context['backend_title'] = u'網站後台'
+        try:
+            self.context['backend_title'] = (self.host_information.site_name is not None) and \
+                            self.host_information.site_name or u'網站後台'
+        except:
+            self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
             self.context['backend_title'] = self.host_information.site_name
             self.context['information'] = self.host_information
@@ -68,7 +71,11 @@ class BackendUiMaterial(Controller):
 
     @route_with('/admin/login')
     def login(self):
-        self.context['backend_title'] = u'網站後台'
+        try:
+            self.context['backend_title'] = (self.host_information.site_name is not None) and \
+                            self.host_information.site_name or u'網站後台'
+        except:
+            self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
             self.context['backend_title'] = self.host_information.site_name
 
