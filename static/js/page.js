@@ -75,6 +75,7 @@ var pageDOD = {
         }
         for (var i=0; i<files.length; i++) {
             var t = evt.target;
+            console.log(t);
             var randId = getRandID("upload-");
             if ($(t).hasClass("form-group")){
                 $(t).attr("data-uploadId", randId);
@@ -91,13 +92,15 @@ var pageDOD = {
     },
     "setTargetValue": function (data){
         var url = data.response.url;
+        var item_key = data.response.item.__key__;
         var target_id = data.target_id;
         var t = $("*[data-uploadId='" + data.target_id + "']");
-        t.find("input").first().val(data.response.url).show();
+        t.find("input").first().val(data.response.url).data("key", item_key).show();
         if (url == ""){
             t.find(".file_picker_item").css("background-image", "none").addClass("file_picker_item_none");
         }else{
             t.find(".file_picker_item").css("background-image", "url(" + url + ")").removeClass("file_picker_item_none");
+            t.find("input").first().change();
         }
     },
     "setEditorValue": function (data){
@@ -220,9 +223,11 @@ $(function(){
     linkClickProcess();
     if (window.name == "content_iframe") {
         backend.iframe.init("#content_iframe");
+        backend.iframe.page = page;
     }
     if (window.name == "aside_iframe") {
         backend.aside.init("#aside_iframe");
+        backend.aside.page = page;
     }
 
     $(document).on('click', function(e){

@@ -201,11 +201,13 @@ var uploader = {
         var file = fileInput.files[0];
         uploader.addFile(file, uploader.pickup_target, function(data){
             var url = data.response.url;
+            var item_key = data.response.item.__key__;
             if (uploader.pickup_target_is_editor) {
                 uploader.pickup_target.selection.setContent('<img src="' + url + '" />');
             }else{
-                uploader.pickup_target.val(url).change();
+                uploader.pickup_target.val(url).data("key", item_key).change();
             }
+            $("#image-file-picker").val("");
         });
     },
     "addFile": function(file, target_id, callback){

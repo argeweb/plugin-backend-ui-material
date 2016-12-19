@@ -6126,6 +6126,7 @@ body{
 .dropping .dropping-box{
     border: solid 0px #427fed !important;
     background-color: #d9edf7;
+    outline: solid 28px #d9edf7;
 }
 .images-selector-box {
     height: 103px;
