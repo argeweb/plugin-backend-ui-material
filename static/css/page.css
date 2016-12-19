@@ -6270,6 +6270,8 @@ body{
     line-height: 34px;
     margin-left: 6px;
     max-height: 34px;
+    width: calc(100% - 30px);
+    cursor: pointer;
 }
 .list-operations.list-lang .dropdown-menu a, .list-operations.related-operations .dropdown-menu a{
     min-width: 210px;
