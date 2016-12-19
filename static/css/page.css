@@ -5953,6 +5953,12 @@ header{
     width: 97%;
     margin: 0 1.5%;
 }
+.scrollDiv.on header{
+    padding: 18px 20px 0 15px;
+    min-width: 360px;
+    width: 97%;
+    margin: 0 1.5%;
+}
 
 header h1 {
     display: inline-block;
@@ -6231,9 +6237,9 @@ body{
     min-width: 180px;
     padding: 0;
     line-height: 25px;
+    max-height: 35px;
 }
 .list-operations{
-    display: inline-flex;
     min-width: 70px;
     top: 0;
     vertical-align: middle;
@@ -6259,16 +6265,20 @@ body{
     min-width: 288px;
 }
 .list-operations label{
-height: 34px;
+    height: 34px;
     margin: 0;
     line-height: 34px;
     margin-left: 6px;
+    max-height: 34px;
 }
 .list-operations.list-lang .dropdown-menu a, .list-operations.related-operations .dropdown-menu a{
     min-width: 210px;
 }
 .fixed-table-toolbar{
     display: none !important;
+}
+main.content .mail-box .fixed-table-container{
+    position: inherit !important;
 }
  .form-control.field-type-boolean-field{
      line-height: 34px;
@@ -6458,7 +6468,7 @@ height: 34px;
 .table-hover tbody tr:hover {
     background-color: #eee;
 }
-.aside-header {
+.page-header {
     position: absolute;
     top:-140px;
     left: 0;
@@ -6469,7 +6479,7 @@ height: 34px;
     background-color: #03a9f4;
     line-height: 25px;
 }
-.aside-header h3{
+.page-header h3{
     color: #fff;
     margin: 16px 0;
     font-size: 18px;
@@ -6508,7 +6518,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 .fbtn-container{
     display: none;
 }
-.aside-page{
+.page-wrap{
     height: 100%;
 }
 .btn-group.op-mode .btn i{
@@ -6560,7 +6570,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
     margin: 9px;
 }
 @media print {
-    .aside-page {
+    .page-wrap {
         height: auto !important;
     }
     .aside .scrollDiv{

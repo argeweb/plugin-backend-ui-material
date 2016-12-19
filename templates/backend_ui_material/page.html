@@ -31,8 +31,8 @@
 <body class="iframe-page {{ aside }} in-edit-mode"
       ondragover="pageDOD.onDragOver(event)" ondrop="pageDOD.onDrop(event)"
       ondragenter="pageDOD.onDragStart(event)" ondragleave="pageDOD.onDragEnd(event)">
-    <div class="aside-page">
-        <div class="aside-header">
+    <div class="page-wrap">
+        <div class="page-header">
             <a class="aside-close"><i class="icon-2x icon material-icons">close</i></a>
             <h3>{%- if scaffolding and s %}{{ s.scaffold_title(route.action) }}{% endif %}</h3>
         </div>

@@ -140,7 +140,7 @@ function create_editor(id){
             image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
             onclick : function() {
                 ed.execCommand('mceFullScreen');
-                $(".aside-header").toggle();
+                $(".page-header").toggle();
             }
         });
         ed.on('init', function (e) {
@@ -164,7 +164,7 @@ function showLoading(callback){
         '</div>', callback)
 }
 function hideHeader(after_hide_html, callback){
-    $('.aside-header').stop().animate({
+    $('.page-header').stop().animate({
         top: -70
     });
     if ($('header').length == 0 && typeof callback === "function"){
@@ -332,9 +332,9 @@ function pageInit(new_html) {
         scrollDiv_top = 56;
         $("body").addClass("aside");
     }else{
-        //backend.iframe.setPageTitle($(".aside-header h3").text());
+        //backend.iframe.setPageTitle($(".page-header h3").text());
     }
-    $(".aside-header").stop().animate({
+    $(".page-header").stop().animate({
         top: nav_var_top
     }, 300);
     if($("header").text().trim() != ""){
