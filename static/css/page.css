@@ -6130,9 +6130,30 @@ body{
     display: block;
 }
 .dropping .dropping-box{
-    border: solid 0px #427fed !important;
+    border: solid 0 #427fed !important;
     background-color: #d9edf7;
     outline: solid 28px #d9edf7;
+}
+.dropping .album-box .dropping-box{
+    background-color: #d9edf7;
+    outline: solid 0 #d9edf7;
+    border: dashed 2px #999 !important;
+}
+.album-upload-box .form-group{
+    height: 100%;
+    width: 100%;
+    min-height: 202px;
+    border: dashed 2px #999;
+    position: relative;
+    margin: 2px 0 0 0;
+}
+.album-upload-box .input-group{
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    line-height: 38px;
+    top: calc(50% - 62px);
+    left: calc(50% - 58px);
 }
 .images-selector-box {
     height: 103px;
