@@ -5959,9 +5959,6 @@ header{
     width: 97%;
     margin: 0 1.5%;
 }
-body.aside .scrollDiv header{
-    padding-top: 0;
-}
 body.aside .scrollDiv.on header{
     min-width: 360px;
     width: 100%;
@@ -6272,6 +6269,7 @@ body{
     min-width: 70px;
     top: 0;
     vertical-align: middle;
+    display: inline-block;
 }
 .list-operations>a:first-child{
     flex: 1 0;
