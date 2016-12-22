@@ -754,9 +754,9 @@ li.hr + li.hr {
     margin: 4px 0 4px 30px;
 }
 .nav li ul {
-    position: absolute;
+    /*position: absolute;*/
     top: 0;
-    display: none;
+    /*display: none;*/
     right: 300px;
 }
 .menu-box{
