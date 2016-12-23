@@ -499,7 +499,7 @@ var aside = {
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("aside");
         $(window).resize(function(){
-            $("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "52%"}, 200);
+            $("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 200);
         })
     },
     "load": function(url){
@@ -545,7 +545,7 @@ var aside = {
         }, headers);
     },
     "showUi": function(callback){
-        $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "52%"}, 500, function(){
+        $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 500, function(){
             aside.is_open = true;
             if (typeof callback === "function") callback();
             $(this).addClass("open");
@@ -557,6 +557,24 @@ var aside = {
             if (typeof callback === "function") callback();
             $(this).removeClass("open");
         });
+    },
+    "addClass": function(class_name){
+        var contents = null;
+        try{
+            contents = $(this.instance).contents();
+        }catch(e){
+            contents = this.instance.contents();
+        }
+        contents.find("body").addClass(class_name);
+    },
+    "removeClass": function(class_name){
+        var contents = null;
+        try{
+            contents = $(this.instance).contents();
+        }catch(e){
+            contents = this.instance.contents();
+        }
+        contents.find("body").removeClass(class_name);
     }
 };
 function print(){
@@ -664,6 +682,11 @@ var view = {
         if (window.name == ""){
             this.current = view_name;
             $("body").removeClass("in-view-mode").removeClass("in-edit-mode").removeClass("in-delete-mode").removeClass("in-sort-mode").addClass("in-"+view_name+"-mode");
+            aside.removeClass("in-edit-mode");
+            aside.removeClass("in-view-mode");
+            aside.removeClass("in-sort-mode");
+            aside.removeClass("in-delete-mode");
+            aside.addClass("in-"+view_name+"-mode");
             if (view_name == "sort"){
                 iframe.addClass("in-sort-mode");
             }else{

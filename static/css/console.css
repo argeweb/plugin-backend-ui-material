@@ -918,7 +918,6 @@ body.sortTag [data-sort]::after{
     outline: solid 1px #bebebe;
     text-align: center;
     line-height: 25px;
-
 }
 body.sortTag .menu-content .nav>li>a[data-sort]::after {
     top: 12px;

@@ -10,8 +10,8 @@
     {% endif %}
     <div class="btn-group">
         {%- if route.action != 'view' -%}
-        <a href="javascript: save_form();" class="btn btn-white hidden-xs"><i class="icon">save</i> {{ submit_text }}</a>
-        <a href="javascript: save_and_exit();" class="btn btn-white hidden-xs"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
+        <a href="javascript: save_form();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
+        <a href="javascript: save_and_exit();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
         {% endif %}
     </div>
 

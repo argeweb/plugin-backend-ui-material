@@ -450,6 +450,7 @@ function pageInit(new_html) {
     });
 
     $('#list-table').on('post-body.bs.table', function () {
+        console.log("aaaa");
         makeSortTable();
         makeListOp();
         checkNavItemAndShow();
@@ -527,10 +528,12 @@ function linkClickProcess(){
             e.preventDefault();
             var callback = $(this).data("callback");
             json(_url, null, function (data) {
-                if (callback !== undefined){
+                if (callback !== undefined && callback !== "undefined"){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
                 }else{
-                    location.reload();
+                    if (window.name == "content_iframe") {
+                        backend.iframe.reload();
+                    }
                 }
             }, function(data){
                 if (data.code == "404"){
@@ -557,8 +560,7 @@ function linkClickProcess(){
 }
 // 可以排序的表格
 function makeSortTable(){
-    $("table").stickyTableHeaders({scrollableArea: $('.scrollDiv')});
-    try{
+    //try{
         $(".sortable-list tbody").sortable({
             placeholder: "ui-state-highlight",
             handle: 'td.move-headline',
@@ -583,8 +585,9 @@ function makeSortTable(){
                 });
             }
         });
-    }catch(e){
-    }
+    //}catch(e){
+    //}
+    //$("table").stickyTableHeaders({scrollableArea: $('.scrollDiv')});
 }
 function makeListOp(){
     if ($(".filed-display-operations ul").data("done") == true){ return false;}
