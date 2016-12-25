@@ -24,11 +24,11 @@ var affix = function(top){
     }else{
         $("header.header").removeClass("affix");
     }
-}
+};
 var consoleDOD = function(evt){
     evt.preventDefault();
     evt.stopPropagation();
-    iframe.focus();
+    content_iframe.focus();
 };
 var message = {
     "list": [],
@@ -278,7 +278,7 @@ var uploader = {
         }
     }
 };
-var iframe = {
+var content_iframe = {
     "instance": null,
     "history": {},
     "last_url": null,
@@ -292,7 +292,7 @@ var iframe = {
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("iframe");
         window.onpopstate = this.popState;
-        this.history = JSON.parse(localStorage.getItem('iframe.history'));
+        this.history = JSON.parse(localStorage.getItem('content_iframe.history'));
         if (this.history == null || this.history == "null") this.history = [];
         //  常用項目
         //var sort_list = [];
@@ -313,8 +313,8 @@ var iframe = {
         $linkList.click(function(event){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
-            if ($(this).hasClass("main-link")){ aside.closeUi(); }
-            iframe.load($(this).attr("href"), t);
+            if ($(this).hasClass("main-link")){ aside_iframe.closeUi(); }
+            content_iframe.load($(this).attr("href"), t);
             event.preventDefault();
         });
         var b = $("body").data("dashboard-name");
@@ -330,7 +330,7 @@ var iframe = {
             if (find_page==false){
                 var last_page = this.getState(hash);
                 if (last_page != null){
-                    iframe.load(hash, last_page.text, last_page.referer_page);
+                    content_iframe.load(hash, last_page.text, last_page.referer_page);
                 }else{
                     var h = hash.split("/").slice(0, 3).join("/");
                     $linkList.each(function(){
@@ -342,24 +342,24 @@ var iframe = {
                 }
             }
             if (find_page==false){
-                iframe.load("/"+b+"/welcome", "Welcome");
+                content_iframe.load("/"+b+"/welcome", "Welcome");
             }
         }else{
-            iframe.load("/"+b+"/welcome", "Welcome");
+            content_iframe.load("/"+b+"/welcome", "Welcome");
         }
         $(".content").hover(function(){ }, function(){
             setTimeout(function(){
-                if (iframe.need_focus == false){
+                if (content_iframe.need_focus == false){
                     $(".iframe_mask").show();
                 }
             }, 800);
         });
-        $(".iframe_mask").hover(iframe.focus, function(){ iframe.need_focus = false; }).mouseover(iframe.focus).mouseenter(iframe.focus).click(iframe.focus)
+        $(".iframe_mask").hover(content_iframe.focus, function(){ content_iframe.need_focus = false; }).mouseover(content_iframe.focus).mouseenter(content_iframe.focus).click(content_iframe.focus)
     },
     "focus": function(){
         $(".iframe_mask").hide();
-        iframe.need_focus = true;
-        iframe.instance.contentWindow.focus();
+        content_iframe.need_focus = true;
+        content_iframe.instance.contentWindow.focus();
         var contents = null;
         try{
             contents = $(this.instance).contents();
@@ -369,14 +369,14 @@ var iframe = {
         contents.find('body').click();
     },
     "removeMask": function(){
-        iframe.need_focus = true;
+        content_iframe.need_focus = true;
         $(".iframe_mask").hide();
     },
     "reload": function(keep_aside){
-        if (!(keep_aside && keep_aside == true)) aside.closeUi();
+        if (!(keep_aside && keep_aside == true)) aside_iframe.closeUi();
         var last_page = this.getState();
         if (last_page != null) {
-            iframe.load(last_page.href, last_page.text, last_page.referer_page);
+            content_iframe.load(last_page.href, last_page.text, last_page.referer_page);
         }
         //this.instance.contentWindow.location.reload();
     },
@@ -390,49 +390,32 @@ var iframe = {
         this.loading_lock = true;
         clearTimeout(this.loading_timer);
         this.loading_timer = setTimeout(function(){
-            iframe.instance.contentWindow.showTimeout();
+            content_iframe.instance.contentWindow.showTimeout();
         }, 25000);
         this.last_url = url;
         this.pushState(url , text, referer_page);
-        iframe.instance.contentWindow.showLoading(function(){
+        content_iframe.instance.contentWindow.showLoading(function(){
             ajax(url, null, function(page){
-                var data = iframe.getState();
+                var data = content_iframe.getState();
                 if (data) history.pushState(data, data.text, "#" + data.href);
-                clearTimeout(iframe.loading_timer);
-                iframe.loading_lock = false;
-                iframe.instance.contentWindow.pageInit(page);
+                clearTimeout(content_iframe.loading_timer);
+                content_iframe.loading_lock = false;
+                content_iframe.instance.contentWindow.pageInit(page);
             }, function(page){
-                clearTimeout(iframe.loading_timer);
-                iframe.loading_lock = false;
-                iframe.instance.contentWindow.pageInit(page);
+                clearTimeout(content_iframe.loading_timer);
+                content_iframe.loading_lock = false;
+                content_iframe.instance.contentWindow.pageInit(page);
                 return false;
             }, {
-                "is_ajax": "true"
+                "is_ajax": "true",
+                "page_view": view.current
             });
         });
     },
-    "addClass": function(class_name){
-        var contents = null;
-        try{
-            contents = $(this.instance).contents();
-        }catch(e){
-            contents = this.instance.contents();
-        }
-        contents.find("body").addClass(class_name);
-    },
-    "removeClass": function(class_name){
-        var contents = null;
-        try{
-            contents = $(this.instance).contents();
-        }catch(e){
-            contents = this.instance.contents();
-        }
-        contents.find("body").removeClass(class_name);
-    },
     "getState": function(url) {
-        if (typeof url === "undefined") url = iframe.getUrl();
+        if (typeof url === "undefined") url = content_iframe.getUrl();
         if (url in this.history){
-            return iframe.history[url];
+            return content_iframe.history[url];
         }
         return null;
     },
@@ -443,14 +426,14 @@ var iframe = {
         }
         var history_item = null;
         if (url in this.history){
-            history_item = iframe.history[url];
+            history_item = content_iframe.history[url];
             history_item.last_date = Date.now();
             if (history_item.visit){
                 history_item.visit++;
             }else{
                 history_item.visit = 1
             }
-            localStorage.setItem('iframe.history', JSON.stringify(this.history));
+            localStorage.setItem('content_iframe.history', JSON.stringify(this.history));
             return false;
         }
         this.history[url] ={
@@ -460,12 +443,12 @@ var iframe = {
             "last_date": Date.now(),
             "referer_page": referer_page
         };
-        localStorage.setItem('iframe.history', JSON.stringify(this.history));
+        localStorage.setItem('content_iframe.history', JSON.stringify(this.history));
     },
     "popState": function(event){
         var s = event.state;
         if (s){
-            iframe.load(s.href, s.text, s.is_list);
+            content_iframe.load(s.href, s.text, s.is_list);
             window.history.replaceState( s , s.text, "#" + s.href);
         }
     },
@@ -486,7 +469,7 @@ var iframe = {
         }
     }
 };
-var aside = {
+var aside_iframe = {
     "instance": null,
     "is_open": false,
     "last_url": null,
@@ -507,19 +490,19 @@ var aside = {
         this.loading_lock = true;
         clearTimeout(this.loading_timer);
         this.loading_timer = setTimeout(function(){
-            aside.loading_lock = false;
-            aside.instance.contentWindow.showTimeout();
+            aside_iframe.loading_lock = false;
+            aside_iframe.instance.contentWindow.showTimeout();
         }, 250000);
 
         this.last_url = url;
         if (this.is_open) {
-            aside.instance.contentWindow.showLoading(function(){
-                aside.runAjax(url);
+            aside_iframe.instance.contentWindow.showLoading(function(){
+                aside_iframe.runAjax(url);
             });
         }else{
-            aside.showUi();
-            aside.instance.contentWindow.showLoading(function(){
-                aside.runAjax(url);
+            aside_iframe.showUi();
+            aside_iframe.instance.contentWindow.showLoading(function(){
+                aside_iframe.runAjax(url);
             });
         }
         //contents.find("head").append(
@@ -532,53 +515,35 @@ var aside = {
     "runAjax": function(url){
         var headers = {
             "is_ajax": "true",
-            "aside": "aside"
+            "aside": "aside_iframe"
         };
         ajax(url, null, function(page){
-            clearTimeout(aside.loading_timer);
-            aside.loading_lock = false;
-            aside.instance.contentWindow.pageInit(page);
+            clearTimeout(aside_iframe.loading_timer);
+            aside_iframe.loading_lock = false;
+            aside_iframe.instance.contentWindow.pageInit(page);
         }, function(page){
-            clearTimeout(aside.loading_timer);
-            aside.loading_lock = false;
-            aside.instance.contentWindow.pageInit(page);
+            clearTimeout(aside_iframe.loading_timer);
+            aside_iframe.loading_lock = false;
+            aside_iframe.instance.contentWindow.pageInit(page);
         }, headers);
     },
     "showUi": function(callback){
         $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 500, function(){
-            aside.is_open = true;
+            aside_iframe.is_open = true;
+            aside_iframe.instance.contentWindow.addClass("open");
             if (typeof callback === "function") callback();
-            $(this).addClass("open");
         });
     },
     "closeUi": function(callback){
         $("#aside_iframe").stop().animate({"width": "0"}, 500, function(){
-            aside.is_open = false;
+            aside_iframe.is_open = false;
+            aside_iframe.instance.contentWindow.removeClass("open");
             if (typeof callback === "function") callback();
-            $(this).removeClass("open");
         });
-    },
-    "addClass": function(class_name){
-        var contents = null;
-        try{
-            contents = $(this.instance).contents();
-        }catch(e){
-            contents = this.instance.contents();
-        }
-        contents.find("body").addClass(class_name);
-    },
-    "removeClass": function(class_name){
-        var contents = null;
-        try{
-            contents = $(this.instance).contents();
-        }catch(e){
-            contents = this.instance.contents();
-        }
-        contents.find("body").removeClass(class_name);
     }
 };
 function print(){
-    var target = aside.is_open ? aside : iframe;
+    var target = aside_iframe.is_open ? aside_iframe : iframe;
     var target_window = target.instance.contentWindow;
     target_window.print();
 }
@@ -606,7 +571,7 @@ var shortcut = {
         key(shortcut.keys, 'input', function(event, handler){ return shortcut.catchEvent(window.name, handler.shortcut, handler.scope); });
     },
     "catchEvent": function(window_name, shortcut_key, scope){
-        var target = aside.is_open ? aside : iframe;
+        var target = aside_iframe.is_open ? aside_iframe : content_iframe;
         var target_window = target.instance.contentWindow;
         console.log(window_name, shortcut_key, scope);
 
@@ -616,7 +581,7 @@ var shortcut = {
             case 'ctrl+r':
             case 'ctrl+f5': target.reload(); break;
         }
-        if (aside.is_open){
+        if (aside_iframe.is_open){
             switch (shortcut_key) {
                 case 'ctrl+shift+s': target_window.save_and_exit(); break;
                 case 'ctrl+s': target_window.save_form(); break;
@@ -645,15 +610,15 @@ var shortcut = {
                     $("body").toggleClass("sortTag");
                     break;
                 case '`':
-                    if (aside.is_open)
-                        aside.closeUi();
+                    if (aside_iframe.is_open)
+                        aside_iframe.closeUi();
                     else
-                        aside.showUi();
+                        aside_iframe.showUi();
                     break;
                 case 'esc':
                     if (shortcut.lock == true){
                         shortcut.lock = false;
-                        aside.closeUi();
+                        aside_iframe.closeUi();
                         return false;
                     }
                     shortcut.lock = true;
@@ -678,23 +643,16 @@ var shortcut = {
 };
 var view = {
     "current": "edit",
+    "last": "edit",
     "change": function(view_name){
         if (window.name == ""){
+            this.last = this.current;
             this.current = view_name;
-            $("body").removeClass("in-view-mode").removeClass("in-edit-mode").removeClass("in-delete-mode").removeClass("in-sort-mode").addClass("in-"+view_name+"-mode");
-            aside.removeClass("in-edit-mode");
-            aside.removeClass("in-view-mode");
-            aside.removeClass("in-sort-mode");
-            aside.removeClass("in-delete-mode");
-            aside.addClass("in-"+view_name+"-mode");
-            if (view_name == "sort"){
-                iframe.addClass("in-sort-mode");
-            }else{
-                iframe.removeClass("in-sort-mode");
-            }
-            iframe.instance.contentWindow.changeView();
-            if (aside.is_open){
-                aside.instance.contentWindow.changeViewAndReload();
+            $("body").removeClass("in-"+this.last+"-mode").addClass("in-"+view_name+"-mode");
+            content_iframe.instance.contentWindow.changeView();
+            aside_iframe.instance.contentWindow.changeView();
+            if (aside_iframe.is_open){
+                aside_iframe.instance.contentWindow.changeViewAndReload();
             }
         }
     }
@@ -704,7 +662,7 @@ var ui = {
     "showSearchBox": function(){ $("#keyword").click().focus();},
     "closeSearchBox": function(){ $(".page-overlay a").focus(); $(".page-overlay").click(); },
     "setUserInformation": function(name, blob_url){
-        var href = iframe.last_url;
+        var href = content_iframe.last_url;
         if (href.indexOf('/admin/application_user/%3A') >= 0) {
             if (href.indexOf($("body").data("user")) > 0) {
                 $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
@@ -727,7 +685,7 @@ $(function(){
 
     $(".scrollDiv").hover(function(){
         $(this).addClass("on");
-        iframe.need_focus = false;
+        content_iframe.need_focus = false;
     }, function(){
         $(this).removeClass("on");
     }).mouseover(function(){
@@ -750,7 +708,7 @@ $(function(){
     }).keyup(function(event){
         if (event.which == 13) {
             event.preventDefault();
-            iframe.search($(this).val());
+            content_iframe.search($(this).val());
         }
     });
     $(".menu-link").click(function(event){

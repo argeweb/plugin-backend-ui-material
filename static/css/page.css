@@ -5806,7 +5806,8 @@ del {
 }
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
-    margin-top: -4px
+    margin-top: -4px;
+    position: relative;
 }
 
 @media (max-width: 1000px) {

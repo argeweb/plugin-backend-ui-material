@@ -111,6 +111,19 @@ var pageDOD = {
         }
     }
 };
+function is_aside(){
+    return (window.name == "aside_iframe");
+}
+function is_content(){
+    return (window.name == "content_iframe");
+}
+function reload(){
+    if (is_aside()) {
+        backend.aside_iframe.reload();
+    }else{
+        backend.content_iframe.reload();
+    }
+}
 function change_lang(index){
     $("a.btn-lang").eq(index).click();
 }
@@ -178,13 +191,21 @@ function hideHeader(after_hide_html, callback){
         });
     }
 }
+function addClass(class_name){
+    $("body").addClass(class_name);
+}
+function removeClass(class_name){
+    $("body").removeClass(class_name);
+}
 var currentView = "edit";
 function changeView(){
-    var view_name = backend.view.current;
-    $("body").removeClass("in-view-mode").removeClass("in-edit-mode").removeClass("in-delete-mode").removeClass("in-sort-mode").addClass("in-"+view_name+"-mode");
+    $("body").removeClass("in-"+backend.view.last+"-mode").addClass("in-"+backend.view.current+"-mode");
+    if (typeof page["change_view_to_"+backend.view.current] == "function"){
+        page["change_view_to_"+backend.view.current]();
+    }
 }
 function changeViewAndReload(){
-    if (currentView != backend.view.current){
+    if (backend.view.last != backend.view.current){
         currentView = backend.view.current;
         if (currentView == "edit" || currentView == "view"){
             $("a."+currentView+"-url").first().click();
@@ -213,7 +234,7 @@ function save_and_exit(){
 }
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
-    backend.iframe.removeMask();
+    backend.content_iframe.removeMask();
 }
 //  僅執行一次
 $(function(){
@@ -221,13 +242,12 @@ $(function(){
         pageInit();
     }
     linkClickProcess();
-    if (window.name == "content_iframe") {
-        backend.iframe.init("#content_iframe");
-        backend.iframe.page = page;
-    }
-    if (window.name == "aside_iframe") {
-        backend.aside.init("#aside_iframe");
-        backend.aside.page = page;
+    if (is_aside()) {
+        backend.aside_iframe.init("#aside_iframe");
+        backend.aside_iframe.page = page;
+    }else{
+        backend.content_iframe.init("#content_iframe");
+        backend.content_iframe.page = page;
     }
 
     $(document).on('click', function(e){
@@ -246,7 +266,7 @@ $(function(){
         if (url && url != ""){
             console.log(currentView);
             if (currentView != "delete"){
-                backend.aside.load(url);
+                backend.aside_iframe.load(url);
             }else{
                 backend.swal({
                     title: "您確定要刪除此記錄嗎",
@@ -260,7 +280,7 @@ $(function(){
                 }).then(function(){
                     json(url, null, function (data) {
                         backend.swal("删除成功！", "您已经永久删除了此記錄。", "success");
-                        backend.iframe.reload();
+                        backend.content_iframe.reload();
                     }, function (data) {
                         backend.swal("删除失敗！", "刪除記錄時發生問題。", "error");
                     })
@@ -326,13 +346,13 @@ function pageInit(new_html) {
     var nav_var_top = -70;
     var page_header_top = 0;
     var scrollDiv_top = 0;
-    if (window.name == "aside_iframe"){
+    if (is_aside()){
         nav_var_top = 0;
         page_header_top = 56;
         scrollDiv_top = 56;
         $("body").addClass("aside");
     }else{
-        //backend.iframe.setPageTitle($(".page-header h3").text());
+        //backend.content_iframe.setPageTitle($(".page-header h3").text());
     }
     $(".page-header").stop().animate({
         top: nav_var_top
@@ -345,15 +365,15 @@ function pageInit(new_html) {
         }, 300);
     }else{
         $("body").addClass("no-header");
-        if (window.name == "content_iframe"){
+        if (is_content()){
             $("header").hide();
         }
     }
     $(".aside-close").click(function(){
-        backend.aside.closeUi();
+        backend.aside_iframe.closeUi();
     });
 
-    if (window.name == "content_iframe"){
+    if (is_content()){
         scrollDiv_top = 0;
     }
     $(".scrollDiv").stop().animate({
@@ -369,7 +389,7 @@ function pageInit(new_html) {
     }).css({
         "height": "calc(100% - " + scrollDiv_top +"px)"
     }).scroll(function() {
-        if (window.name == "content_iframe"){
+        if (is_content()){
             backend.affix($(this).scrollTop());
         }
     });
@@ -377,7 +397,7 @@ function pageInit(new_html) {
     if (window == top) {
         return;
     }
-    //backend.iframe.afterOnLoad(location.pathname);
+    //backend.content_iframe.afterOnLoad(location.pathname);
     $("#onLoad").remove();
     $('body').removeClass("body-hide");
     checkNavItemAndShow();
@@ -409,14 +429,14 @@ function pageInit(new_html) {
             if (j["response_info"] == "success"){
                 if (save_with_exit){
                     save_with_exit = false;
-                    setTimeout(backend.aside.closeUi(), 10);
+                    setTimeout(backend.aside_iframe.closeUi(), 10);
                     backend.message.quick_info(text);
                 }else{
                     show_message(text, 1800);
                 }
                 backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
                 if (j["response_method"] == "add" || j["response_method"] == "edit"){
-                    backend.iframe.reload(true);
+                    backend.content_iframe.reload(true);
                 }
             }else{
                 backend.message.quick_info("表單欄位有誤");
@@ -531,8 +551,8 @@ function linkClickProcess(){
                 if (callback !== undefined && callback !== "undefined"){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
                 }else{
-                    if (window.name == "content_iframe") {
-                        backend.iframe.reload();
+                    if (is_content()) {
+                        backend.content_iframe.reload();
                     }
                 }
             }, function(data){
@@ -549,9 +569,9 @@ function linkClickProcess(){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
             if ($(this).attr("target") == "aside_iframe"){
-                backend.aside.load($(this).attr("href"));
+                backend.aside_iframe.load($(this).attr("href"));
             }else{
-                backend.iframe.load($(this).attr("href"), t, location.pathname);
+                backend.content_iframe.load($(this).attr("href"), t, location.pathname);
             }
             e.preventDefault();
             e.stopPropagation();

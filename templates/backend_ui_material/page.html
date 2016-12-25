@@ -52,8 +52,16 @@
             {% include "backend_ui_material/flash_messages.html" with context -%}
         </div>
     </div>
-    {% block float_buttons -%}{%- endblock -%}
     <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
+    <script type="text/javascript">
+        (function(page){
+            {%- if change_view_to_edit_function %}page["change_view_to_edit"] = {{ change_view_to_edit_function }};{% endif -%}
+            {%- if change_view_to_view_function %}page["change_view_to_view"] = {{ change_view_to_view_function }};{% endif -%}
+            {%- if change_view_to_sort_function %}page["change_view_to_sort"] = {{ change_view_to_sort_function }};{% endif -%}
+            {%- if change_view_to_delete_function %}page["change_view_to_delete"] = {{ change_view_to_delete_function }};{% endif -%}
+        })(page);
+    </script>
+    {% block float_buttons -%}{%- endblock -%}
     {% block layout_scripts -%}{%- endblock -%}
 </body>
 </html>
