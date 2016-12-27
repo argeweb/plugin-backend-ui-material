@@ -516,6 +516,7 @@ div.page-overlay.on{
     }
 
     .nav-drawer.nav-drawer-md {
+        box-shadow: rgba(0, 0, 0, 0.498039) 0 1px 10px;
         width: 210px;
     }
 }
@@ -605,7 +606,7 @@ main.content{
     background-color: rgba(154, 154, 154, 0.68) !important;
 }
 .menu-content{
-    padding-top: 0px;
+    padding-top: 0;
     height: 100%;
     overflow: hidden;
 }

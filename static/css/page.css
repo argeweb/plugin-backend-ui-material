@@ -5373,8 +5373,8 @@ del {
 
 @-webkit-keyframes sk-innerCircle {
     0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0)
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
     }
     100% {
         -webkit-transform: rotate(360deg);
@@ -5384,8 +5384,8 @@ del {
 
 @keyframes sk-innerCircle {
     0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0)
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
     }
     100% {
         -webkit-transform: rotate(360deg);
@@ -6225,10 +6225,11 @@ body{
     border: solid 1px #aaa;
     background-size: cover;
     background-position: 50%;
-    margin: -10px 0px -10px 0px;
+    margin: -10px 0 -10px 0;
 }
 .file_picker_div input{
-    border-right: 0;width: calc( 100% - 0px );
+    border-right: 0;
+    width: 100%;
     margin-top: 5px;
     float: left;
 }
@@ -6249,7 +6250,7 @@ body{
     float: left;
 }
 .list-pager{
-    margin-right: 0px;
+    margin-right: 0;
 }
 .list-operations input[type="checkbox"] {
     margin: 11px 3px 11px 8px;
@@ -6324,8 +6325,8 @@ main.content .mail-box .fixed-table-container{
  .checkbox, .radio {
     position: relative;
     display: block;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 .ui-state-highlight {padding: 8px; width:calc(100% - 60px); min-height: 56px; height: 56px; line-height: 56px; background-color: #1ab394; border: solid 1px #1ab394; }
 .ui-state-highlight td{background-color: #1ab394;}
@@ -6388,7 +6389,7 @@ main.content .mail-box .fixed-table-container{
 }
 @media(max-width:768px) {
     .forum-item .forum-sub-title {
-        margin-left: 0px;
+        margin-left: 0;
         margin-right: 28px;
     }
 }
@@ -6438,7 +6439,7 @@ main.content .mail-box .fixed-table-container{
     background-color: transparent;
 }
 #page-top-bar{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .btn-create{
     margin-right: 12px;
@@ -6723,7 +6724,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 }
 
 li.file-menu.active {
-    border-left: 0px solid #19aa8d;
+    border-left: 0 solid #19aa8d;
     color: #293846;
     background: transparent;
 }

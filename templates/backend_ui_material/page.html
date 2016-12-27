@@ -39,9 +39,11 @@
             </header>
             <main class="content">
                 {%- block layout_body -%}
-                    {% block layout_before_content -%}{{ events.layout_before_content() }}{%- endblock -%}
+                    {{ events.layout_before_content() }}
+                    {% block layout_before_content -%}{%- endblock -%}
                     {% block layout_content %}{%- endblock %}
-                    {% block layout_after_content -%}{{ events.layout_after_content() }}{%- endblock %}
+                    {% block layout_after_content -%}{%- endblock %}
+                    {{ events.layout_after_content() }}
                 {%- endblock %}
             </main>
             {%- include "backend_ui_material/flash_messages.html" with context %}
