@@ -1314,7 +1314,7 @@ table.dataTable thead .sorting:after {
     padding-left: 0
 }
 
-.form-control, .single-line {
+.form-control, .form-group-brand .form-control, .single-line {
     background-color: #FFF;
     background-image: none;
     border: 1px solid #e5e6e7;
@@ -6002,10 +6002,10 @@ header .fbtn-container span.icon{
 }
 
 .scrollDiv {
-    height: 100%;
     overflow: hidden;
     padding-right: 0;
     margin-top: 0;
+    height: calc(100% - 56px);
 }
 .scrollDiv.on {
     height: 100%;

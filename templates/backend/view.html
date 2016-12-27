@@ -1,7 +1,7 @@
 {%- import 'backend/macros.html' as s with context -%}
 {%- extends s.layout() -%}
 {%- set item = context[scaffolding.singular] -%}
-{%- block header -%}
+{%- block layout_header -%}
     {%- if scaffolding %}
         {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
 {#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
@@ -43,14 +43,10 @@
 </div>
 {% endblock %}
 
-{% block float_buttons %}
+{% block layout_buttons %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}
-            <div class="fbtn-container">
-                <div class="fbtn-inner">
-                    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
-                </div>
-            </div>
+            <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
         {%- endif -%}
     {%- endif %}
 {% endblock %}
