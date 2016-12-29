@@ -7,6 +7,7 @@
 {#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
     {%- endif %}
 {% endblock %}
+
 {% block layout_content %}
 <div class="wrapper wrapper-content">
     <iframe name="iframeForm" width="0" height="0" frameborder="0" seamless style="position: absolute; top: -100px;"></iframe>
@@ -19,36 +20,34 @@
         {% block form_body %}
         <div class="col-sm-12" style=" margin-top: 10px;margin-bottom: 30px;">
             {% block form_content %}
-                <div class="ibox-content">
-                {{ layout_before_content }}
-                    {{ events.before_form_fields() }}
-                    <div class="row">
-                        {%- block form_fields %}
-                        {%- for field in form %}
+            <div class="ibox-content">
+                {{ events.before_form_fields() }}
+                <div class="row">
+                    {%- block form_fields %}{%- for field in form %}
                         {% if not field.name in scaffolding.excluded_properties_in_from %}{{ s.form_field(form, field) }}{% endif %}
-                        {%- endfor %}
-                        {%- endblock %}
+                    {%- endfor %}{%- endblock %}
 
-                        {% block form_actions %}
-                        <div class="col-xs-12 text-right">
-                            {% block submit_button -%}
-                            <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
-                            <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
-                            {%- endblock %}
-                        </div>
-                        {% endblock %}
+                    {% block form_actions %}
+                    <div class="col-xs-12 text-right">
+                        {% block submit_button -%}
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
+                        <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
+                        {%- endblock %}
                     </div>
-                    {{ events.after_form_fields() }}
+                    {% endblock %}
                 </div>
-                <input type="hidden" name="returnType" value="json" />
-                <input type="hidden" name="routeAction" value="{{ route.action }}" />
-                <input type="hidden" name="routeName" value="{{ route.name }}" />
+                {{ events.after_form_fields() }}
+            </div>
             {% endblock %}
+            <input type="hidden" name="returnType" value="json" />
+            <input type="hidden" name="routeAction" value="{{ route.action }}" />
+            <input type="hidden" name="routeName" value="{{ route.name }}" />
         </div>
         {% endblock %}
     </form>
 </div>
 {% endblock %}
+
 {% block layout_buttons %}
     <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: save_form();"><span class="fbtn-text fbtn-text-left">{% block submit_text_f %}{% endblock %}</span><span class="icon icon-lg">save</span></a>
 {% endblock %}

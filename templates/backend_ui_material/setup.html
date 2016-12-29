@@ -7,7 +7,7 @@
     <meta name="keywords" content="ArgeWeb Framework Google App Engine">
     <meta name="description" content="ArgeWeb Framework 是一個 Google App Engine 網站系統，可以快速的在 Google App Engine 上建立起網站">
     <link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/vendor/jquery.steps/jquery.steps.css">
+    <link rel="stylesheet" href="/static/vendor/jquery.steps/jquery.steps.min.css">
     <link rel="stylesheet" href="/static/vendor/animate.css/animate.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/page.css?v=4.1.1">
     <link href='https://fonts.googleapis.com/css?family=Finger+Paint' rel='stylesheet' type='text/css'>
@@ -73,7 +73,7 @@
             line-height: 22px;
         }
         body{
-            background: url(/plugins/backend_ui_material/static/img/install.jpg);background-size: cover; background-position: 80%;
+            background-size: cover; background-position: 80%;
         }
         .head_180{
             padding: 180px 0;
@@ -133,17 +133,17 @@
                             <h4>ArgeWeb Framework 讓您快速的在 Google App Engine 上建立起網站</h4>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label class="col-xs-2 control-label">目前網域</label>
+                                <label class="col-xs-2 control-label" for="server_name">目前網域</label>
                                 <div class="col-xs-10">
-                                    <input type="text" class="form-control" name="namespace" value="{{ server_name }}" readonly>
+                                    <input type="text" class="form-control" id="server_name" name="server_name" value="{{ server_name }}" readonly>
                                     <span class="help-block m-b-none">若有多個網域使用相同資料，請指定相同的命名空間</span>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label class="col-xs-2 control-label">命名空間</label>
+                                <label class="col-xs-2 control-label" for="name_space">命名空間</label>
                                 <div class="col-xs-10">
-                                    <input type="text" class="form-control required" name="name_space" value="{{ namespace }}" readonly>
+                                    <input type="text" class="form-control required" name="name_space" id="name_space" value="{{ namespace }}" readonly>
                                     <span class="help-block m-b-none">將被 DataStore、Cache、Task queue、Search 所使用</span>
                                 </div>
                             </div>
@@ -162,9 +162,9 @@
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label class="col-xs-2 control-label">佈景主題</label>
+                                <label class="col-xs-2 control-label" for="theme">佈景主題</label>
                                 <div class="col-xs-10">
-                                    <select class="form-control m-b required" name="theme">
+                                    <select class="form-control m-b required" name="theme" id="theme">
                                         {% for item in themes_list %}
                                         <option value="{{ item.theme_name }}">{{ item.theme_title }} - 作者 {{ item.author }}</option>
                                         {% endfor %}
@@ -203,7 +203,6 @@
                         <h1>完成</h1>
                         <div class="step-content form-horizontal">
                             <h4>已完成設定完成</h4>
-
                             <p>
                                 請點擊下方的送出按鈕，請注意，送出後 命名空間 namespace 將不可在修改。
                             </p>
@@ -219,7 +218,7 @@
 <script src="/static/vendor/bootstrap/bootstrap.min.js"></script>
 <script src="/static/vendor/jquery.steps/jquery.steps.min.js"></script>
 <script src="/static/vendor/jquery-validation/jquery.validate.min.js"></script>
-<script src="/static/vendor/jquery-validation/messages_zh_TW.js"></script>
+<script src="/static/vendor/jquery-validation/messages_zh_TW.min.js"></script>
 <script>
     $(document).ready(function () {
         $("#wizard").steps({
@@ -257,7 +256,7 @@
         $(".ibox").show();
     });
     $("#send_form").click(function(){
-        $("#wizard").submit();;
+        $("#wizard").submit();
     })
 </script>
 </body>
