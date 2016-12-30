@@ -4074,7 +4074,19 @@ ul.notes li div {
     font-size: 70px;
     color: #dadada
 }
-.file .file-name{
+.file .file-name {
+    overflow: hidden;
+    padding: 15px 10px 15px 10px;
+    position: absolute;
+    z-index: 999;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    background: #333;
+}
+.file.theme .file-name.theme-name{
     height: 90px;
     overflow: hidden;
     padding: 30px 10px 5px 10px;
@@ -4083,7 +4095,7 @@ ul.notes li div {
     bottom: 0;
     right: 0;
     left: 0;
-    opacity: 0;
+    opacity: 0.9;
     background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0) 6%, rgba(0,0,0,0.65) 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.65) 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
@@ -6210,6 +6222,7 @@ body{
 }
 .theme .file-name-span {
     font-size: 18px;
+    color: #111;
 }
 .file.theme{
     overflow: hidden;
@@ -6708,7 +6721,6 @@ td.hide-sorting-mode, th.hide-sorting-mode{
     text-shadow: 5px 2px rgba(67, 74, 84, 0.45);
 }
 .file .file-icon{
-    float: left;
     margin: 0;
     box-shadow: none;
     width: 100%;
