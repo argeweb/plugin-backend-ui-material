@@ -871,16 +871,16 @@ header.header .page-overlay{
     left: calc(100% - 250px);
 }
 .in-edit-mode header.header .page-overlay{
-    background-color: rgba(15, 69, 117, 0.19);
+    background-color: rgba(15, 69, 117, 0);
 }
 .in-view-mode header.header .page-overlay{
-    background-color: rgba(33, 70, 56, 0.19)
+    background-color: rgba(33, 70, 56, 0)
 }
 .in-sort-mode header.header .page-overlay{
-    background-color: rgba(117, 38, 15, 0.19);
+    background-color: rgba(117, 38, 15, 0);
 }
 .in-delete-mode header.header .page-overlay{
-    background-color: rgba(117, 15, 39, 0.19);
+    background-color: rgba(117, 15, 39, 0);
 }
 header.header.affix{
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
