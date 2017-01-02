@@ -25,7 +25,7 @@ var affix = function(top){
         $("header.header").removeClass("affix");
     }
 };
-var consoleDOD = function(evt){
+var pageDOD = function(evt){
     evt.preventDefault();
     evt.stopPropagation();
     content_iframe.focus();
@@ -45,7 +45,7 @@ var message = {
             swal(msg).done();
         }
     },
-    "quick_info": function(msg, sec){
+    "snackbar": function(msg, sec){
 		$('body').snackbar({
             alive: sec,
 			content: msg,
@@ -242,7 +242,7 @@ var uploader = {
             xhr.open('POST', this.reader_info.upload_url);
             xhr.onload = function(data) {
                 progress_bar.set(100);
-                message.quick_info("上傳完成");
+                message.snackbar("上傳完成");
                 message.change(this.xhr_info.message_id, "success", "上傳完成", "100 %, 上傳完成", this.xhr_info.image, true);
                 if (typeof this.xhr_info.callback === "function"){
                     eval('var a = ' + data.currentTarget.response);
@@ -294,7 +294,7 @@ var content_iframe = {
         window.onpopstate = this.popState;
         this.history = JSON.parse(localStorage.getItem('content_iframe.history'));
         if (this.history == null || this.history == "null") this.history = [];
-        //  常用項目
+        //  常用項目 (利用本機儲存記錄各頁面查看次數，用以顯示為常用項目)
         //var sort_list = [];
         //var $menu_usually = $("#menu_usually");
         //$menu_usually.parent().addClass("hidden");
@@ -319,15 +319,7 @@ var content_iframe = {
         });
         var b = $("body").data("dashboard-name");
         if(window.location.hash) {
-            //var find_page = false;
             var hash = window.location.hash.replace("#", "");
-            //$linkList.each(function(){
-            //    if ($(this).attr("href") == hash){
-            //        find_page = true;
-            //        $(this).click();
-            //    }
-            //});
-            //if (find_page){ return false; }
             var last_page = this.getState(hash);
             if (last_page != null){
                 content_iframe.load(hash, last_page.text, last_page.referer_page, false);
@@ -676,6 +668,7 @@ $(function(){
     //    short_key(window.name, e);
     //});
 
+    // scrollDiv 是一個 iframe 的遮罩，用來解決 iframe 抓不到滑鼠移動事件的問題
     $(".scrollDiv").hover(function(){
         $(this).addClass("on");
         content_iframe.need_focus = false;
@@ -707,22 +700,17 @@ $(function(){
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
+            // 顯示主選單、隱藏子選單
             event.stopPropagation();
             event.preventDefault();
-            $(target_id).removeClass("in").animate({"left": -300}, function(){
-                //$(this).css({"position": "relative", "top": "0"});
-                //$(target_id);
-            });
+            $(target_id).removeClass("in").animate({"left": -300});
             $("#main-nav").show().animate({"left": 0});
         }else{
+            // 顯示子選單、隱藏主選單
             event.stopPropagation();
             event.preventDefault();
-            $("#main-nav").animate({"left": -300}, function(){
-                $(this).hide();
-            });
-            $(target_id).animate({"left": 0}, function(){
-                $(target_id).addClass("in");
-            });
+            $("#main-nav").animate({"left": -300}, function(){ $(this).hide(); });
+            $(target_id).animate({"left": 0}, function(){ $(target_id).addClass("in"); });
         }
     });
 });

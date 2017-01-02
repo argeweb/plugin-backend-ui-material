@@ -1,6 +1,6 @@
-function json(url,data,successCallback,errorCallback)       {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
+function json(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
 function json_async(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:1 ,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
-function ajax_post(url,data,successCallback,errorCallback)  {$.ajax({url:url,type:"POST",cache: true,data:data,async:true,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{window.alert(thrownError.message)}}})};
+function ajax_post(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",cache: true,data:data,async:true,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{window.alert(thrownError.message)}}})};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
 var save_with_exit = false;
 var dom_is_ready = false;
@@ -12,20 +12,18 @@ var page = {};
 function show_message(msg, timeout){
     backend.message.quick_show(msg, timeout);
 }
+// 確保 file picker 與 message 被正常載入
 var start_filepicker = backend.uploader.pickup;
-
 function parent_is_ready(){
+    //  此文件在 parent 準備好之前就載入完畢
     show_message = backend.message.quick_show;
     start_filepicker = backend.uploader.pickup;
 }
 if (backend.js_is_ready && backend.js_is_ready == true){
+    //  此文件在 parent 準備好之後才載入完畢
     show_message = backend.message.quick_show;
     start_filepicker = backend.uploader.pickup;
 }
-
-//window.onpopstate = function(event){
-//    console.log("iframe event" + event);
-//};
 
 var pageDOD = {
     "visual_timer": 3,
@@ -197,7 +195,6 @@ function addClass(class_name){
 function removeClass(class_name){
     $("body").removeClass(class_name);
 }
-var currentView = "edit";
 function changeView(){
     $("body").removeClass("in-"+backend.view.last+"-mode").addClass("in-"+backend.view.current+"-mode");
     if (typeof page["change_view_to_"+backend.view.current] == "function"){
@@ -206,9 +203,8 @@ function changeView(){
 }
 function changeViewAndReload(){
     if (backend.view.last != backend.view.current){
-        currentView = backend.view.current;
-        if (currentView == "edit" || currentView == "view"){
-            $("a."+currentView+"-url").first().click();
+        if (backend.view.current == "edit" || backend.view.current == "view"){
+            $("a."+backend.view.current+"-url").first().click();
         }
     }
 }
@@ -257,19 +253,14 @@ $(function(){
         if (e.target.outerHTML.indexOf('switch-toggle') > 0 || e.target.outerHTML.indexOf('input') > 0){
             return;
         }
-        currentView = backend.view.current;
-        var url_target = currentView + "-url";
+        var url_target = backend.view.current + "-url";
         var url = $(this).parent().data(url_target);
         if ($(this).hasClass("record_item")){
             url = $(this).data(url_target);
         }
-        var target_iframe = $(this).parent().data(currentView+"-iframe");
-            console.log('target_iframe   :  ' + target_iframe);
-        var use_aside_iframe = target_iframe == 'aside';
         if (url && url != ""){
-            console.log('use_aside_iframe   :  ' + use_aside_iframe.toString());
-            if (currentView != "delete"){
-                if (use_aside_iframe)
+            if (backend.view.current != "delete"){
+                if ($(this).parent().data(backend.view.current + "-iframe") == 'aside')
                     backend.aside_iframe.load(url);
                 else
                     backend.content_iframe.load(url);
@@ -298,7 +289,6 @@ $(function(){
         if ($(this).parents(".file_picker_div").hasClass("image")){
             $(this).parents(".file_picker_div").find(".file_picker_item").css("background-image", "url(" + val + ")");
         }else{
-            console.log(val.split(".")[1]);
             $(this).parents(".file_picker_div").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
         }
         if ($(this).attr("id") == "avatar"){
@@ -309,14 +299,14 @@ $(function(){
             var enable_text = $(this).data("enable-text");
             json($(this).data("enable-url"), null, function(data){
                 if (data.info == "success"){
-                    backend.message.quick_info(enable_text+"...");
+                    backend.message.snackbar(enable_text+"...");
                 }
             });
         }else{
             var disable_text = $(this).data("disable-text");
             json($(this).data("disable-url"), null, function(data){
                 if (data.info == "success"){
-                    backend.message.quick_info(disable_text+"...");
+                    backend.message.snackbar(disable_text+"...");
                 }
             });
         }
@@ -436,7 +426,7 @@ function pageInit(new_html) {
                 if (save_with_exit){
                     save_with_exit = false;
                     setTimeout(backend.aside_iframe.closeUi(), 10);
-                    backend.message.quick_info(text);
+                    backend.message.snackbar(text);
                 }else{
                     show_message(text, 1800);
                 }
@@ -445,7 +435,7 @@ function pageInit(new_html) {
                     backend.content_iframe.reload(true);
                 }
             }else{
-                backend.message.quick_info("表單欄位有誤");
+                backend.message.snackbar("表單欄位有誤");
             }
             clearTimeout(timeout_lock_saving);
             timeout_lock_saving = setTimeout(function(){
@@ -474,7 +464,6 @@ function pageInit(new_html) {
     });
 
     $('#list-table').on('post-body.bs.table', function () {
-        console.log("aaaa");
         makeSortTable();
         makeListOp();
         checkNavItemAndShow();
@@ -603,7 +592,7 @@ function makeSortTable(){
                     }
                 });
                 json_async("/admin/record/sort.json", last_page_record + $sort.sortable('serialize'), function (data) {
-                    backend.message.quick_info("排序完成...");
+                    backend.message.snackbar("排序完成...");
                 }, function (data) {
                     return false;
                 });

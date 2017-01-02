@@ -5875,23 +5875,6 @@ del {
     max-width: 72px
 }
 
-#quick_info {
-    position: absolute;
-    top: 26px;
-    right: 31%;
-    border: solid 1px #f8ac59;
-    min-width: 50px;
-    min-height: 25px;
-    z-index: 99999999999;
-    line-height: 18px;
-    text-align: center;
-    border-radius: 4px;
-    padding: 3px 6px;
-    color: #fff;
-    background: #fbbe7b;
-    font-size: 10px
-}
-
 .msg div.alert-tag {
     width: 32px;
     float: left;
