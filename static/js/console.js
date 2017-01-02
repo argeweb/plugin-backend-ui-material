@@ -314,35 +314,25 @@ var content_iframe = {
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
             if ($(this).hasClass("main-link")){ aside_iframe.closeUi(); }
-            content_iframe.load($(this).attr("href"), t);
+            content_iframe.load($(this).attr("href"), t, content_iframe.last_url);
             event.preventDefault();
         });
         var b = $("body").data("dashboard-name");
         if(window.location.hash) {
-            var find_page =false;
+            //var find_page = false;
             var hash = window.location.hash.replace("#", "");
-            $linkList.each(function(){
-                if ($(this).attr("href") == hash){
-                    find_page = true;
-                    $(this).click();
-                }
-            });
-            if (find_page==false){
-                var last_page = this.getState(hash);
-                if (last_page != null){
-                    content_iframe.load(hash, last_page.text, last_page.referer_page);
-                }else{
-                    var h = hash.split("/").slice(0, 3).join("/");
-                    $linkList.each(function(){
-                        if ($(this).attr("href") == h){
-                            find_page = true;
-                            $(this).click();
-                        }
-                    });
-                }
-            }
-            if (find_page==false){
-                content_iframe.load("/"+b+"/welcome", "Welcome");
+            //$linkList.each(function(){
+            //    if ($(this).attr("href") == hash){
+            //        find_page = true;
+            //        $(this).click();
+            //    }
+            //});
+            //if (find_page){ return false; }
+            var last_page = this.getState(hash);
+            if (last_page != null){
+                content_iframe.load(hash, last_page.text, last_page.referer_page, false);
+            }else{
+                content_iframe.load(hash, "最後檢視", {}, false);
             }
         }else{
             content_iframe.load("/"+b+"/welcome", "Welcome");
@@ -384,7 +374,7 @@ var content_iframe = {
         //return this.instance.contentWindow.location.pathname;
         return this.last_url;
     },
-    "load": function(url, text, referer_page){
+    "load": function(url, text, referer_page, need_push){
         affix(0);
         if (this.loading_lock == true) return false;
         this.loading_lock = true;
@@ -393,11 +383,15 @@ var content_iframe = {
             content_iframe.instance.contentWindow.showTimeout();
         }, 25000);
         this.last_url = url;
-        this.pushState(url , text, referer_page);
+        if (typeof need_push === "undefined"){ need_push = true }
+        if (need_push){ this.pushState(url , text, referer_page); }
         content_iframe.instance.contentWindow.showLoading(function(){
             ajax(url, null, function(page){
                 var data = content_iframe.getState();
-                if (data) history.pushState(data, data.text, "#" + data.href);
+                if (need_push){
+                    if (data) history.pushState(data, data.text, "#" + data.href);
+                }
+                //window.history.replaceState( s , s.text, "#" + s.href);
                 clearTimeout(content_iframe.loading_timer);
                 content_iframe.loading_lock = false;
                 content_iframe.instance.contentWindow.pageInit(page);
@@ -448,8 +442,7 @@ var content_iframe = {
     "popState": function(event){
         var s = event.state;
         if (s){
-            content_iframe.load(s.href, s.text, s.is_list);
-            window.history.replaceState( s , s.text, "#" + s.href);
+            content_iframe.load(s.href, s.text, s.referer_page, false);
         }
     },
     "search": function(keyword){
@@ -537,7 +530,7 @@ var aside_iframe = {
     "closeUi": function(callback){
         $("#aside_iframe").stop().animate({"width": "0"}, 500, function(){
             aside_iframe.is_open = false;
-            aside_iframe.instance.contentWindow.removeClass("open");
+            try{ aside_iframe.instance.contentWindow.removeClass("open"); }catch(e){}
             if (typeof callback === "function") callback();
         });
     }

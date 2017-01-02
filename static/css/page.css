@@ -5989,6 +5989,8 @@ header h1 {
 }
 
 header a, header a.btn, header span{
+    padding: 6px 10px 5px 9px;
+    margin-top: 1px;
     color: #333;
 }
 
@@ -6949,4 +6951,10 @@ textarea.w100p {
 }
 .form-group .checkbox{
     position: relative !important;
+}
+.btn-display-in-iframe{
+    display: inline-block;
+}
+body.aside .btn-display-in-iframe{
+    display: none;
 }

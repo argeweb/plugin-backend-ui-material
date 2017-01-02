@@ -258,15 +258,21 @@ $(function(){
             return;
         }
         currentView = backend.view.current;
-        var url_targe = currentView + "-url";
-        var url = $(this).parent().data(url_targe);
+        var url_target = currentView + "-url";
+        var url = $(this).parent().data(url_target);
         if ($(this).hasClass("record_item")){
-            url = $(this).data(url_targe);
+            url = $(this).data(url_target);
         }
+        var target_iframe = $(this).parent().data(currentView+"-iframe");
+            console.log('target_iframe   :  ' + target_iframe);
+        var use_aside_iframe = target_iframe == 'aside';
         if (url && url != ""){
-            console.log(currentView);
+            console.log('use_aside_iframe   :  ' + use_aside_iframe.toString());
             if (currentView != "delete"){
-                backend.aside_iframe.load(url);
+                if (use_aside_iframe)
+                    backend.aside_iframe.load(url);
+                else
+                    backend.content_iframe.load(url);
             }else{
                 backend.swal({
                     title: "您確定要刪除此記錄嗎",
@@ -451,9 +457,7 @@ function pageInit(new_html) {
             save_form();
         });
     }catch(e){
-
     }
-
     $(".filepicker").click(function(){
         start_filepicker($(this).parents(".input-group").find("input"), false);
     });
