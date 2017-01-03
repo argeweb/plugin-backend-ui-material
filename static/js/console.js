@@ -189,10 +189,12 @@ var uploader = {
     "pickup": function($target, ed){
         uploader.pickup_target = $target;
         uploader.pickup_target_is_editor = ed;
-        if ($target.hasClass("image")){
-            $("#image-file-picker").attr("accept", "image/*");
-        }else{
-            $("#image-file-picker").attr("accept", "*");
+        if (ed != true){
+            if ($target.hasClass("image")){
+                $("#image-file-picker").attr("accept", "image/*");
+            }else{
+                $("#image-file-picker").attr("accept", "*");
+            }
         }
         $("#image-file-picker").click();
     },
@@ -213,7 +215,7 @@ var uploader = {
     "addFile": function(file, target_id, callback){
         progress_bar.set(10);
         var message_id = message.insert("info", "準備上傳", "等待中....", undefined, true);
-        json_async("/admin/user_file/get.json", null, function(data){
+        json_async("/admin/user_file/user_file/get_url", null, function(data){
             progress_bar.set(20);
             uploader.upload({
                 "message_id": message_id,
@@ -360,10 +362,8 @@ var content_iframe = {
         if (last_page != null) {
             content_iframe.load(last_page.href, last_page.text, last_page.referer_page);
         }
-        //this.instance.contentWindow.location.reload();
     },
     "getUrl": function(){
-        //return this.instance.contentWindow.location.pathname;
         return this.last_url;
     },
     "load": function(url, text, referer_page, need_push){
@@ -383,7 +383,6 @@ var content_iframe = {
                 if (need_push){
                     if (data) history.pushState(data, data.text, "#" + data.href);
                 }
-                //window.history.replaceState( s , s.text, "#" + s.href);
                 clearTimeout(content_iframe.loading_timer);
                 content_iframe.loading_lock = false;
                 content_iframe.instance.contentWindow.pageInit(page);

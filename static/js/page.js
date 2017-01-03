@@ -141,8 +141,7 @@ function create_editor(id){
             title : '插入圖片',
             image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
             onclick : function() {
-                var $target_editor = ed;
-                start_filepicker($target_editor, true)
+                start_filepicker(ed, true)
             }
         });
 
