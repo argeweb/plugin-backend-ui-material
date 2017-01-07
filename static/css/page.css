@@ -3960,7 +3960,8 @@ ul.notes li div {
 .folder-list li a {
     color: #666;
     display: block;
-    padding: 7px 0
+    padding: 6px 4px;
+    margin: 0;
 }
 
 .folder-list li {
@@ -3972,6 +3973,8 @@ ul.notes li div {
     margin-right: 8px;
     color: #3d4d5d;
     float: left;
+    font-size: 18px;
+    line-height: 26px;
 }
 
 .category-list li a {
@@ -5972,7 +5975,6 @@ header h1 {
 }
 
 header a, header a.btn, header span{
-    padding: 6px 10px 5px 9px;
     margin-top: 1px;
     color: #333;
 }
@@ -6263,10 +6265,10 @@ body{
 .folder-list li {
     border-bottom: 1px solid #e7eaec;
     display: block;
-    min-width: 180px;
+    min-width: 280px;
     padding: 0;
     line-height: 25px;
-    max-height: 35px;
+    max-height: 38px;
 }
 .list-operations{
     min-width: 70px;
@@ -6312,20 +6314,31 @@ body{
 main.content .mail-box .fixed-table-container{
     position: inherit !important;
 }
- .form-control.field-type-boolean-field{
-     line-height: 34px;
+
+.form-control.field-type-boolean-field {
+    line-height: 34px;
     height: 18px !important;
     margin: 0 !important;
     float: left !important;
     width: 18px !important;
-     display: inline-block;
- }
- .checkbox, .radio {
+    display: inline-block;
+}
+
+.field-type-backend-link-field {
+    line-height: 31px;
+    padding-top: 7px;
+    float: left;
+    display: block;
+    width: 100%;
+}
+
+.checkbox, .radio {
     position: relative;
     display: block;
     margin-top: 0;
     margin-bottom: 0;
 }
+
 .ui-state-highlight {padding: 8px; width:calc(100% - 60px); min-height: 56px; height: 56px; line-height: 56px; background-color: #1ab394; border: solid 1px #1ab394; }
 .ui-state-highlight td{background-color: #1ab394;}
 .ui-sortable-helper .sortable-hide{ display: none;}
@@ -6880,7 +6893,6 @@ img.descPicture.descPictureClose { width:150px; }
     background-color: #ed5565;
 }
 .btn-group-vertical>.btn, .btn-group>.btn {
-    padding: 6px 10px 5px 9px;
     margin-top: 1px;
 }
 .aside .header-transparent {

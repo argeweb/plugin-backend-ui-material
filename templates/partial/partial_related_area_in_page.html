@@ -26,9 +26,9 @@
         <ul class="dropdown-menu folder-list ">
             <li class="dropdown-menu-group">頁面</li>
             {%- if route.action == 'edit' -%}
-            <li><a href="javascript: save_form();"><i class="icon">save</i>{{ submit_text }}
+            <li><a href="javascript: save_form();"><i class="material-icons">save</i>{{ submit_text }}
                     <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
-            <li><a href="javascript: save_and_exit();"><i class="icon">save</i>{{ submit_and_exit_text }}
+            <li><a href="javascript: save_and_exit();"><i class="material-icons">save</i>{{ submit_and_exit_text }}
                     <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Shift</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
             {% endif %}
             {%- if route.action != 'add' -%}
