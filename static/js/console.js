@@ -273,6 +273,7 @@ var uploader = {
             };
             fd.append('name', this.reader_info.file.name);
             fd.append('content_type', this.reader_info.file.type);
+            fd.append('content_length', this.reader_info.file.size);
             fd.append('file', this.reader_info.file);
             xhr.send(fd);//開始上傳
         };
