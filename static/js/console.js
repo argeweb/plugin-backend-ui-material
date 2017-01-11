@@ -565,15 +565,11 @@ var shortcut = {
             case 'f5':
             case 'ctrl+r':
             case 'ctrl+f5': target.reload(); break;
-        }
-        if (aside_iframe.is_open){
-            switch (shortcut_key) {
-                case 'ctrl+shift+s': target_window.save_and_exit(); break;
-                case 'ctrl+s': target_window.save_form(); break;
-                case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
-                    target_window.change_lang(parseInt(shortcut_key.replace('alt+', ''))-1);
-                    break;
-            }
+            case 'ctrl+shift+s': target_window.save_and_exit(); break;
+            case 'ctrl+s': target_window.save_form(); break;
+            case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
+                target_window.change_lang(parseInt(shortcut_key.replace('alt+', ''))-1);
+                break;
         }
         if (scope != "input"){
             var s = [];
