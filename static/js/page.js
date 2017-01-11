@@ -285,10 +285,10 @@ $(function(){
         }
     }).on("change", ".file_picker_div input", function(){
         var val = $(this).val();
-        if ($(this).parents(".file_picker_div").hasClass("image")){
-            $(this).parents(".file_picker_div").find(".file_picker_item").css("background-image", "url(" + val + ")");
+        if ($(this).parents(".form-group").hasClass("form-group-avatar")){
+            $(this).parents(".form-group").find(".file_picker_item").css("background-image", "url(" + val + ")").text("");
         }else{
-            $(this).parents(".file_picker_div").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
+            $(this).parents(".form-group").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
         }
         if ($(this).attr("id") == "avatar"){
             backend.ui.setUserInformation($("#name").val(), val);
