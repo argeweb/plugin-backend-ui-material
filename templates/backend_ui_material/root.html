@@ -38,13 +38,17 @@
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
-            <li><a href="/admin/application_user/profile" target="content_iframe" title="{{ application_user_name }}"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>
+{#            <li><a href="/admin/application_user/profile" target="content_iframe" title="{{ application_user_name }}"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>#}
 		</ul>
 	</header>
 	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">
 		<div class="menu-scroll">
 			<div class="menu-content">
 				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a><div class="page-overlay"></div></div>
+                <div class="user-box">
+					<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>
+					<div class="user-name"><a href="/admin/application_user/profile" target="content_iframe">{{ application_user_name }}</a></div>
+				</div>
                 <div class="op-mode">
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
                     <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>

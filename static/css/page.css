@@ -6760,6 +6760,11 @@ li.file-menu.active a{
 .control-label {
     line-height: 31px;
 }
+@media (min-width: 768px){
+    .form-horizontal .control-label {
+        padding-top: 4px;
+    }
+}
 :hover ul{
     list-style: none;
 }

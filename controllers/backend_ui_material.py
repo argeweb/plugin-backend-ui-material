@@ -298,6 +298,6 @@ class BackendUiMaterial(Controller):
 
         if not has_record():
             application_user_init(account_name, account, password, prohibited_actions,
-                                 '/plugins/backend_ui_material/static/css/images/persian.jpg')
+                                 '/plugins/backend_ui_material/static/images/users/avatar-001.jpg')
         self.settings.set_theme(self.host_information.host, namespace, theme)
         return self.redirect('/')
