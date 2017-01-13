@@ -32,7 +32,7 @@
 			</li>
             <li class="dropdown"><a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
                 <ul class="dropdown-menu dropdown-menu-right top100-12" style="top: 100%;">
-                    <li><a class="waves-attach" href="javascript:iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
+                    <li><a class="waves-attach" href="javascript:content_iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     {% if dashboard_name == "admin" %}<li><a class="waves-attach" href="/admin/log" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>{% endif %}
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>

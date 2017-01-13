@@ -6958,3 +6958,9 @@ textarea.w100p {
 body.aside .btn-display-in-iframe{
     display: none;
 }
+.nav-tabs{
+    margin: 0;
+}
+.form-tabs .nav-tabs li a{
+    padding: 0 10px;
+}
