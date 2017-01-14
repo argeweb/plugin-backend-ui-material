@@ -295,8 +295,8 @@ var content_iframe = {
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("iframe");
         window.onpopstate = this.popState;
-        this.history = JSON.parse(localStorage.getItem('content_iframe.history'));
-        if (this.history == null || this.history == "null") this.history = [];
+        var h = JSON.parse(localStorage.getItem('content_iframe.history'));
+        if (h != null && h != [] && h != "null") content_iframe.history = h;
         //  常用項目 (利用本機儲存記錄各頁面查看次數，用以顯示為常用項目)
         //var sort_list = [];
         //var $menu_usually = $("#menu_usually");
@@ -317,7 +317,7 @@ var content_iframe = {
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
             if ($(this).hasClass("main-link")){ aside_iframe.closeUi(); }
-            content_iframe.load($(this).attr("href"), t, content_iframe.last_url);
+            content_iframe.load($(this).attr("href"), t, content_iframe.last_url, true);
             event.preventDefault();
         });
         var b = $("body").data("dashboard-name");
@@ -361,7 +361,7 @@ var content_iframe = {
         if (!(keep_aside && keep_aside == true)) aside_iframe.closeUi();
         var last_page = this.getState();
         if (last_page != null) {
-            content_iframe.load(last_page.href, last_page.text, last_page.referer_page);
+            content_iframe.load(last_page.href, last_page.text, last_page.referer_page, false);
         }
     },
     "getUrl": function(){
@@ -376,6 +376,7 @@ var content_iframe = {
             content_iframe.instance.contentWindow.showTimeout();
         }, 25000);
         this.last_url = url;
+        console.log(need_push);
         if (typeof need_push === "undefined"){ need_push = true }
         if (need_push){ this.pushState(url , text, referer_page); }
         content_iframe.instance.contentWindow.showLoading(function(){
@@ -400,7 +401,7 @@ var content_iframe = {
     },
     "getState": function(url) {
         if (typeof url === "undefined") url = content_iframe.getUrl();
-        if (url in this.history){
+        if (url in content_iframe.history){
             return content_iframe.history[url];
         }
         return null;
@@ -411,7 +412,7 @@ var content_iframe = {
             referer_page = referer_page_data.referer_page;
         }
         var history_item = null;
-        if (url in this.history){
+        if (url in content_iframe.history){
             history_item = content_iframe.history[url];
             history_item.last_date = Date.now();
             if (history_item.visit){
@@ -419,17 +420,17 @@ var content_iframe = {
             }else{
                 history_item.visit = 1
             }
-            localStorage.setItem('content_iframe.history', JSON.stringify(this.history));
+            localStorage.setItem('content_iframe.history', JSON.stringify(content_iframe.history));
             return false;
         }
-        this.history[url] ={
+        content_iframe.history[url] ={
             "href": url,
             "text": text,
             "visit": 1,
             "last_date": Date.now(),
             "referer_page": referer_page
         };
-        localStorage.setItem('content_iframe.history', JSON.stringify(this.history));
+        localStorage.setItem('content_iframe.history', JSON.stringify(content_iframe.history));
     },
     "popState": function(event){
         var s = event.state;

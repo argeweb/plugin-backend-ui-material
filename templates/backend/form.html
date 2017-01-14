@@ -19,42 +19,32 @@
           target="{% block form_tag_target %}iframeForm{% endblock %}" role="form">
         {% block form_body %}
         <div class="col-sm-12" style=" margin-top: 10px;margin-bottom: 30px;">
-            <div class="tabs-container form-tabs">
-                {% if scaffolding.form_tab_pages %}
+            <div class="tabs-container form-tabs">{% if scaffolding.form_tab_pages %}
                 <ul class="nav nav-tabs">{% for tab_page in scaffolding.form_tab_pages -%}{% if loop.index == 1 %}
                     <li class="active"><a data-toggle="tab" href="#tab-{{ loop.index }}" aria-expanded="true"> {{ tab_page }}</a></li>{% else %}
                     <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">{{ tab_page }}</a></li>{% endif %}{% endfor -%}
-                </ul>
-                {% endif %}
+                </ul>{% endif %}
                 <div class="tab-content">
-                {% block form_content %}
-                    <div id="tab-1" class="tab-pane active">
+                    {%- block form_content %}{{ events.before_form_fields() }}
+                    {%- for tabs_fields in scaffolding.form_tab_pages_fields %}
+                    <div id="tab-{{ loop.index }}" class="tab-pane active">
                         <div class="panel-body">
-                                {{ events.before_form_fields() }}
-                                <div class="row">
-                                    {%- block form_fields %}{%- for field in form %}
-                                        {% if not field.name in scaffolding.excluded_properties_in_from %}{{ s.form_field(form, field) }}{% endif %}
-                                    {%- endfor %}{%- endblock %}
+                            <div class="row">{%- for field in form %}{% if field.name in tabs_fields and field.name not in scaffolding.excluded_properties_in_from %}
+                                {{ s.form_field(form, field) }}{% endif %}{%- endfor %}</div>
+                        </div>
+                    </div>
+                    {%- endfor %}
+                    {%- endblock %}
 
-                                    {% block form_actions %}
-                                    <div class="col-xs-12 text-right">
-                                        {% block submit_button -%}
-                                        <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
-                                        <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
-                                        {%- endblock %}
-                                    </div>
-                                    {% endblock %}
-                                </div>
-                                {{ events.after_form_fields() }}
-                        </div>
+                    {% block form_actions %}
+                    <div class="col-xs-12 text-right">
+                        {% block submit_button -%}
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
+                        <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
+                        {%- endblock %}
                     </div>
-                    <div id="tab-2" class="tab-pane">
-                        <div class="panel-body">
-                            <strong>移动设备优先</strong>
-                            <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3 中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap 是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
-                        </div>
-                    </div>
-                {% endblock %}
+                    {% endblock %}
+                {{ events.after_form_fields() }}
                 </div>
             </div>
 
