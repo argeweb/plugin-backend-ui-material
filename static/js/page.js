@@ -2,7 +2,9 @@ function json(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POS
 function json_async(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:1 ,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
 function ajax_post(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",cache: true,data:data,async:true,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{window.alert(thrownError.message)}}})};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
-var save_with_exit = false;
+var exit_after_save = false;
+var load_record_after_save = false;
+
 var dom_is_ready = false;
 var is_saving = false;
 var timeout_lock_saving = null;
@@ -224,7 +226,7 @@ function save_form(){
     $form.submit();
 }
 function save_and_exit(){
-    save_with_exit = true;
+    exit_after_save = true;
     save_form();
 }
 function scrollDiv(){
@@ -328,6 +330,53 @@ $(function(){
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
+function get_iframeForm_message(method_default_message, method){
+    var msg = (method_default_message !== null) && method_default_message || {
+            "add": "記錄已新增",
+            "edit": "記錄已儲存",
+            "profile": "資料已更新",
+            "data": "資料已更新",
+            "config": "設定已變更",
+            "undefined": "未定義的訊息"
+        };
+    method = method.replace("admin_", "");
+    return (typeof msg[method] === "undefined") && msg["undefined"] || msg[method];
+}
+function after_iframeForm_load (){
+    var j = JSON.parse($(this).contents().find("body").text());
+    $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
+    var err = j["errors"];
+    if (err){
+        for (var key in err) {
+            $("form #" + key).parents(".form-group").addClass("has-error has-danger").find(".help-block").text(err[key]);
+        }
+        if ($("form").attr("action").indexOf("/_ah/upload/") >= 0){
+            $("form").attr("action", j["new_form_action"]);
+        }
+    }
+    var message = get_iframeForm_message(j["method_default_message"], j["request_method"]);
+    if (j["response_info"] == "success"){
+        if (exit_after_save){
+            exit_after_save = false;
+            if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
+            if (is_content()) setTimeout(function(){ history.go(-1); }, 10);
+            backend.message.snackbar(message);
+        }else{
+            show_message(message, 1800);
+        }
+        backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
+        if (j["response_method"] == "add" || j["response_method"] == "edit"){
+            if (is_aside()) backend.content_iframe.reload(true);
+        }
+    }else{
+        backend.message.snackbar("表單欄位有誤");
+    }
+    clearTimeout(timeout_lock_saving);
+    timeout_lock_saving = setTimeout(function(){
+        is_saving = false;
+    }, 3000);
+}
+
 //  ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
@@ -397,52 +446,13 @@ function pageInit(new_html) {
     $('body').removeClass("body-hide");
     checkNavItemAndShow();
     try{
-        $("iframe[name='iframeForm']").load(function(){
-            var j = JSON.parse($(this).contents().find("body").text());
-            $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
-            var err = j["errors"];
-            if (err){
-                for (var key in err) {
-                    $("form #" + key).parents(".form-group").addClass("has-error has-danger").find(".help-block").text(err[key]);
-                }
-                if ($("form").attr("action").indexOf("/_ah/upload/") >= 0){
-                    $("form").attr("action", j["new_form_action"]);
-                }
-            }
-            var msg = {
-                "add": "記錄已新增",
-                "edit": "記錄已儲存",
-                "profile": "資料已更新",
-                "data": "資料已更新",
-                "config": "設定已變更",
-                "undefined": "未定義的訊息"
-            };
-            var text = msg[j["response_method"]];
-            if (typeof text === "undefined"){
-                text = msg["undefined"];
-            }
-            if (j["response_info"] == "success"){
-                if (save_with_exit){
-                    save_with_exit = false;
-                    setTimeout(backend.aside_iframe.closeUi(), 10);
-                    backend.message.snackbar(text);
-                }else{
-                    show_message(text, 1800);
-                }
-                backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
-                if (j["response_method"] == "add" || j["response_method"] == "edit"){
-                    backend.content_iframe.reload(true);
-                }
-            }else{
-                backend.message.snackbar("表單欄位有誤");
-            }
-            clearTimeout(timeout_lock_saving);
-            timeout_lock_saving = setTimeout(function(){
-                is_saving = false;
-            }, 3000);
-        });
+        $("iframe[name='iframeForm']").load(after_iframeForm_load);
         $(".submit_and_exit").click(function(){
-            save_with_exit = true;
+            exit_after_save = true;
+            save_form();
+        });
+        $(".submit_and_load_record").click(function(){
+            load_record_after_save = true;
             save_form();
         });
     }catch(e){

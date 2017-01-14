@@ -645,13 +645,15 @@ var ui = {
     "closeSearchBox": function(){ $(".page-overlay a").focus(); $(".page-overlay").click(); },
     "setUserInformation": function(name, blob_url){
         var href = content_iframe.last_url;
-        if (href.indexOf('/admin/application_user/%3A') >= 0) {
+        var p = $(".user-name a").attr("href");
+        var pe = p.replace("profile", "%3A");
+        if (href.indexOf(pe) >= 0) {
             if (href.indexOf($("body").data("user")) > 0) {
                 $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
                 $(".user-name a").text(name);
             }
         }
-        if (href.indexOf('/admin/application_user/profile') >= 0){
+        if (href.indexOf(p) >= 0){
             $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
             $(".user-name a").text(name);
         }

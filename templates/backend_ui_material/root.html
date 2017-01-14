@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
 </head>
-<body class="page-brand in-edit-mode" data-user="{{ application_user_key }}" data-dashboard-name="{{ dashboard_name }}"
+<body class="page-brand in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
       ondragover="pageDOD(event)" ondrop="pageDOD(event)" ondragenter="pageDOD(event)" ondragleave="pageDOD(event)">
 	<header class="header header-transparent header-waterfall ui-header">
 		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
@@ -47,7 +47,7 @@
 				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a><div class="page-overlay"></div></div>
                 <div class="user-box">
 					<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>
-					<div class="user-name"><a href="/admin/application_user/profile" target="content_iframe">{{ application_user_name }}</a></div>
+					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_iframe">{{ application_user_name }}</a></div>
 				</div>
                 <div class="op-mode">
                     <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
