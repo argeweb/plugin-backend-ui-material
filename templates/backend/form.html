@@ -27,7 +27,7 @@
                 <div class="tab-content">
                     {%- block form_content %}{{ events.before_form_fields() }}
                     {%- for tabs_fields in scaffolding.form_tab_pages_fields %}
-                    <div id="tab-{{ loop.index }}" class="tab-pane active">
+                    <div id="tab-{{ loop.index }}" class="tab-pane {% if loop.index == 1 %}active{% endif %}">
                         <div class="panel-body">
                             <div class="row">{%- for field in form %}{% if field.name in tabs_fields and field.name not in scaffolding.excluded_properties_in_from %}
                                 {{ s.form_field(form, field) }}{% endif %}{%- endfor %}</div>

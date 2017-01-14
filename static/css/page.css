@@ -6912,8 +6912,6 @@ img.descPicture.descPictureClose { width:150px; }
     width: 100%;
     margin-right: 0;
     margin-left: 0;
-    padding-left: 0;
-    padding-right: 0;
 }
 .aside .scrollDiv.on main.content{
     width: calc(100% + 5px);
