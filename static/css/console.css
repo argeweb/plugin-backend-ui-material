@@ -701,11 +701,11 @@ main.content{
 }
 #aside_iframe{
     position: absolute;
-    top: 0;
-    bottom:0;
+    top: 60px;
+    height: calc(100% - 60px);
     right: -2px;
     width: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
     z-index: 999;
     overflow: hidden;
     background-color: #f3f3f4;

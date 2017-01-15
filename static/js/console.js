@@ -33,13 +33,15 @@ var pageDOD = function(evt){
 var message = {
     "list": [],
     "snackbarText": 1,
-    "quick_show": function(msg, timeout){
+    "quick_show": function(msg, timeout, allowOutsideClick){
+        if (typeof allowOutsideClick === "undefined") allowOutsideClick = true;
         if (timeout !== undefined){
             swal({
-              title: "",
-              html: msg,
-              timer: timeout,
-              showConfirmButton: false
+                title: "",
+                html: msg,
+                timer: timeout,
+                showConfirmButton: false,
+                allowOutsideClick: allowOutsideClick
             }).done();
         }else{
             swal(msg).done();
@@ -91,6 +93,7 @@ var message = {
         "hide": function(){
             $("#message-box").parent("li").removeClass("open");
             message.ui.hideTimerCount = 0;
+            swal.closeModal();
         }
     },
     "insert": function(kind, title, new_message, image, mini){
@@ -312,15 +315,13 @@ var content_iframe = {
         //    }
         //});
         // ====
-        var $linkList = $("a[target=content_iframe]");
-        $linkList.click(function(event){
+        $("a[target=content_iframe]").click(function(event){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
             if ($(this).hasClass("main-link")){ aside_iframe.closeUi(); }
             content_iframe.load($(this).attr("href"), t, content_iframe.last_url, true);
             event.preventDefault();
         });
-        var b = $("body").data("dashboard-name");
         if(window.location.hash) {
             var hash = window.location.hash.replace("#", "");
             var last_page = this.getState(hash);
@@ -330,7 +331,7 @@ var content_iframe = {
                 content_iframe.load(hash, "最後檢視", {}, false);
             }
         }else{
-            content_iframe.load("/"+b+"/welcome", "Welcome");
+            content_iframe.load("/" + $("body").data("dashboard-name") + "/welcome", "Welcome");
         }
         $(".content").hover(function(){ }, function(){
             setTimeout(function(){
@@ -452,6 +453,13 @@ var content_iframe = {
             url = url.replace("query=", "");
             this.load(url);
         }
+    },
+    "setTitle": function(text){
+        if (text == "" || typeof text === "undefined"){
+            document.title = $(".gf-title").eq(0).text();
+        }else{
+            document.title = text + " - " + $(".gf-title").eq(0).text();
+        }
     }
 };
 var aside_iframe = {
@@ -467,7 +475,10 @@ var aside_iframe = {
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("aside");
         $(window).resize(function(){
-            $("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 200);
+            if (aside_iframe.is_open){
+                aside_iframe.showUi();
+            }
+            //$("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 200);
         })
     },
     "load": function(url){
@@ -513,15 +524,17 @@ var aside_iframe = {
         }, headers);
     },
     "showUi": function(callback){
-        $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 500, function(){
+        $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "400"}, 500, function(){
             aside_iframe.is_open = true;
             aside_iframe.instance.contentWindow.addClass("open");
+            content_iframe.instance.contentWindow.addClass("aside_is_open");
             if (typeof callback === "function") callback();
         });
     },
     "closeUi": function(callback){
         $("#aside_iframe").stop().animate({"width": "0"}, 500, function(){
             aside_iframe.is_open = false;
+            content_iframe.instance.contentWindow.removeClass("aside_is_open");
             try{ aside_iframe.instance.contentWindow.removeClass("open"); }catch(e){}
             if (typeof callback === "function") callback();
         });
@@ -565,10 +578,10 @@ var shortcut = {
             case 'f5':
             case 'ctrl+r':
             case 'ctrl+f5': target.reload(); break;
-            case 'ctrl+shift+s': target_window.save_and_exit(); break;
-            case 'ctrl+s': target_window.save_form(); break;
+            case 'ctrl+shift+s': target_window.saveFormAndGoBack(); break;
+            case 'ctrl+s': target_window.saveForm(); break;
             case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
-                target_window.change_lang(parseInt(shortcut_key.replace('alt+', ''))-1);
+                target_window.changeLangField(parseInt(shortcut_key.replace('alt+', ''))-1);
                 break;
         }
         if (scope != "input"){

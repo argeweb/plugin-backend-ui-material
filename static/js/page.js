@@ -10,12 +10,13 @@ var is_saving = false;
 var timeout_lock_saving = null;
 var backend = parent;
 var page = {};
-
-function show_message(msg, timeout){
-    backend.message.quick_show(msg, timeout);
+var start_filepicker = null;
+function show_message(msg, timeout, allowOutsideClick){
+    backend.message.quick_show(msg, timeout, allowOutsideClick);
 }
 // 確保 file picker 與 message 被正常載入
-var start_filepicker = backend.uploader.pickup;
+if (backend && backend.uploader && backend.uploader.pickup)
+    start_filepicker = backend.uploader.pickup;
 function parent_is_ready(){
     //  此文件在 parent 準備好之前就載入完畢
     show_message = backend.message.quick_show;
@@ -32,12 +33,15 @@ var pageDOD = {
     "onDragStart": function(evt){
         evt.preventDefault();
         evt.stopPropagation();
-        $("html").addClass("dropping");
-        if ($(".file_picker_div, .imgs_selector_div, .field-type-rich-text-field").length == 0){
-            $("#dropping").addClass("no_target");
-        }else{
-            $("#dropping").removeClass("no_target");
-            $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+        var dt = evt.dataTransfer;
+        if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))) {
+            $("html").addClass("dropping");
+            if ($(".file_picker_div, .imgs_selector_div, .field-type-rich-text-field").length == 0){
+                $("#dropping").addClass("no_target");
+            }else{
+                $("#dropping").removeClass("no_target");
+                $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+            }
         }
     },
     "onDragEnd": function (evt){
@@ -124,10 +128,10 @@ function reload(){
         backend.content_iframe.reload();
     }
 }
-function change_lang(index){
+function changeLangField(index){
     $("a.btn-lang").eq(index).click();
 }
-function create_editor(id){
+function createEditorField(id){
     var ed = tinyMCE.createEditor(id, {
     theme : 'modern',
     content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
@@ -135,7 +139,7 @@ function create_editor(id){
     plugins: [
     "link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
     ],
-    toolbar: "undo redo | styleselect | alignleft aligncenter alignright forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
+    toolbar: "undo redo | styleselect | alignleft aligncenter alignright | forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
     statusbar: false,
     menubar: false,
     setup : function(ed) {
@@ -209,13 +213,14 @@ function changeViewAndReload(){
         }
     }
 }
-function save_form(){
-    if ($("form").length <=0){ return false;}
+function saveForm(){
+    show_message("請稍候...", 30000, false);
+    var $form = $("form");
+    if ($form.length <=0){ return false;}
     if (is_saving == true){ return false;}
     is_saving = true;
     clearTimeout(timeout_lock_saving);
     timeout_lock_saving = setTimeout(function(){ is_saving = false; }, 5000);
-    var $form = $("form");
     $form.find(".field-type-rich-text-field").each(function(){
         var id = $(this).attr("id");
         if (tinyMCE.get(id)){
@@ -223,11 +228,14 @@ function save_form(){
         }
         $(this).change();
     });
+    if ($("#response_return_encode").length == 0)
+        $('<input type="hidden" id="response_return_encode" name="response_return_encode" value="' +
+            $form.data("return-encoding") + '" />').appendTo($form[0]);
     $form.submit();
 }
-function save_and_exit(){
+function saveFormAndGoBack(){
     exit_after_save = true;
-    save_form();
+    saveForm();
 }
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
@@ -265,6 +273,8 @@ $(function(){
                     backend.aside_iframe.load(url);
                 else
                     backend.content_iframe.load(url);
+                    // debugger 使用 aside
+                    //backend.aside_iframe.load(url);
             }else{
                 backend.swal({
                     title: "您確定要刪除此記錄嗎",
@@ -330,7 +340,7 @@ $(function(){
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
-function get_iframeForm_message(method_default_message, method){
+function getIframeFormMessage(method_default_message, method){
     var msg = (method_default_message !== null) && method_default_message || {
             "add": "記錄已新增",
             "edit": "記錄已儲存",
@@ -342,7 +352,7 @@ function get_iframeForm_message(method_default_message, method){
     method = method.replace("admin_", "");
     return (typeof msg[method] === "undefined") && msg["undefined"] || msg[method];
 }
-function after_iframeForm_load (){
+function afterIframeFormLoad (){
     var j = JSON.parse($(this).contents().find("body").text());
     $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
     var err = j["errors"];
@@ -354,13 +364,14 @@ function after_iframeForm_load (){
             $("form").attr("action", j["new_form_action"]);
         }
     }
-    var message = get_iframeForm_message(j["method_default_message"], j["request_method"]);
+    var message = getIframeFormMessage(j["method_default_message"], j["request_method"]);
     if (j["response_info"] == "success"){
         if (exit_after_save){
             exit_after_save = false;
             if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
             if (is_content()) setTimeout(function(){ history.go(-1); }, 10);
             backend.message.snackbar(message);
+            backend.message.ui.hide();
         }else{
             show_message(message, 1800);
         }
@@ -384,20 +395,21 @@ function pageInit(new_html) {
         try{
             $("body").html(new_html);
         }catch(e){
-            console.log(e);
+            backend.message.quick_show("發生問題了 " + e.toString());
         }
     }
+    if (is_content()) backend.content_iframe.setTitle($("title").text());
     var nav_var_top = -70;
     var page_header_top = 0;
     var scrollDiv_top = 0;
-    if (is_aside()){
-        nav_var_top = 0;
-        page_header_top = 56;
-        scrollDiv_top = 56;
-        $("body").addClass("aside");
-    }else{
-        //backend.content_iframe.setPageTitle($(".page-header h3").text());
-    }
+    //if (is_aside()){
+    //    nav_var_top = 0;
+    //    page_header_top = 56;
+    //    scrollDiv_top = 56;
+    //    $("body").addClass("aside");
+    //}else{
+    //    //backend.content_iframe.setPageTitle($(".page-header h3").text());
+    //}
     $(".page-header").stop().animate({
         top: nav_var_top
     }, 300);
@@ -409,9 +421,7 @@ function pageInit(new_html) {
         }, 300);
     }else{
         $("body").addClass("no-header");
-        if (is_content()){
-            $("header").hide();
-        }
+        $("header").hide();
     }
     $(".aside-close").click(function(){
         backend.aside_iframe.closeUi();
@@ -446,15 +456,15 @@ function pageInit(new_html) {
     $('body').removeClass("body-hide");
     checkNavItemAndShow();
     try{
-        $("iframe[name='iframeForm']").load(after_iframeForm_load);
+        $("iframe[name='iframeForm']").load(afterIframeFormLoad);
         $(".submit_and_exit").click(function(){
             exit_after_save = true;
-            save_form();
+            saveForm();
         });
         $(".submit_and_load_record").click(function(){
             // TODO 儲存並重新載入 (建立後載入)
             load_record_after_save = true;
-            save_form();
+            saveForm();
         });
     }catch(e){
     }
@@ -469,7 +479,7 @@ function pageInit(new_html) {
         var id = $(this).attr("id");
         if (id == undefined){ id = $(this).attr("name"); $(this).attr("id", id); }
         if (id) {
-            create_editor(id);
+            createEditorField(id);
         }
     });
 

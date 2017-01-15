@@ -1404,7 +1404,6 @@ table.dataTable thead .sorting:after {
     background: #fff;
     border: 1px solid #e7eaec;
     border-radius: 2px;
-    padding: 20px;
     position: relative
 }
 
@@ -6147,6 +6146,10 @@ body{
     outline: solid 0 #d9edf7;
     border: dashed 2px #999 !important;
 }
+.album-upload-box {
+    display: block !important;
+    float: left !important;
+}
 .album-upload-box .form-group{
     height: 100%;
     width: 100%;
@@ -6155,7 +6158,7 @@ body{
     position: relative;
     margin: 2px 0 0 0;
 }
-.album-upload-box .input-group{
+.album-upload-box .album-input-text{
     display: inline-block;
     position: absolute;
     text-align: center;
@@ -6562,6 +6565,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 }
 .fbtn-container{
     display: none;
+    transition: all 800ms ease-in-out;
 }
 .page-wrap{
     height: 100%;
@@ -6912,6 +6916,8 @@ img.descPicture.descPictureClose { width:150px; }
     width: 100%;
     margin-right: 0;
     margin-left: 0;
+    padding-right: 0;
+    padding-left: 0;
 }
 .aside .scrollDiv.on main.content{
     width: calc(100% + 5px);
@@ -6961,4 +6967,13 @@ body.aside .btn-display-in-iframe{
 }
 .form-tabs .nav-tabs li a{
     padding: 0 10px;
+}
+.tab-content {
+    border-top: 1px solid #e7eaec;
+}
+.tabs-container .nav-tabs+.tab-content {
+    border-top: 0;
+}
+body.aside_is_open .fbtn-container{
+    right: 420px;
 }

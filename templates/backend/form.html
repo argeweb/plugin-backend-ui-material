@@ -14,7 +14,8 @@
     <form method="{% block form_tag_method %}POST{% endblock %}"
           class="{% block form_tag_class %}form-horizontal row{% endblock %}"
           action="{% block form_tag_action %}{{ scaffolding.form_action|default(uri(_pass_all=True), True) }}{% endblock %}"
-          enctype="{% block form_tag_enctype %}{{ scaffolding.form_encoding|default('application/json', True) }}{% endblock %}"
+          data-return-encoding="{% block form_tag_return_encoding %}{{ scaffolding.form_return_encoding }}{% endblock %}"
+          enctype="{% block form_tag_enctype %}{{ scaffolding.form_encoding }}{% endblock %}"
           accept-charset="{% block form_tag_charset %}UTF-8{% endblock %}"
           target="{% block form_tag_target %}iframeForm{% endblock %}" role="form">
         {% block form_body %}
@@ -24,8 +25,8 @@
                     <li class="active"><a data-toggle="tab" href="#tab-{{ loop.index }}" aria-expanded="true"> {{ tab_page }}</a></li>{% else %}
                     <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">{{ tab_page }}</a></li>{% endif %}{% endfor -%}
                 </ul>{% endif %}
-                {{ events.before_form_fields() }}
                 <div class="tab-content">
+                    {{ events.before_form_fields() }}
                     {%- block form_content %}{%- for tabs_fields in scaffolding.form_tab_pages_fields %}
                     <div id="tab-{{ loop.index }}" class="tab-pane {% if loop.index == 1 %}active{% endif %}">
                         <div class="panel-body">
@@ -43,11 +44,9 @@
                         {%- endblock %}
                     </div>
                     {%- endblock %}
+                    {{ events.after_form_fields() }}
                 </div>
-                {{ events.after_form_fields() }}
             </div>
-
-            <input type="hidden" name="returnType" value="json" />
         </div>
         {% endblock %}
     </form>
@@ -55,5 +54,5 @@
 {% endblock %}
 
 {% block layout_buttons %}
-    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: save_form();"><span class="fbtn-text fbtn-text-left">{% block submit_text_f %}{% endblock %}</span><span class="icon icon-lg">save</span></a>
+    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: saveForm();"><span class="fbtn-text fbtn-text-left">{% block submit_text_f %}{% endblock %}</span><span class="icon icon-lg">save</span></a>
 {% endblock %}

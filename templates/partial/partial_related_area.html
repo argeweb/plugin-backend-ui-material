@@ -9,7 +9,7 @@
         <ul class="dropdown-menu folder-list">
             {%- for nav_item in scaffolding.navigation -%}
             {%- if uri_exists_with_permission("admin:" + scaffolding.singular + ":" + nav_item.action, item=item) -%}
-            <li><a href="{{ uri_action_link(nav_item.action, item) }}" target="aside_iframe" class="waves-attach waves-effect"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
+            <li><a href="{{ uri_action_link(nav_item.action, item) }}" class="waves-attach waves-effect"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
             {%- endif -%}
             {%- endfor %}
         </ul>

@@ -46,7 +46,7 @@
 {% block layout_buttons %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}
-            <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}" target="aside_iframe"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
+            <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
         {%- endif -%}
     {%- endif %}
 {% endblock %}
