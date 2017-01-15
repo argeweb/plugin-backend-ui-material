@@ -376,7 +376,6 @@ var content_iframe = {
             content_iframe.instance.contentWindow.showTimeout();
         }, 25000);
         this.last_url = url;
-        console.log(need_push);
         if (typeof need_push === "undefined"){ need_push = true }
         if (need_push){ this.pushState(url , text, referer_page); }
         content_iframe.instance.contentWindow.showLoading(function(){

@@ -452,6 +452,7 @@ function pageInit(new_html) {
             save_form();
         });
         $(".submit_and_load_record").click(function(){
+            // TODO 儲存並重新載入 (建立後載入)
             load_record_after_save = true;
             save_form();
         });

@@ -24,16 +24,15 @@
                     <li class="active"><a data-toggle="tab" href="#tab-{{ loop.index }}" aria-expanded="true"> {{ tab_page }}</a></li>{% else %}
                     <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">{{ tab_page }}</a></li>{% endif %}{% endfor -%}
                 </ul>{% endif %}
+                {{ events.before_form_fields() }}
                 <div class="tab-content">
-                    {%- block form_content %}{{ events.before_form_fields() }}
-                    {%- for tabs_fields in scaffolding.form_tab_pages_fields %}
+                    {%- block form_content %}{%- for tabs_fields in scaffolding.form_tab_pages_fields %}
                     <div id="tab-{{ loop.index }}" class="tab-pane {% if loop.index == 1 %}active{% endif %}">
                         <div class="panel-body">
                             <div class="row">{%- for field in form %}{% if field.name in tabs_fields and field.name not in scaffolding.excluded_properties_in_from %}
                                 {{ s.form_field(form, field) }}{% endif %}{%- endfor %}</div>
                         </div>
-                    </div>
-                    {%- endfor %}
+                    </div>{%- endfor %}
                     {%- endblock %}
 
                     {% block form_actions %}
@@ -43,14 +42,12 @@
                         <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
                         {%- endblock %}
                     </div>
-                    {% endblock %}
-                {{ events.after_form_fields() }}
+                    {%- endblock %}
                 </div>
+                {{ events.after_form_fields() }}
             </div>
 
             <input type="hidden" name="returnType" value="json" />
-            <input type="hidden" name="routeAction" value="{{ route.action }}" />
-            <input type="hidden" name="routeName" value="{{ route.name }}" />
         </div>
         {% endblock %}
     </form>
