@@ -378,12 +378,17 @@ var content_iframe = {
         }, 25000);
         this.last_url = url;
         if (typeof need_push === "undefined"){ need_push = true }
-        if (need_push){ this.pushState(url , text, referer_page); }
+        if (need_push){
+            aside_iframe.closeUi();
+            this.pushState(url , text, referer_page);
+        }
         content_iframe.instance.contentWindow.showLoading(function(){
             ajax(url, null, function(page){
                 var data = content_iframe.getState();
                 if (need_push){
-                    if (data) history.pushState(data, data.text, "#" + data.href);
+                    if (data) {
+                        history.pushState(data, data.text, "#" + data.href);
+                    }
                 }
                 clearTimeout(content_iframe.loading_timer);
                 content_iframe.loading_lock = false;
@@ -435,6 +440,7 @@ var content_iframe = {
     "popState": function(event){
         var s = event.state;
         if (s){
+            aside_iframe.closeUi();
             content_iframe.load(s.href, s.text, s.referer_page, false);
         }
     },
