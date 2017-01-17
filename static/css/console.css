@@ -438,10 +438,11 @@ header .header-logo{
     margin-top: 4px;
 }
 @media screen and (max-width: 420px){
-
+    body{
+        width: 420px;
+    }
     header.header{
-        /*display: flex;*/
-        min-width: 250px;
+        min-width: 310px;
     }
     header .right-menu {
         width: calc(100% - 180px) !important;

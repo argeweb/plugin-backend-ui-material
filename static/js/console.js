@@ -524,17 +524,18 @@ var aside_iframe = {
         }, headers);
     },
     "showUi": function(callback){
-        $("#aside_iframe").stop().animate({"width": ($(window).width() < 992) ? "100%" : "400"}, 500, function(){
+        content_iframe.instance.contentWindow.addClass("aside_is_open");
+        $("#aside_iframe").stop().animate({
+            "width": ($(window).width() < 768) ? $(window).width() + 3 : "400"}, 500, function(){
             aside_iframe.is_open = true;
             aside_iframe.instance.contentWindow.addClass("open");
-            content_iframe.instance.contentWindow.addClass("aside_is_open");
             if (typeof callback === "function") callback();
         });
     },
     "closeUi": function(callback){
+        content_iframe.instance.contentWindow.removeClass("aside_is_open");
         $("#aside_iframe").stop().animate({"width": "0"}, 500, function(){
             aside_iframe.is_open = false;
-            content_iframe.instance.contentWindow.removeClass("aside_is_open");
             try{ aside_iframe.instance.contentWindow.removeClass("open"); }catch(e){}
             if (typeof callback === "function") callback();
         });
@@ -559,7 +560,6 @@ var shortcut = {
             n++;
         });
         shortcut.keys += ", " + s.join(", ");
-        console.log(shortcut.keys);
         key.filter = function(event){
             var tagName = (event.target || event.srcElement).tagName;
             key.setScope(/^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? 'input' : 'doc');

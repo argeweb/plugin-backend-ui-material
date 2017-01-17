@@ -1418,14 +1418,17 @@ table.dataTable thead .sorting:after {
 
 .tabs-container .nav-tabs > li.active > a, .tabs-container .nav-tabs > li.active > a:focus, .tabs-container .nav-tabs > li.active > a:hover {
     border: 1px solid #e7eaec;
+    position: inherit;
     border-bottom-color: transparent
 }
 
 .tabs-container .nav-tabs {
-    border-bottom: 1px solid #e7eaec
+    border-bottom: 1px solid #e7eaec;
+    position: inherit;
 }
 
 .tabs-container .tab-pane .panel-body {
+    position: inherit;
     border-top: 0
 }
 
@@ -2835,6 +2838,7 @@ nav.page-tabs .page-tabs-content {
 }
 
 .nav.nav-tabs li {
+    position: inherit;
     background: 0;
     border: 0
 }
@@ -5946,13 +5950,13 @@ del {
     padding-bottom: 27px;
 }
 header{
-    padding: 18px 25px 0 15px;
+    padding: 18px 20px 0 15px;
     min-width: 360px;
     width: 97%;
     margin: 0 1.5%;
 }
 .scrollDiv.on header{
-    padding: 18px 20px 0 15px;
+    padding: 18px 15px 0 15px;
     min-width: 360px;
     width: 97%;
     margin: 0 1.5%;
@@ -6092,6 +6096,12 @@ main.content{
 }
 body{
     background-color: transparent;
+}
+
+@media screen and (max-width: 420px) {
+    body{
+        width: 420px;
+    }
 }
 .text-center{
     text-align: center;
@@ -6282,7 +6292,7 @@ body{
 .list-operations>a:first-child{
     flex: 1 0;
     border: solid 1px #fcfcfc;
-    padding: 4px;
+    padding: 7px;
     display: inline-block;
     min-width: 80px;
 }
@@ -6565,7 +6575,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 }
 .fbtn-container{
     display: none;
-    transition: all 800ms ease-in-out;
+    transition: all 350ms ease-in-out;
 }
 .page-wrap{
     height: 100%;
@@ -6966,6 +6976,7 @@ body.aside .btn-display-in-iframe{
     margin: 0;
 }
 .form-tabs .nav-tabs li a{
+    position: inherit;
     padding: 0 10px;
 }
 .tab-content {
@@ -6974,6 +6985,20 @@ body.aside .btn-display-in-iframe{
 .tabs-container .nav-tabs+.tab-content {
     border-top: 0;
 }
-body.aside_is_open .fbtn-container{
-    right: 420px;
+.page-wrap{
+    width: 100%;
+    transition: width 600ms ease-in-out;
+}
+@media screen and (max-width: 420px){
+    body.aside_is_open .fbtn-container{
+        left: 400px;
+    }
+}
+@media screen and (min-width: 768px) {
+    body.aside_is_open .fbtn-container{
+        right: 420px;
+    }
+    body.aside_is_open .page-wrap{
+        width: calc(100% - 398px);
+    }
 }

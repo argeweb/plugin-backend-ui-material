@@ -99,7 +99,7 @@
         {% endif -%}
         {%- set lang_class = ' '.join(container_classes) -%}
 
-        <{{ container_element }} class='form-group form-group-{{ field.id }} {{ lang_class }} {% if field.errors %}has-error{% endif %}'>
+        <{{ container_element }} class='form-group form-group-{{ field.id }} {{ lang_class }} filed-group-{{ field.field_group_index }} {% if field.errors %}has-error{% endif %}'>
             {{ field.label(class='col-xs-3 text-right control-label') }}
             <div class="col-xs-8 {{ css_class_outsides }}">
                 {{ field(class=css_class, **kwargs) }}
