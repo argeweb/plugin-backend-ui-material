@@ -388,7 +388,7 @@ function afterIframeFormLoad (){
     }, 3000);
 }
 
-//  ajax 載入時，需再執行一次
+// ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
     if (new_html){
@@ -410,9 +410,7 @@ function pageInit(new_html) {
     //}else{
     //    //backend.content_iframe.setPageTitle($(".page-header h3").text());
     //}
-    $(".page-header").stop().animate({
-        top: nav_var_top
-    }, 300);
+    $(".page-header").stop().animate({ top: nav_var_top }, 300);
     if($("header").text().trim() != ""){
         scrollDiv_top += 0;
         $("body").addClass("has-header");
@@ -623,14 +621,15 @@ function makeSortTable(){
     //$("table").stickyTableHeaders({scrollableArea: $('.scrollDiv')});
 }
 function makeListOp(){
-    if ($(".filed-display-operations ul").data("done") == true){ return false;}
+    var $operations_ul = $(".filed-display-operations ul");
+    if ($operations_ul.data("done") == true) return false;
     $("input[data-field]").each(function () {
         var field_name = $(this).data("field");
         var field_texe = $(this).text();
         var field_val  = $(this).val();
         var is_checked = "checked" ? $(this).attr("checked"): "";
         if (field_name != 'is_enable' && field_name != 'record_buttons' && field_name != '') {
-            $(".filed-display-operations ul").append(
+            $operations_ul.append(
                 '<li><input type="checkbox" ' + is_checked + ' ' +
                 'id="ro-field-' + field_name + '" ' +
                 'value="' + field_val + '">' +
@@ -638,11 +637,11 @@ function makeListOp(){
             );
         }
     });
-    $('.filed-display-operations ul input[type=checkbox]').change(function() {
+    $operations_ul.find("input[type=checkbox]").change(function() {
         var id = $(this).attr("id").replace("ro-field-", "");
         var val = $(this).is(":checked");
         $("input[data-field='" + id + "']").click();
     });
-    $(".filed-display-operations ul").attr("data-done", true);
+    $operations_ul.attr("data-done", true);
 }
 

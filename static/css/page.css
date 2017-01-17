@@ -40,7 +40,7 @@ header .btn{
     padding: 9px 10px;
     display: inline-block;
     color: #676a6c;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 header .btn.btn-primary{
     color: #fff;
@@ -6272,7 +6272,7 @@ body{
 }
 .sortable-list {
     margin: 0;
-    padding: 0 20px;
+    padding: 0 15px;
     border: 0 !important;
 }
 .folder-list li {
@@ -7001,4 +7001,11 @@ body.aside .btn-display-in-iframe{
     body.aside_is_open .page-wrap{
         width: calc(100% - 398px);
     }
+}
+.field-type-side-panel-field {
+    line-height: 35px;
+    font-size: 16px;
+}
+body.aside_is_open .scrollDiv.on::-webkit-scrollbar-thumb{
+    background-color: #eee;
 }
