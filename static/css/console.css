@@ -49,16 +49,16 @@ body:before {
     text-underline: none;
 }
 .in-edit-mode .menu-content > .menu-logo .page-overlay{
-    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgba(7, 28, 47, 0.69) 60px, rgba(255, 255, 255, 0) 10px, rgba(245, 245, 245, 0) 100%);
+    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgba(7, 28, 47, 0.69) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 .in-view-mode .menu-content > .menu-logo .page-overlay{
-    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(12, 67, 67) 60px, rgba(255, 255, 255, 0) 10px, rgba(245, 245, 245, 0) 100%);
+    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(12, 67, 67) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 .in-sort-mode .menu-content > .menu-logo .page-overlay{
-    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(84, 58, 30) 60px, rgba(255, 255, 255, 0) 10px, rgba(245, 245, 245, 0) 100%);
+    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(84, 58, 30) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 .in-delete-mode .menu-content > .menu-logo .page-overlay{
-    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(255, 255, 255, 0) 10px, rgba(245, 245, 245, 0) 100%);
+    background-image: linear-gradient( rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 
 .user-box {
@@ -482,7 +482,7 @@ div.search-bar {
 div.search-bar input{
     background: transparent;
     border: 0;
-    color: rgba(42, 84, 121, 0.9);
+    color: rgba(255, 255, 255, 0.4);
     padding: 10px;
     outline: none;
 }
@@ -866,11 +866,11 @@ li.menu-back + li.gt {
     /*background: rgba(204, 203, 203, 0.48);*/
 /*}*/
 body.in-edit-mode .edit-color, body.in-edit-mode .brand-text-color{
-    color: #1A77C9 !important;
+    color: #398dee !important;
 }
 body.in-edit-mode:before,body.in-edit-mode .page-brand .header-transparent:before,
 body.in-edit-mode .menu-content > .menu-logo{
-    background-color: #1A77C9;
+    background-color: #398dee;
 }
 body.in-view-mode .view-color, body.in-view-mode .brand-text-color{
     color: #23c6c8 !important;
@@ -931,15 +931,11 @@ body.on-search .header a{
     color: #666;
 }
 body.on-search .enter-edit-mode, body.on-search .enter-view-mode, body.on-search .enter-delete-mode, body.on-search .enter-sorting-mode{
-    background: #999;
     color: rgba(207, 207, 207, 0.42) !important;
 }
-body.on-search .user-box{
-    border: 2px solid #666;
-}
 body.on-search .nav li.hr{
-    border-bottom: solid 1px rgba(68, 62, 62, 0.69);
-    box-shadow: 1px 1px 2px #aea7a7;
+    border-bottom: solid 1px rgba(231, 225, 225, 0.69);
+    box-shadow: 1px 1px 2px #cbc7c7;
 }
 body.sortTag [data-sort] i{
     display: none;

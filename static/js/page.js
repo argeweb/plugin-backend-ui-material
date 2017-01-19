@@ -2,28 +2,39 @@ function json(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POS
 function json_async(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:1 ,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
 function ajax_post(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",cache: true,data:data,async:true,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{window.alert(thrownError.message)}}})};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
+var backend = parent;
+var start_filepicker = function(){};
+var page = {};
+var status = {
+    "need_reload_side_panel": null,
+    "exit_after_save": null,
+    "load_record_after_save": null,
+    "last_side_panel_target_id": null,
+    "dom_is_ready": null,
+    "is_saving": null,
+    "timeout_lock_saving": null
+};
 var exit_after_save = false;
 var load_record_after_save = false;
-
+var last_side_panel_target_id = null;
 var dom_is_ready = false;
 var is_saving = false;
 var timeout_lock_saving = null;
-var backend = parent;
-var page = {};
-var start_filepicker = null;
+
+// 訊息 (簡單的方式)
 function show_message(msg, timeout, allowOutsideClick){
     backend.message.quick_show(msg, timeout, allowOutsideClick);
 }
+
 // 確保 file picker 與 message 被正常載入
-if (backend && backend.uploader && backend.uploader.pickup)
-    start_filepicker = backend.uploader.pickup;
-function parent_is_ready(){
-    //  此文件在 parent 準備好之前就載入完畢
+if (backend && backend.uploader && backend.uploader.pickup) start_filepicker = backend.uploader.pickup;
+if (backend.js_is_ready && backend.js_is_ready == true){
+    //  此文件在 parent 準備好之後才載入完畢
     show_message = backend.message.quick_show;
     start_filepicker = backend.uploader.pickup;
 }
-if (backend.js_is_ready && backend.js_is_ready == true){
-    //  此文件在 parent 準備好之後才載入完畢
+function parent_is_ready(){
+    //  此文件在 parent 準備好之前就載入完畢
     show_message = backend.message.quick_show;
     start_filepicker = backend.uploader.pickup;
 }
@@ -237,10 +248,15 @@ function saveFormAndGoBack(){
     exit_after_save = true;
     saveForm();
 }
+function saveFormAndReloadRecord(){
+    load_record_after_save = true;
+    saveForm();
+}
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
     backend.content_iframe.removeMask();
 }
+
 //  僅執行一次
 $(function(){
     if (window.name != ""){
@@ -337,6 +353,7 @@ $(function(){
         //remove items from localStorage
     };
 });
+
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
@@ -352,6 +369,8 @@ function getIframeFormMessage(method_default_message, method){
     method = method.replace("admin_", "");
     return (typeof msg[method] === "undefined") && msg["undefined"] || msg[method];
 }
+
+// 表單資料儲存完成之後
 function afterIframeFormLoad (){
     var j = JSON.parse($(this).contents().find("body").text());
     $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
@@ -373,6 +392,11 @@ function afterIframeFormLoad (){
             backend.message.snackbar(message);
             backend.message.ui.hide();
         }else{
+            if (load_record_after_save && is_content() && backend.aside_iframe.is_open){
+                load_record_after_save = false;
+                status.need_reload_side_panel = true;
+                backend.content_iframe.load(j["method_record_edit_url"], "", {}, false);
+            }
             show_message(message, 1800);
         }
         backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
@@ -391,6 +415,7 @@ function afterIframeFormLoad (){
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
+    status.need_reload_side_panel = false;
     if (new_html){
         try{
             $("body").html(new_html);
@@ -455,10 +480,6 @@ function pageInit(new_html) {
     checkNavItemAndShow();
     try{
         $("iframe[name='iframeForm']").load(afterIframeFormLoad);
-        $(".submit_and_exit").click(function(){
-            exit_after_save = true;
-            saveForm();
-        });
         $(".submit_and_load_record").click(function(){
             // TODO 儲存並重新載入 (建立後載入)
             load_record_after_save = true;
@@ -489,6 +510,9 @@ function pageInit(new_html) {
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
 
+    if (status.need_reload_side_panel){
+        $("#" + last_side_panel_target_id).click();
+    }
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
     }, 800);
@@ -579,13 +603,21 @@ function linkClickProcess(){
         if (_url.indexOf("javascript:") <0 && _url.indexOf("#") <0 ){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
-            if ($(this).attr("target") == "aside_iframe"){
+            var target = $(this).attr("target");
+            if (target == "aside_iframe"){
+                if ($(this).hasClass("field-type-side-panel-field")){
+                    status.need_reload_side_panel = true;
+                    last_side_panel_target_id = $(this).attr("id");
+                }
                 backend.aside_iframe.load($(this).attr("href"));
-            }else{
-                backend.content_iframe.load($(this).attr("href"), t, location.pathname);
+                e.preventDefault();
+                e.stopPropagation();
             }
-            e.preventDefault();
-            e.stopPropagation();
+            if (typeof target === "undefined" || target == "content_iframe") {
+                backend.content_iframe.load($(this).attr("href"), t, location.pathname);
+                e.preventDefault();
+                e.stopPropagation();
+            }
         }
     });
 }
@@ -644,4 +676,3 @@ function makeListOp(){
     });
     $operations_ul.attr("data-done", true);
 }
-

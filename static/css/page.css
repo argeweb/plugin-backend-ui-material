@@ -2395,7 +2395,6 @@ a.forum-item-title:hover {
 
 .sidebar-container ul.nav-tabs li a {
     border: 0;
-    padding: 12px 10px;
     margin: 0;
     border-radius: 0;
     background: #2f4050;
@@ -5857,7 +5856,7 @@ del {
 
 ::-webkit-scrollbar {
     width: 6px;
-    /*background-image: linear-gradient( #1A77C9, #1A77C9 40px, #f5f5f5 10px, #f5f5f5 100%);*/
+    /*background-image: linear-gradient( #398dee, #398dee 40px, #f5f5f5 10px, #f5f5f5 100%);*/
 }
 
 ::-webkit-scrollbar-thumb {
@@ -6860,7 +6859,7 @@ img.descPicture.descPictureClose { width:150px; }
     background: rgba(255, 255, 255, 0.23);
 }
 .in-edit-mode .bootstrap-table .table,.in-edit-mode .page-wrap .page-header, .in-edit-mode .tableFloatingHeaderOriginal{
-    background: rgb(115, 172, 222);
+    background: rgba(33, 150, 243, 0.49);
 }
 .in-view-mode .bootstrap-table .table,.in-view-mode .page-wrap .page-header, .in-view-mode .tableFloatingHeaderOriginal{
     background: rgb(124, 221, 222);
@@ -6876,13 +6875,13 @@ img.descPicture.descPictureClose { width:150px; }
     color: #fff;
 }
 .in-edit-mode .btn-flat.btn-brand, .in-edit-mode .edit-color, .in-edit-mode .brand-text-color{
-    color: #1A77C9 !important;
+    color: #398dee !important;
 }
 .in-edit-mode .sk-spinner-chasing-dots .sk-dot1, .in-edit-mode .sk-spinner-chasing-dots .sk-dot2,
 .in-edit-mode:before,.in-edit-mode .page-brand .header-transparent:before,
 .in-edit-mode .menu-content > .menu-logo:first-child,.in-edit-mode.page-brand .ui-header,
 .in-edit-mode .op-mode, .in-edit-mode .brand-bg-color{
-    background-color: #1A77C9;
+    background-color: #398dee;
 }
 .in-view-mode .btn-flat.btn-brand, .in-view-mode .view-color, .in-view-mode .brand-text-color{
     color: #23c6c8 !important;
@@ -7000,6 +6999,14 @@ body.aside .btn-display-in-iframe{
     }
     body.aside_is_open .page-wrap{
         width: calc(100% - 398px);
+    }
+}
+@media screen and (max-width: 400px) {
+    .aside main.content {
+        width: calc(100% - 20px);
+    }
+    .aside .scrollDiv.on main.content{
+        width: calc(100% - 15px);
     }
 }
 .field-type-side-panel-field {
