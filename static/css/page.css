@@ -7008,6 +7008,9 @@ body.aside .btn-display-in-iframe{
     .aside .scrollDiv.on main.content{
         width: calc(100% - 15px);
     }
+    body.aside_is_open #onLoad {
+        width: calc(100% - 398px);
+    }
 }
 .field-type-side-panel-field {
     line-height: 35px;
