@@ -583,7 +583,7 @@ var shortcut = {
             case 'ctrl+p': target_window.print(); break;
             case 'f5':
             case 'ctrl+r':
-            case 'ctrl+f5': target.reload(); break;
+            case 'ctrl+f5': content_iframe.reload(); break;
             case 'ctrl+shift+s': target_window.saveFormAndGoBack(); break;
             case 'ctrl+s': target_window.saveForm(); break;
             case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':

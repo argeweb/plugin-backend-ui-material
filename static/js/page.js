@@ -5,21 +5,15 @@ function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTU
 var backend = parent;
 var start_filepicker = function(){};
 var page = {};
-var status = {
-    "need_reload_side_panel": null,
-    "exit_after_save": null,
-    "load_record_after_save": null,
+
+var page_status = {
+    "exit_after_save": false,
+    "load_record_after_save": false,
+    "need_reload_side_panel": false,
     "last_side_panel_target_id": null,
-    "dom_is_ready": null,
-    "is_saving": null,
+    "is_saving": false,
     "timeout_lock_saving": null
 };
-var exit_after_save = false;
-var load_record_after_save = false;
-var last_side_panel_target_id = null;
-var dom_is_ready = false;
-var is_saving = false;
-var timeout_lock_saving = null;
 
 // 訊息 (簡單的方式)
 function show_message(msg, timeout, allowOutsideClick){
@@ -27,14 +21,10 @@ function show_message(msg, timeout, allowOutsideClick){
 }
 
 // 確保 file picker 與 message 被正常載入
+//  此文件在 parent 準備好之後才載入完畢
 if (backend && backend.uploader && backend.uploader.pickup) start_filepicker = backend.uploader.pickup;
-if (backend.js_is_ready && backend.js_is_ready == true){
-    //  此文件在 parent 準備好之後才載入完畢
-    show_message = backend.message.quick_show;
-    start_filepicker = backend.uploader.pickup;
-}
+//  此文件在 parent 準備好之前就載入完畢
 function parent_is_ready(){
-    //  此文件在 parent 準備好之前就載入完畢
     show_message = backend.message.quick_show;
     start_filepicker = backend.uploader.pickup;
 }
@@ -191,19 +181,9 @@ function showLoading(callback){
         '</div>', callback)
 }
 function hideHeader(after_hide_html, callback){
-    $('.page-header').stop().animate({
-        top: -70
-    });
-    if ($('header').length == 0 && typeof callback === "function"){
-        callback();
-    }else{
-        $('header').stop().animate({
-            top: -70
-        }, 250, function(){
-            $('body').addClass("body-hide").html(after_hide_html);
-            if (typeof callback === "function") callback();
-        });
-    }
+    if ($('header').length > 0)
+        $('body').addClass("body-hide").html(after_hide_html);
+    if (typeof callback === "function") callback();
 }
 function addClass(class_name){
     $("body").addClass(class_name);
@@ -228,10 +208,10 @@ function saveForm(){
     show_message("請稍候...", 30000, false);
     var $form = $("form");
     if ($form.length <=0){ return false;}
-    if (is_saving == true){ return false;}
-    is_saving = true;
-    clearTimeout(timeout_lock_saving);
-    timeout_lock_saving = setTimeout(function(){ is_saving = false; }, 5000);
+    if (page_status.is_saving == true){ return false;}
+    page_status.is_saving = true;
+    clearTimeout(page_status.timeout_lock_saving);
+    page_status.timeout_lock_saving = setTimeout(function(){ page_status.is_saving = false; }, 5000);
     $form.find(".field-type-rich-text-field").each(function(){
         var id = $(this).attr("id");
         if (tinyMCE.get(id)){
@@ -245,11 +225,12 @@ function saveForm(){
     $form.submit();
 }
 function saveFormAndGoBack(){
-    exit_after_save = true;
+    page_status.exit_after_save = true;
+    page_status.need_reload_side_panel = false;
     saveForm();
 }
 function saveFormAndReloadRecord(){
-    load_record_after_save = true;
+    page_status.load_record_after_save = true;
     saveForm();
 }
 function scrollDiv(){
@@ -385,17 +366,21 @@ function afterIframeFormLoad (){
     }
     var message = getIframeFormMessage(j["method_default_message"], j["request_method"]);
     if (j["response_info"] == "success"){
-        if (exit_after_save){
-            exit_after_save = false;
+        if (page_status.exit_after_save){
+            page_status.exit_after_save = false;
             if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
             if (is_content()) setTimeout(function(){ history.go(-1); }, 10);
             backend.message.snackbar(message);
             backend.message.ui.hide();
         }else{
-            if (load_record_after_save && is_content() && backend.aside_iframe.is_open){
-                load_record_after_save = false;
-                status.need_reload_side_panel = true;
+            if (page_status.load_record_after_save && is_content() && backend.aside_iframe.is_open){
+                page_status.load_record_after_save = false;
+                page_status.need_reload_side_panel = true;
                 backend.content_iframe.load(j["method_record_edit_url"], "", {}, false);
+            }else{
+                if (page_status.need_reload_side_panel){
+                    $("#" + page_status.last_side_panel_target_id).click();
+                }
             }
             show_message(message, 1800);
         }
@@ -406,56 +391,37 @@ function afterIframeFormLoad (){
     }else{
         backend.message.snackbar("表單欄位有誤");
     }
-    clearTimeout(timeout_lock_saving);
-    timeout_lock_saving = setTimeout(function(){
-        is_saving = false;
+    clearTimeout(page_status.timeout_lock_saving);
+    page_status.timeout_lock_saving = setTimeout(function(){
+        page_status.is_saving = false;
     }, 3000);
 }
 
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
-    status.need_reload_side_panel = false;
+    page_status.need_reload_side_panel = false;
+    var $body = $("body");
     if (new_html){
         try{
-            $("body").html(new_html);
+            $body.html(new_html);
         }catch(e){
             backend.message.quick_show("發生問題了 " + e.toString());
         }
     }
+    var $header = $("header");
     if (is_content()) backend.content_iframe.setTitle($("title").text());
-    var nav_var_top = -70;
-    var page_header_top = 0;
-    var scrollDiv_top = 0;
-    //if (is_aside()){
-    //    nav_var_top = 0;
-    //    page_header_top = 56;
-    //    scrollDiv_top = 56;
-    //    $("body").addClass("aside");
-    //}else{
-    //    //backend.content_iframe.setPageTitle($(".page-header h3").text());
-    //}
-    $(".page-header").stop().animate({ top: nav_var_top }, 300);
-    if($("header").text().trim() != ""){
-        scrollDiv_top += 0;
-        $("body").addClass("has-header");
-        $("header").stop().animate({
-            top: page_header_top
-        }, 300);
+    if($header.text().trim() != ""){
+        $body.addClass("has-header").removeClass("no-header");
     }else{
-        $("body").addClass("no-header");
-        $("header").hide();
+        $body.addClass("no-header").removeClass("has-header");
+        $header.hide();
     }
     $(".aside-close").click(function(){
         backend.aside_iframe.closeUi();
     });
 
-    if (is_content()){
-        scrollDiv_top = 0;
-    }
-    $(".scrollDiv").stop().animate({
-        "margin-top": scrollDiv_top,
-    }, 300).hover(function(){
+    $(".scrollDiv").hover(function(){
         scrollDiv();
     }, function(){
         $(this).removeClass("on");
@@ -463,8 +429,6 @@ function pageInit(new_html) {
         scrollDiv();
     }).mouseleave(function() {
         $(this).removeClass("on");
-    }).css({
-        "height": "calc(100% - " + scrollDiv_top +"px)"
     }).scroll(function() {
         if (is_content()){
             backend.affix($(this).scrollTop());
@@ -476,17 +440,9 @@ function pageInit(new_html) {
     }
     //backend.content_iframe.afterOnLoad(location.pathname);
     $("#onLoad").remove();
-    $('body').removeClass("body-hide");
+    $body.removeClass("body-hide");
     checkNavItemAndShow();
-    try{
-        $("iframe[name='iframeForm']").load(afterIframeFormLoad);
-        $(".submit_and_load_record").click(function(){
-            // TODO 儲存並重新載入 (建立後載入)
-            load_record_after_save = true;
-            saveForm();
-        });
-    }catch(e){
-    }
+    $("iframe[name='iframeForm']").load(afterIframeFormLoad);
     $(".filepicker").click(function(){
         start_filepicker($(this).parents(".input-group").find("input"), false);
     });
@@ -510,8 +466,8 @@ function pageInit(new_html) {
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
 
-    if (status.need_reload_side_panel){
-        $("#" + last_side_panel_target_id).click();
+    if (page_status.need_reload_side_panel){
+        $("#" + page_status.last_side_panel_target_id).click();
     }
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
@@ -606,8 +562,8 @@ function linkClickProcess(){
             var target = $(this).attr("target");
             if (target == "aside_iframe"){
                 if ($(this).hasClass("field-type-side-panel-field")){
-                    status.need_reload_side_panel = true;
-                    last_side_panel_target_id = $(this).attr("id");
+                    page_status.need_reload_side_panel = true;
+                    page_status.last_side_panel_target_id = $(this).attr("id");
                 }
                 backend.aside_iframe.load($(this).attr("href"));
                 e.preventDefault();

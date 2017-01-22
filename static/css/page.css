@@ -2932,12 +2932,6 @@ img.circle-border {
     margin-top: 25%
 }
 
-.page-header {
-    padding: 20px 0 9px;
-    margin: 0 0 20px;
-    border-bottom: 1px solid #eee
-}
-
 .fontawesome-icon-list {
     margin-top: 22px
 }
@@ -5960,6 +5954,9 @@ header{
     width: 97%;
     margin: 0 1.5%;
 }
+.no-header header{
+    display: none !important;
+}
 body.aside {
     background-color: #fff !important;
 }
@@ -6006,7 +6003,7 @@ header .fbtn-container span.icon{
     overflow: hidden;
     padding-right: 0;
     margin-top: 0;
-    height: calc(100% - 56px);
+    height: 100%;
 }
 .scrollDiv.on {
     height: 100%;
@@ -6778,9 +6775,6 @@ li.file-menu.active a{
         padding-top: 4px;
     }
 }
-:hover ul{
-    list-style: none;
-}
 #sortableListsBase{
     cursor: -webkit-grabbing;
 }
@@ -7018,4 +7012,7 @@ body.aside .btn-display-in-iframe{
 }
 body.aside_is_open .scrollDiv.on::-webkit-scrollbar-thumb{
     background-color: #eee;
+}
+.progress {
+    background-color: #f3f3f3;
 }
