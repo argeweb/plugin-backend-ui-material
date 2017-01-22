@@ -6482,10 +6482,6 @@ main.content .mail-box .fixed-table-container{
     /*margin-top: -100%;*/
     height: 100%;
 }
-.aside .scrollDiv{
-    height: calc(100% - 56px);
-}
-
 .action-edit .wrapper-content, .action-view .wrapper-content{
     padding: 0;
 }

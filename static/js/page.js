@@ -333,6 +333,7 @@ $(function(){
         //clean up cookies
         //remove items from localStorage
     };
+    moment.locale('zh-tw');
 });
 
 function setBodyClass(class_name){
@@ -469,6 +470,9 @@ function pageInit(new_html) {
     if (page_status.need_reload_side_panel){
         $("#" + page_status.last_side_panel_target_id).click();
     }
+    $(".moment-from-now").each(function(){
+        $(this).text(moment($(this).data("datetime")).add(8, "hours").fromNow());
+    });
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
     }, 800);
@@ -566,14 +570,12 @@ function linkClickProcess(){
                     page_status.last_side_panel_target_id = $(this).attr("id");
                 }
                 backend.aside_iframe.load($(this).attr("href"));
-                e.preventDefault();
-                e.stopPropagation();
             }
             if (typeof target === "undefined" || target == "content_iframe") {
                 backend.content_iframe.load($(this).attr("href"), t, location.pathname);
-                e.preventDefault();
-                e.stopPropagation();
             }
+            e.preventDefault();
+            e.stopPropagation();
         }
     });
 }
