@@ -16,7 +16,7 @@
                 <thead>
                 <tr>
                     <th data-field="sortable" class="col-1 sorting-mode text-center">排序</th>
-                    {% for property in scaffolding.display_properties_in_list -%}
+                    {% for property in scaffolding.display_in_list -%}
                         <th data-field="{{ property }}" class="text-center">{{ s.scaffold_field_name(property) }}</th>
                     {% endfor -%}
                     <th data-field="more-field" class="col-1 text-center">更多</th>

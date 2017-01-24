@@ -94,7 +94,7 @@
         {%- if field.id.find("_lang_")>0 -%}
             {%- set _ = container_classes.append('lang lang-' + field.id.split("_lang_")[0] + ' lang-' + field.id.split("_lang_")[1] ) -%}
         {%- endif -%}
-        {%- if field.name in scaffolding.hidden_properties_in_edit %}
+        {%- if field.name in scaffolding.hidden_in_form %}
             {%- set _ = container_classes.append('hidden') -%}
         {% endif -%}
         {%- set lang_class = ' '.join(container_classes) -%}
