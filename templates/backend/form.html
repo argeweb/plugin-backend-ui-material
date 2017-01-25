@@ -2,9 +2,7 @@
 {% extends s.layout() %}
 {%- block layout_header -%}
     {%- if scaffolding %}
-{#        {% if uri_exists_with_permission(action="add") -%}<a class="btn btn-red btn-create" href="{{ uri_action_link('add') }}"><i class="icon">edit</i>{{ s.scaffold_title("add") }}</a>{%- endif -%}#}
         {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
-{#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
     {%- endif %}
 {% endblock %}
 

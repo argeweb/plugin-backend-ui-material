@@ -6981,6 +6981,9 @@ body.aside .btn-display-in-iframe{
     body.aside_is_open .page-wrap{
         width: calc(100% - 398px);
     }
+    body.aside_is_open #onLoad {
+        width: calc(100% - 398px);
+    }
 }
 @media screen and (max-width: 400px) {
     .aside main.content {
