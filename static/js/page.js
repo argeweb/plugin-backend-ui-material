@@ -374,10 +374,10 @@ function afterIframeFormLoad (){
             backend.message.snackbar(message);
             backend.message.ui.hide();
         }else{
-            if (page_status.load_record_after_save && is_content() && backend.aside_iframe.is_open){
+            if (page_status.load_record_after_save && is_content()){
                 page_status.load_record_after_save = false;
                 page_status.need_reload_side_panel = true;
-                backend.content_iframe.load(j["method_record_edit_url"], "", {}, false);
+                backend.content_iframe.load(j["method_record_edit_url"], "", {}, false, true);
             }else{
                 if (page_status.need_reload_side_panel){
                     $("#" + page_status.last_side_panel_target_id).click();
@@ -401,7 +401,6 @@ function afterIframeFormLoad (){
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
-    page_status.need_reload_side_panel = false;
     var $body = $("body");
     if (new_html){
         try{
@@ -466,8 +465,9 @@ function pageInit(new_html) {
         $(".sortable-list").removeClass("hidden");
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
-
-    if (page_status.need_reload_side_panel){
+    var need_reload_side_panel = page_status.need_reload_side_panel;
+    page_status.need_reload_side_panel = false;
+    if (need_reload_side_panel){
         $("#" + page_status.last_side_panel_target_id).click();
     }
     $(".moment-from-now").each(function(){

@@ -368,7 +368,7 @@ var content_iframe = {
     "getUrl": function(){
         return this.last_url;
     },
-    "load": function(url, text, referer_page, need_push){
+    "load": function(url, text, referer_page, need_push, need_replace){
         affix(0);
         if (this.loading_lock == true) return false;
         this.loading_lock = true;
@@ -378,6 +378,7 @@ var content_iframe = {
         }, 25000);
         this.last_url = url;
         if (typeof need_push === "undefined"){ need_push = true }
+        if (typeof need_replace === "undefined"){ need_replace = false }
         if (need_push){
             aside_iframe.closeUi();
             this.pushState(url , text, referer_page);
@@ -386,8 +387,10 @@ var content_iframe = {
             ajax(url, null, function(page){
                 var data = content_iframe.getState();
                 if (need_push){
-                    if (data) {
-                        history.pushState(data, data.text, "#" + data.href);
+                    history.pushState(data, text, "#" + url);
+                }else{
+                    if (need_replace){
+                        history.replaceState(data, text, "#" + url);
                     }
                 }
                 clearTimeout(content_iframe.loading_timer);
@@ -583,7 +586,7 @@ var shortcut = {
             case 'ctrl+p': target_window.print(); break;
             case 'f5':
             case 'ctrl+r':
-            case 'ctrl+f5': content_iframe.reload(); break;
+            case 'ctrl+f5': content_iframe.reload(true); break;
             case 'ctrl+shift+s': target_window.saveFormAndGoBack(); break;
             case 'ctrl+s': target_window.saveForm(); break;
             case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
