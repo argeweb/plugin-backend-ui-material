@@ -205,8 +205,10 @@ var uploader = {
         var fileInput = document.getElementById('image-file-picker');
         var file = fileInput.files[0];
         uploader.addFile(file, uploader.pickup_target, function(data){
+            data = data['data'];
             var url = data.response.url;
             var item_key = data.response.item.__key__;
+            console.log(data);
             if (uploader.pickup_target_is_editor) {
                 uploader.pickup_target.selection.setContent('<img src="' + url + '" />');
             }else{
@@ -219,6 +221,7 @@ var uploader = {
         progress_bar.set(10);
         var message_id = message.insert("info", "準備上傳", "等待中....", undefined, true);
         json_async("/admin/user_file/user_file/get_url", null, function(data){
+            data = data['data'];
             progress_bar.set(20);
             uploader.upload({
                 "message_id": message_id,
@@ -249,6 +252,7 @@ var uploader = {
                 progress_bar.set(100);
                 message.snackbar("上傳完成");
                 message.change(this.xhr_info.message_id, "success", "上傳完成", "100 %, 上傳完成", this.xhr_info.image, true);
+                debugger;
                 if (typeof this.xhr_info.callback === "function"){
                     eval('var a = ' + data.currentTarget.response);
                     this.xhr_info.callback({

@@ -109,7 +109,7 @@ var pageDOD = {
         }
     },
     "setEditorValue": function (data){
-        var url = data.response.url;
+        var url = data.response.data.url;
         var target_id = data.target_id;
         if (tinyMCE.get(target_id)){
             tinyMCE.get(target_id).selection.setContent('<img src="' + url + '" />');
@@ -204,9 +204,10 @@ function changeViewAndReload(){
         }
     }
 }
-function saveForm(){
+function saveForm(form_id){
     show_message("請稍候...", 30000, false);
-    var $form = $("form");
+    if (typeof form_id === "undefined") form_id = "form";
+    var $form = $(form_id);
     if ($form.length <=0){ return false;}
     if (page_status.is_saving == true){ return false;}
     page_status.is_saving = true;
@@ -219,9 +220,11 @@ function saveForm(){
         }
         $(this).change();
     });
-    if ($("#response_return_encode").length == 0)
-        $('<input type="hidden" id="response_return_encode" name="response_return_encode" value="' +
-            $form.data("return-encoding") + '" />').appendTo($form[0]);
+    if ($("input[name$='response_return_encode']").length == 0){
+        var r = $form.data("return-encoding");
+        if (typeof r === "undefined") r = "application/json";
+        $('<input type="hidden" name="response_return_encode" value="' + r + '" />').appendTo($form);
+    }
     $form.submit();
 }
 function saveFormAndGoBack(){
@@ -339,17 +342,25 @@ $(function(){
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
-function getIframeFormMessage(method_default_message, method){
-    var msg = (method_default_message !== null) && method_default_message || {
-            "add": "記錄已新增",
-            "edit": "記錄已儲存",
-            "profile": "資料已更新",
-            "data": "資料已更新",
-            "config": "設定已變更",
+function getIframeFormMessage(scaffold, status){
+    var method_default_message = null;
+    var request_method = "undefined";
+    if (typeof scaffold !== "undefined"){
+        method_default_message = scaffold["method_default_message"];
+        request_method = scaffold["request_method"];
+    }
+    var msg = (method_default_message !== null && typeof method_default_message !== "undefined") &&
+        method_default_message || {
+            "add.success": "記錄已新增",
+            "edit.success": "記錄已儲存",
+            "profile.success": "資料已更新",
+            "data.success": "資料已更新",
+            "config.success": "設定已變更",
+            "undefined.success": "已成功",
             "undefined": "未定義的訊息"
         };
-    method = method.replace("admin_", "");
-    return (typeof msg[method] === "undefined") && msg["undefined"] || msg[method];
+    request_method = request_method.replace("admin_", "") + "." + status;
+    return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
 }
 
 // 表單資料儲存完成之後
@@ -365,8 +376,9 @@ function afterIframeFormLoad (){
             $("form").attr("action", j["new_form_action"]);
         }
     }
-    var message = getIframeFormMessage(j["method_default_message"], j["request_method"]);
-    if (j["response_info"] == "success"){
+    var response_info = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
+    var message = getIframeFormMessage(j["scaffold"], response_info);
+    if (response_info == "success"){
         if (page_status.exit_after_save){
             page_status.exit_after_save = false;
             if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
@@ -377,7 +389,7 @@ function afterIframeFormLoad (){
             if (page_status.load_record_after_save && is_content()){
                 page_status.load_record_after_save = false;
                 page_status.need_reload_side_panel = true;
-                backend.content_iframe.load(j["method_record_edit_url"], "", {}, false, true);
+                backend.content_iframe.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
             }else{
                 if (page_status.need_reload_side_panel){
                     $("#" + page_status.last_side_panel_target_id).click();
@@ -386,7 +398,7 @@ function afterIframeFormLoad (){
             show_message(message, 1800);
         }
         backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
-        if (j["response_method"] == "add" || j["response_method"] == "edit"){
+        if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit"){
             if (is_aside()) backend.content_iframe.reload(true);
         }
     }else{
