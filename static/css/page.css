@@ -6058,7 +6058,7 @@ main.content{
     padding-right: 15px;
 }
 .scrollDiv.on main.content{
-    width: calc(100% + 4.2px);
+    width: calc(100% + 5px);
 }
 .record_item{
     cursor: pointer;

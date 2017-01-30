@@ -968,3 +968,6 @@ body.sortTag .menu-content .nav>li>a[data-sort]::after {
 .swal2-modal h2{
     font-size: 28px;
 }
+.nav-drawer.nav-drawer-md {
+    z-index: 32;
+}
