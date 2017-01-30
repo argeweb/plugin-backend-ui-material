@@ -342,7 +342,7 @@ $(function(){
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
-function getIframeFormMessage(scaffold, status){
+function getIframeFormMessage(scaffold, status, message){
     var method_default_message = null;
     var request_method = "undefined";
     if (typeof scaffold !== "undefined"){
@@ -360,7 +360,10 @@ function getIframeFormMessage(scaffold, status){
             "undefined": "未定義的訊息"
         };
     request_method = request_method.replace("admin_", "") + "." + status;
-    return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
+    if (typeof message === "undefined" || message == "undefined")
+        return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
+    else
+        return message;
 }
 
 // 表單資料儲存完成之後
@@ -377,7 +380,7 @@ function afterIframeFormLoad (){
         }
     }
     var response_info = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
-    var message = getIframeFormMessage(j["scaffold"], response_info);
+    var message = getIframeFormMessage(j["scaffold"], response_info, j['message']);
     if (response_info == "success"){
         if (page_status.exit_after_save){
             page_status.exit_after_save = false;
