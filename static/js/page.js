@@ -337,6 +337,11 @@ $(function(){
         //remove items from localStorage
     };
     moment.locale('zh-tw');
+    setInterval(function(){
+        $(".moment-from-now").each(function(){
+            $(this).text(moment($(this).data("from-now")).fromNow());
+        });
+    }, 10000);
 });
 
 function setBodyClass(class_name){
@@ -486,7 +491,7 @@ function pageInit(new_html) {
         $("#" + page_status.last_side_panel_target_id).click();
     }
     $(".moment-from-now").each(function(){
-        $(this).text(moment($(this).data("datetime")).add(8, "hours").fromNow());
+        $(this).text(moment($(this).data("from-now")).fromNow());
     });
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
