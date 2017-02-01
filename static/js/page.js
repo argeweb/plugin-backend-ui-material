@@ -493,6 +493,13 @@ function pageInit(new_html) {
     $(".moment-from-now").each(function(){
         $(this).text(moment($(this).data("from-now")).fromNow());
     });
+    $("select[readonly] :selected").each(function(){
+        $(this).parent().data("default", this);
+    });
+
+    $("select[readonly]").change(function(e) {
+        $($(this).data("default")).prop("selected", true);
+    });
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
     }, 800);
