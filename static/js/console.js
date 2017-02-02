@@ -90,10 +90,13 @@ var message = {
                 message.ui.hideTimer = setTimeout(message.ui.hideAuto, 1000);
             }
         },
-        "hide": function(){
-            $("#message-box").parent("li").removeClass("open");
-            message.ui.hideTimerCount = 0;
-            swal.closeModal();
+        "hide": function(sec){
+            sec = sec || 10;
+            setTimeout(function(){
+                $("#message-box").parent("li").removeClass("open");
+                message.ui.hideTimerCount = 0;
+                swal.closeModal();
+            }, sec);
         }
     },
     "insert": function(kind, title, new_message, image, mini){
@@ -252,7 +255,6 @@ var uploader = {
                 progress_bar.set(100);
                 message.snackbar("上傳完成");
                 message.change(this.xhr_info.message_id, "success", "上傳完成", "100 %, 上傳完成", this.xhr_info.image, true);
-                debugger;
                 if (typeof this.xhr_info.callback === "function"){
                     eval('var a = ' + data.currentTarget.response);
                     this.xhr_info.callback({
@@ -301,6 +303,7 @@ var content_iframe = {
         this.is_init = true;
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("iframe");
+        this.instance.contentWindow.methods.setBackendMethods();
         window.onpopstate = this.popState;
         var h = JSON.parse(localStorage.getItem('content_iframe.history'));
         if (h != null && h != [] && h != "null") content_iframe.history = h;
@@ -345,6 +348,7 @@ var content_iframe = {
             }, 800);
         });
         $(".iframe_mask").hover(content_iframe.focus, function(){ content_iframe.need_focus = false; }).mouseover(content_iframe.focus).mouseenter(content_iframe.focus).click(content_iframe.focus)
+        try{ content_iframe.instance.contentWindow.parent_is_ready(); }catch(e){}
     },
     "focus": function(){
         $(".iframe_mask").hide();
@@ -487,12 +491,13 @@ var aside_iframe = {
         this.is_init = true;
         this.instance = $(selector).get(0);
         this.instance.contentWindow.setBodyClass("aside");
+        this.instance.contentWindow.methods.setBackendMethods();
         $(window).resize(function(){
             if (aside_iframe.is_open){
                 aside_iframe.showUi();
             }
             //$("#aside_iframe.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 200);
-        })
+        });
     },
     "load": function(url){
         if (this.loading_lock == true) return false;
@@ -555,7 +560,7 @@ var aside_iframe = {
     }
 };
 function print(){
-    var target = aside_iframe.is_open ? aside_iframe : iframe;
+    var target = aside_iframe.is_open ? aside_iframe : content_iframe;
     var target_window = target.instance.contentWindow;
     target_window.print();
 }
@@ -711,16 +716,6 @@ $(function(){
     $(".enter-edit-mode").click(function(){ view.change("edit")});
     $(".enter-delete-mode").click(function(){ view.change("delete")});
     $(".page-overlay").click(function(){$("div.search-bar, .page-overlay").removeClass("on");$("body").removeClass("on-search");});
-    $("#keyword").focus(function(){
-        ui.closeMessageBox();
-        $("div.search-bar, .page-overlay").addClass("on");
-        $("body").addClass("on-search");
-    }).keyup(function(event){
-        if (event.which == 13) {
-            event.preventDefault();
-            content_iframe.search($(this).val());
-        }
-    });
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
@@ -735,6 +730,16 @@ $(function(){
             event.preventDefault();
             $("#main-nav").animate({"left": -300}, function(){ $(this).hide(); });
             $(target_id).animate({"left": 0}, function(){ $(target_id).addClass("in"); });
+        }
+    });
+    $("#keyword").focus(function(){
+        ui.closeMessageBox();
+        $("div.search-bar, .page-overlay").addClass("on");
+        $("body").addClass("on-search");
+    }).keyup(function(event){
+        if (event.which == 13) {
+            event.preventDefault();
+            content_iframe.search($(this).val());
         }
     });
 });

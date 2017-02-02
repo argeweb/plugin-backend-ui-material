@@ -26,7 +26,7 @@
                     <td>系統編號</td>
                     <td><span class='badge' title='{{ item.key.urlsafe() }}'>{{ item.key.id() }}</span></td>
                 </tr>
-                {% for property in scaffolding.display_in_form %}
+                {% for property in scaffolding.display_in_form %}{%- if property.name not in scaffolding.hidden_in_form %}
                 <tr>
                     <td>
                         {{ s.scaffold_field_name(property) }}
@@ -34,7 +34,7 @@
                     <td>
                         {{ print_value(item[property]) }}
                     </td>
-                </tr>
+                </tr>{% endif -%}
                 {% endfor %}
                 </tbody>
             </table>

@@ -5,30 +5,6 @@ function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTU
 var backend = parent;
 var start_filepicker = function(){};
 var page = {};
-
-var page_status = {
-    "exit_after_save": false,
-    "load_record_after_save": false,
-    "need_reload_side_panel": false,
-    "last_side_panel_target_id": null,
-    "is_saving": false,
-    "timeout_lock_saving": null
-};
-
-// 訊息 (簡單的方式)
-function show_message(msg, timeout, allowOutsideClick){
-    backend.message.quick_show(msg, timeout, allowOutsideClick);
-}
-
-// 確保 file picker 與 message 被正常載入
-//  此文件在 parent 準備好之後才載入完畢
-if (backend && backend.uploader && backend.uploader.pickup) start_filepicker = backend.uploader.pickup;
-//  此文件在 parent 準備好之前就載入完畢
-function parent_is_ready(){
-    show_message = backend.message.quick_show;
-    start_filepicker = backend.uploader.pickup;
-}
-
 var pageDOD = {
     "visual_timer": 3,
     "onDragStart": function(evt){
@@ -116,6 +92,162 @@ var pageDOD = {
         }
     }
 };
+
+var page_data = {
+    "last_side_panel_target_id": "",
+    "is_saving": false,
+    "timeout_lock_saving": null
+};
+var methods = {
+    "parseScaffoldMessage": function(j){
+        var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
+        var message = j['message'];
+        var scaffold = j["scaffold"];
+        var request_method = "undefined";
+        var method_default_message = null;
+        if (typeof scaffold !== "undefined"){
+            method_default_message = scaffold["method_default_message"];
+            request_method = scaffold["request_method"];
+        }
+        var msg = (method_default_message !== null && typeof method_default_message !== "undefined") &&
+            method_default_message || {
+                "add.success": "記錄已新增",
+                "edit.success": "記錄已儲存",
+                "profile.success": "資料已更新",
+                "data.success": "資料已更新",
+                "config.success": "設定已變更",
+                "undefined.success": "已成功",
+                "undefined": "未定義的訊息"
+            };
+        request_method = request_method.replace("admin_", "") + "." + status;
+        if (typeof message === "undefined" || message == "undefined")
+            return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
+        else
+            return message;
+
+    },
+    "goBack": function(n){
+        n = n || 1;
+        if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
+        if (is_content()) setTimeout(history.go(-Math.abs(n)), 10);
+    },
+    "setBackendMethods": function(){
+        //  此文件在 parent 準備好之前就載入完畢
+        show_message = backend.message.quick_show;
+        start_filepicker = backend.uploader.pickup;
+    },
+    "reloadSidePanel": function(){
+        var n = page_data.last_side_panel_target_id;
+        page_data.last_side_panel_target_id = "";
+        if (n !== ""){ $("#" + n).click(); }
+    }
+};
+var form = {
+    "last_target": null,
+    "validate": function(j){
+        var err = j["errors"];
+        if (err){
+            for (var key in err) {
+                $("form #" + key).parents(".form-group").addClass("has-error has-danger").find(".help-block").text(err[key]);
+            }
+            if (form.last_target.attr("action").indexOf("/_ah/upload/") >= 0) {
+                form.last_target.attr("action", j["new_form_action"]);
+            }
+            backend.message.snackbar("表單欄位有誤");
+            return false;
+        }
+        return true;
+    },
+    "beforeSubmit": function(){
+        show_message("請稍候...", 30000, false);
+        form.lock();
+        form.last_target.find(".field-type-rich-text-field").each(function(){
+            var id = $(this).attr("id");
+            //if (tinyMCE.get(id)){
+            //    $(this).val(tinyMCE.get(id).getContent());
+            //}
+            $(this).change();
+        });
+        if ($("input[name$='response_return_encode']").length == 0){
+            var r = form.last_target.data("return-encoding");
+            if (typeof r === "undefined") r = "application/json";
+            $('<input type="hidden" name="response_return_encode" value="' + r + '" />').appendTo(form.last_target);
+        }
+    },
+    "submit": function(form_id, callback){
+        if (typeof form_id === "undefined") form_id = "form";
+        if (typeof callback === "function") form.afterSubmitCallback = callback;
+        var $form = $(form_id);
+        if ($form.length <=0){ return false;}
+        if (page_data.is_saving == true){ return false;}
+        form.last_target = $form;
+        form.beforeSubmit();
+        $form.submit();
+    },
+    "afterSubmit": function(){
+        // 表單資料儲存完成之後
+        $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
+        var j = JSON.parse($(this).contents().find("body").text());
+        form.unlock();
+        backend.message.ui.hide();
+        if (form.validate(j)) {
+            var message = methods.parseScaffoldMessage(j);
+            backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
+            // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
+            //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
+            //    if (is_aside()) backend.content_iframe.reload(true);
+            //}
+            if (typeof form.afterSubmitCallback === "function"){
+                // 儲存並離開、建立並繼續編輯 會有 callback
+                form.afterSubmitCallback(j, message);
+                form.afterSubmitCallback = null;
+            }else{
+                // 儲存
+                backend.message.snackbar(message);
+                methods.reloadSidePanel();
+            }
+        }
+        form.last_target = undefined;
+    },
+    "afterSubmitCallback": function(){},
+    "lock": function(s){
+        s = s || 5000;
+        page_data.is_saving = true;
+        clearTimeout(page_data.timeout_lock_saving);
+        page_data.timeout_lock_saving = setTimeout(function(){ page_data.is_saving = false; }, s);
+
+    },
+    "unlock": function(s){
+        s = s || 3000;
+        clearTimeout(page_data.timeout_lock_saving);
+        page_data.timeout_lock_saving = setTimeout(function () { page_data.is_saving = false; }, s);
+    }
+};
+var saveForm = form.submit;
+function saveFormAndGoBack(form_id){
+    saveForm(form_id, function(j, message){
+        methods.goBack();
+        backend.message.snackbar(message);
+    });
+}
+function saveFormAndReloadRecord(form_id){
+    saveForm(form_id, function(j, message){
+        if (is_content()) {
+            backend.content_iframe.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
+            backend.message.snackbar(message);
+        }
+    });
+}
+
+// 訊息 (簡單的方式)
+function show_message(msg, timeout, allowOutsideClick){
+    backend.message.quick_show(msg, timeout, allowOutsideClick);
+}
+
+// 確保 file picker 與 message 被正常載入
+//  此文件在 parent 準備好之後才載入完畢
+if (backend && backend.uploader && backend.uploader.pickup) start_filepicker = backend.uploader.pickup;
+
 function is_aside(){
     return (window.name == "aside_iframe");
 }
@@ -133,41 +265,42 @@ function changeLangField(index){
     $("a.btn-lang").eq(index).click();
 }
 function createEditorField(id){
-    var ed = tinyMCE.createEditor(id, {
-    theme : 'modern',
-    content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
-    height: 400,
-    plugins: [
-    "link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
-    ],
-    toolbar: "undo redo | styleselect | alignleft aligncenter alignright | forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
-    statusbar: false,
-    menubar: false,
-    setup : function(ed) {
-        ed.addButton('upload_image', {
-            title : '插入圖片',
-            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
-            onclick : function() {
-                start_filepicker(ed, true)
-            }
-        });
-
-        ed.addButton('custom_fullscreen', {
-            title: '擴大編輯區',
-            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
-            onclick : function() {
-                ed.execCommand('mceFullScreen');
-                $(".page-header").toggle();
-            }
-        });
-        ed.on('init', function (e) {
-        });
-    },
-    convert_urls:false,
-    relative_urls:false,
-    remove_script_host:false
-    });
-    ed.render();
+    $("#"+id).summernote();
+    //var ed = tinyMCE.createEditor(id, {
+    //theme : 'modern',
+    //content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
+    //height: 400,
+    //plugins: [
+    //"link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
+    //],
+    //toolbar: "undo redo | styleselect | alignleft aligncenter alignright | forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
+    //statusbar: false,
+    //menubar: false,
+    //setup : function(ed) {
+    //    ed.addButton('upload_image', {
+    //        title : '插入圖片',
+    //        image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
+    //        onclick : function() {
+    //            start_filepicker(ed, true)
+    //        }
+    //    });
+    //
+    //    ed.addButton('custom_fullscreen', {
+    //        title: '擴大編輯區',
+    //        image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
+    //        onclick : function() {
+    //            ed.execCommand('mceFullScreen');
+    //            $(".page-header").toggle();
+    //        }
+    //    });
+    //    ed.on('init', function (e) {
+    //    });
+    //},
+    //convert_urls:false,
+    //relative_urls:false,
+    //remove_script_host:false
+    //});
+    //ed.render();
 }
 function showTimeout(callback){
     hideHeader('<div style="margin: 100px auto; width: 40%; font-size: 18px;">連線逾時</div>', callback);
@@ -204,38 +337,7 @@ function changeViewAndReload(){
         }
     }
 }
-function saveForm(form_id){
-    show_message("請稍候...", 30000, false);
-    if (typeof form_id === "undefined") form_id = "form";
-    var $form = $(form_id);
-    if ($form.length <=0){ return false;}
-    if (page_status.is_saving == true){ return false;}
-    page_status.is_saving = true;
-    clearTimeout(page_status.timeout_lock_saving);
-    page_status.timeout_lock_saving = setTimeout(function(){ page_status.is_saving = false; }, 5000);
-    $form.find(".field-type-rich-text-field").each(function(){
-        var id = $(this).attr("id");
-        if (tinyMCE.get(id)){
-            $(this).val(tinyMCE.get(id).getContent());
-        }
-        $(this).change();
-    });
-    if ($("input[name$='response_return_encode']").length == 0){
-        var r = $form.data("return-encoding");
-        if (typeof r === "undefined") r = "application/json";
-        $('<input type="hidden" name="response_return_encode" value="' + r + '" />').appendTo($form);
-    }
-    $form.submit();
-}
-function saveFormAndGoBack(){
-    page_status.exit_after_save = true;
-    page_status.need_reload_side_panel = false;
-    saveForm();
-}
-function saveFormAndReloadRecord(){
-    page_status.load_record_after_save = true;
-    saveForm();
-}
+
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
     backend.content_iframe.removeMask();
@@ -259,9 +361,7 @@ $(function(){
         backend.ui.closeSearchBox();
         backend.ui.closeMessageBox();
     }).on("click", ".record_item td", function(e){
-        if (e.target.outerHTML.indexOf('switch-toggle') > 0 || e.target.outerHTML.indexOf('input') > 0){
-            return;
-        }
+        if (e.target.outerHTML.indexOf('switch-toggle') > 0 || e.target.outerHTML.indexOf('input') > 0){ return; }
         var url_target = backend.view.current + "-url";
         var url = $(this).parent().data(url_target);
         if ($(this).hasClass("record_item")){
@@ -347,76 +447,6 @@ $(function(){
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
-function getIframeFormMessage(scaffold, status, message){
-    var method_default_message = null;
-    var request_method = "undefined";
-    if (typeof scaffold !== "undefined"){
-        method_default_message = scaffold["method_default_message"];
-        request_method = scaffold["request_method"];
-    }
-    var msg = (method_default_message !== null && typeof method_default_message !== "undefined") &&
-        method_default_message || {
-            "add.success": "記錄已新增",
-            "edit.success": "記錄已儲存",
-            "profile.success": "資料已更新",
-            "data.success": "資料已更新",
-            "config.success": "設定已變更",
-            "undefined.success": "已成功",
-            "undefined": "未定義的訊息"
-        };
-    request_method = request_method.replace("admin_", "") + "." + status;
-    if (typeof message === "undefined" || message == "undefined")
-        return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
-    else
-        return message;
-}
-
-// 表單資料儲存完成之後
-function afterIframeFormLoad (){
-    var j = JSON.parse($(this).contents().find("body").text());
-    $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
-    var err = j["errors"];
-    if (err){
-        for (var key in err) {
-            $("form #" + key).parents(".form-group").addClass("has-error has-danger").find(".help-block").text(err[key]);
-        }
-        if ($("form").attr("action").indexOf("/_ah/upload/") >= 0){
-            $("form").attr("action", j["new_form_action"]);
-        }
-    }
-    var response_info = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
-    var message = getIframeFormMessage(j["scaffold"], response_info, j['message']);
-    if (response_info == "success"){
-        if (page_status.exit_after_save){
-            page_status.exit_after_save = false;
-            if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
-            if (is_content()) setTimeout(function(){ history.go(-1); }, 10);
-            backend.message.snackbar(message);
-            backend.message.ui.hide();
-        }else{
-            if (page_status.load_record_after_save && is_content()){
-                page_status.load_record_after_save = false;
-                page_status.need_reload_side_panel = true;
-                backend.content_iframe.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            }else{
-                if (page_status.need_reload_side_panel){
-                    $("#" + page_status.last_side_panel_target_id).click();
-                }
-            }
-            show_message(message, 1800);
-        }
-        backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
-        if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit"){
-            if (is_aside()) backend.content_iframe.reload(true);
-        }
-    }else{
-        backend.message.snackbar("表單欄位有誤");
-    }
-    clearTimeout(page_status.timeout_lock_saving);
-    page_status.timeout_lock_saving = setTimeout(function(){
-        page_status.is_saving = false;
-    }, 3000);
-}
 
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
@@ -430,7 +460,12 @@ function pageInit(new_html) {
         }
     }
     var $header = $("header");
-    if (is_content()) backend.content_iframe.setTitle($("title").text());
+    if (is_content()) {
+        backend.content_iframe.setTitle($("title").text());
+        if (backend.aside_iframe.is_open) {
+            methods.reloadSidePanel();
+        }
+    }
     if($header.text().trim() != ""){
         $body.addClass("has-header").removeClass("no-header");
     }else{
@@ -462,12 +497,12 @@ function pageInit(new_html) {
     $("#onLoad").remove();
     $body.removeClass("body-hide");
     checkNavItemAndShow();
-    $("iframe[name='iframeForm']").load(afterIframeFormLoad);
+    $("iframe[name='iframeForm']").load(form.afterSubmit);
     $(".filepicker").click(function(){
         start_filepicker($(this).parents(".input-group").find("input"), false);
     });
 
-    tinyMCE.editors=[];
+    //tinyMCE.editors=[];
     $(".field-type-rich-text-field").each(function() {
         var label_name = $(this).prev().text();
         $(this).prev().remove();
@@ -485,21 +520,11 @@ function pageInit(new_html) {
         $(".sortable-list").removeClass("hidden");
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
-    var need_reload_side_panel = page_status.need_reload_side_panel;
-    page_status.need_reload_side_panel = false;
-    if (need_reload_side_panel){
-        $("#" + page_status.last_side_panel_target_id).click();
-    }
     $(".moment-from-now").each(function(){
         $(this).text(moment($(this).data("from-now")).fromNow());
     });
-    $("select[readonly] :selected").each(function(){
-        $(this).parent().data("default", this);
-    });
-
-    $("select[readonly]").change(function(e) {
-        $($(this).data("default")).prop("selected", true);
-    });
+    $("select[readonly] :selected").each(function(){ $(this).parent().data("default", this); });
+    $("select[readonly]").change(function() { $($(this).data("default")).prop("selected", true); });
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
     }, 800);
@@ -593,8 +618,8 @@ function linkClickProcess(){
             var target = $(this).attr("target");
             if (target == "aside_iframe"){
                 if ($(this).hasClass("field-type-side-panel-field")){
-                    page_status.need_reload_side_panel = true;
-                    page_status.last_side_panel_target_id = $(this).attr("id");
+                    page_data.last_side_panel_target_id = $(this).attr("id");
+                    console.log(page_data.last_side_panel_target_id);
                 }
                 backend.aside_iframe.load($(this).attr("href"));
             }
