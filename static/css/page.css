@@ -7015,3 +7015,6 @@ select.form-control, select.picker__select--month, select.picker__select--year{
 .nav-list li {
     float: left;
 }
+.mce-tinymce.mce-container.mce-panel {
+    width: calc(100% - 1px) !important;
+}

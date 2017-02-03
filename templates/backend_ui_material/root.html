@@ -32,11 +32,10 @@
                 <ul class="dropdown-menu dropdown-menu-right top100-12">
                     <li><a class="waves-attach" href="javascript:content_iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
-                    {% if dashboard_name == "admin" %}<li><a class="waves-attach" href="/admin/log" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>{% endif %}
+                    <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout" target="content_iframe"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
-{#            <li><a href="/admin/application_user/profile" title="{{ application_user_name }}"><div class="avatar user-box" style="background-image: url({{ application_user.avatar }})"></div></a></li>#}
 		</ul>
 	</header>
 	<nav aria-hidden="true" class="menu menu-left nav-drawer nav-drawer-md" id="ui_menu" tabindex="-1">

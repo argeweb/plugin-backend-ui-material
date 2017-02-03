@@ -5,8 +5,8 @@
     {%- set is_ajax = params.get_header("Is-Ajax") -%}
     <title>{%- block layout_head_title -%}{%- if scaffolding and s %}{{ s.scaffold_title(route.action) }}{% endif %}{%- endblock -%}</title>
     {%- if is_ajax != "true" %}
-    <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/css/page.css?v=4.1.1&run={{ framework.app_version }}">
     <link rel="stylesheet" href="/static/vendor/bootstrap-table/bootstrap-table.min.css">

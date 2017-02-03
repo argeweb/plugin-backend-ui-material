@@ -20,9 +20,9 @@ var progress_bar = {
 };
 var affix = function(top){
     if (top >= 25){
-        $("header.header").addClass("affix");
+        $("header").addClass("affix");
     }else{
-        $("header.header").removeClass("affix");
+        $("header").removeClass("affix");
     }
 };
 var pageDOD = function(evt){
