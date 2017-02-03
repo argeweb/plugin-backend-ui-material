@@ -7,16 +7,14 @@
 	<title>{{ backend_title }}</title>
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
 </head>
-<body class="page-brand in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
+<body class="in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
       ondragover="pageDOD(event)" ondrop="pageDOD(event)" ondragenter="pageDOD(event)" ondragleave="pageDOD(event)">
-	<header class="header header-transparent header-waterfall ui-header">
+	<header>
 		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
 		<a class="header-logo {% if page_title == backend_title %}header-affix-hide{% else %}{% endif %} margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != '{{ backend_title }}' %}{{ backend_title }}{% endif %}</a>
-        <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != backend_title %}．{% endif %}</a>
-        <a class="header-logo header-affix margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{{ page_title }}</a>
         <ul class="nav nav-list pull-right left-search">
             <li class="search-bar"><div class="search-bar"><i class="icon icon icon-lg">search</i><input type="text" id="keyword" /></div></li>
         </ul>
@@ -31,7 +29,7 @@
 				</div>
 			</li>
             <li class="dropdown"><a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
-                <ul class="dropdown-menu dropdown-menu-right top100-12" style="top: 100%;">
+                <ul class="dropdown-menu dropdown-menu-right top100-12">
                     <li><a class="waves-attach" href="javascript:content_iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     {% if dashboard_name == "admin" %}<li><a class="waves-attach" href="/admin/log" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>{% endif %}

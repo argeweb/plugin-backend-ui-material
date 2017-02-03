@@ -619,7 +619,7 @@ var shortcut = {
                     console.log("help");
                     break;
                 case 'alt+s':
-                    $("body").toggleClass("sortTag");
+                    $("body").toggleClass("show-sort-tag");
                     break;
                 case '`':
                     if (aside_iframe.is_open)
