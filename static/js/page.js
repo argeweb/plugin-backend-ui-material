@@ -163,9 +163,9 @@ var form = {
         form.lock();
         form.last_target.find(".field-type-rich-text-field").each(function(){
             var id = $(this).attr("id");
-            //if (tinyMCE.get(id)){
-            //    $(this).val(tinyMCE.get(id).getContent());
-            //}
+            if (tinyMCE.get(id)){
+                $(this).val(tinyMCE.get(id).getContent());
+            }
             $(this).change();
         });
         if ($("input[name$='response_return_encode']").length == 0){
@@ -265,42 +265,41 @@ function changeLangField(index){
     $("a.btn-lang").eq(index).click();
 }
 function createEditorField(id){
-    $("#"+id).summernote();
-    //var ed = tinyMCE.createEditor(id, {
-    //theme : 'modern',
-    //content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
-    //height: 400,
-    //plugins: [
-    //"link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
-    //],
-    //toolbar: "undo redo | styleselect | alignleft aligncenter alignright | forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
-    //statusbar: false,
-    //menubar: false,
-    //setup : function(ed) {
-    //    ed.addButton('upload_image', {
-    //        title : '插入圖片',
-    //        image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
-    //        onclick : function() {
-    //            start_filepicker(ed, true)
-    //        }
-    //    });
-    //
-    //    ed.addButton('custom_fullscreen', {
-    //        title: '擴大編輯區',
-    //        image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
-    //        onclick : function() {
-    //            ed.execCommand('mceFullScreen');
-    //            $(".page-header").toggle();
-    //        }
-    //    });
-    //    ed.on('init', function (e) {
-    //    });
-    //},
-    //convert_urls:false,
-    //relative_urls:false,
-    //remove_script_host:false
-    //});
-    //ed.render();
+    var ed = tinyMCE.createEditor(id, {
+    theme : 'modern',
+    content_css : ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
+    height: 400,
+    plugins: [
+    "link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
+    ],
+    toolbar: "undo redo | styleselect | alignleft aligncenter alignright | forecolor backcolor bold italic | link upload_image image media | code custom_fullscreen",
+    statusbar: false,
+    menubar: false,
+    setup : function(ed) {
+        ed.addButton('upload_image', {
+            title : '插入圖片',
+            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
+            onclick : function() {
+                start_filepicker(ed, true)
+            }
+        });
+
+        ed.addButton('custom_fullscreen', {
+            title: '擴大編輯區',
+            image : '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
+            onclick : function() {
+                ed.execCommand('mceFullScreen');
+                $(".page-header").toggle();
+            }
+        });
+        ed.on('init', function (e) {
+        });
+    },
+    convert_urls:false,
+    relative_urls:false,
+    remove_script_host:false
+    });
+    ed.render();
 }
 function showTimeout(callback){
     hideHeader('<div style="margin: 100px auto; width: 40%; font-size: 18px;">連線逾時</div>', callback);
@@ -337,13 +336,16 @@ function changeViewAndReload(){
         }
     }
 }
+function setBodyClass(class_name){
+    $("body").addClass(class_name);
+}
 
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
     backend.content_iframe.removeMask();
 }
 
-//  僅執行一次
+// 僅執行一次
 $(function(){
     if (window.name != ""){
         pageInit();
@@ -443,11 +445,6 @@ $(function(){
         });
     }, 10000);
 });
-
-function setBodyClass(class_name){
-    $("body").addClass(class_name);
-}
-
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
@@ -502,7 +499,7 @@ function pageInit(new_html) {
         start_filepicker($(this).parents(".input-group").find("input"), false);
     });
 
-    //tinyMCE.editors=[];
+    tinyMCE.editors=[];
     $(".field-type-rich-text-field").each(function() {
         var label_name = $(this).prev().text();
         $(this).prev().remove();
