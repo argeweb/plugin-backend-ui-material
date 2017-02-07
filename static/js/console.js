@@ -374,7 +374,7 @@ var content_iframe = {
         }
     },
     "getUrl": function(){
-        return this.last_url;
+        return content_iframe.last_url;
     },
     "load": function(url, text, referer_page, need_push, need_replace){
         affix(0);
@@ -384,7 +384,7 @@ var content_iframe = {
         this.loading_timer = setTimeout(function(){
             content_iframe.instance.contentWindow.showTimeout();
         }, 25000);
-        this.last_url = url;
+        content_iframe.last_url = url;
         if (typeof need_push === "undefined"){ need_push = true }
         if (typeof need_replace === "undefined"){ need_replace = false }
         if (need_push){
@@ -457,7 +457,7 @@ var content_iframe = {
     },
     "search": function(keyword){
         var url = "";
-        var current = this.last_url;
+        var current = content_iframe.last_url;
         if (keyword != undefined && keyword != ""){
             url = replaceParam(current, "query", keyword);
             url = replaceParam(url, "cursor", "");
@@ -508,7 +508,7 @@ var aside_iframe = {
             aside_iframe.instance.contentWindow.showTimeout();
         }, 250000);
 
-        this.last_url = url;
+        aside_iframe.last_url = url;
         if (this.is_open) {
             aside_iframe.instance.contentWindow.showLoading(function(){
                 aside_iframe.runAjax(url);
@@ -524,7 +524,7 @@ var aside_iframe = {
         //);
     },
     "reload": function(){
-        this.load(this.last_url);
+        aside_iframe.load(aside_iframe.last_url);
     },
     "runAjax": function(url){
         var headers = {

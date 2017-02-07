@@ -616,7 +616,6 @@ function linkClickProcess(){
             if (target == "aside_iframe"){
                 if ($(this).hasClass("field-type-side-panel-field")){
                     page_data.last_side_panel_target_id = $(this).attr("id");
-                    console.log(page_data.last_side_panel_target_id);
                 }
                 backend.aside_iframe.load($(this).attr("href"));
             }

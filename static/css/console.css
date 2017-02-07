@@ -565,9 +565,9 @@ main.content {
     color:#afafaf !important;
     height: 40px;
     width: 42px;
-    font-size: 11px;
-    line-height: 35px;
-    margin: 0 0 0 5px;
+    font-size: 15px;
+    line-height: 37px;
+    margin: 0 2px 0 5px;
     border-radius: 50%;
 }
 .op-mode .btn+.btn{
@@ -578,9 +578,6 @@ main.content {
 }
 .op-mode .btn.action i{
     color: #03a9f4;
-}
-.op-mode .btn:first-child {
-    margin-left: -3px;
 }
 .op-mode .btn:hover, .op-mode .btn:focus, .op-mode .btn:after {
     background: transparent !important;
