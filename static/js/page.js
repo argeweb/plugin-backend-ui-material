@@ -186,10 +186,10 @@ var form = {
     },
     "afterSubmit": function(){
         // 表單資料儲存完成之後
+        //backend.message.ui.hide();
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         var j = JSON.parse($(this).contents().find("body").text());
         form.unlock();
-        backend.message.ui.hide();
         if (form.validate(j)) {
             var message = methods.parseScaffoldMessage(j);
             backend.ui.setUserInformation($("#name").val(), $("#avatar").val());

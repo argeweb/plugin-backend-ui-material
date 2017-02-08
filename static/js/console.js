@@ -91,7 +91,7 @@ var message = {
             }
         },
         "hide": function(sec){
-            sec = sec || 10;
+            sec = sec || 1;
             setTimeout(function(){
                 $("#message-box").parent("li").removeClass("open");
                 message.ui.hideTimerCount = 0;
