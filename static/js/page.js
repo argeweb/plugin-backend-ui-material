@@ -186,7 +186,6 @@ var form = {
     },
     "afterSubmit": function(){
         // 表單資料儲存完成之後
-        //backend.message.ui.hide();
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         var j = JSON.parse($(this).contents().find("body").text());
         form.unlock();
@@ -203,13 +202,14 @@ var form = {
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
+                backend.message.ui.hide();
                 backend.message.snackbar(message);
                 methods.reloadSidePanel();
             }
         }
         form.last_target = undefined;
     },
-    "afterSubmitCallback": function(){},
+    "afterSubmitCallback": undefined,
     "lock": function(s){
         s = s || 5000;
         page_data.is_saving = true;
