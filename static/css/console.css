@@ -91,9 +91,6 @@ header .nav > li > a, header .nav > li > .a {
 header .dropdown.open .dropdown-toggle {
     background-color: transparent;
 }
-header .page-overlay{
-    left: calc(100% - 250px);
-}
 .header-logo, .header-text {
     -webkit-box-align: center;
       -ms-flex-align: center;
@@ -435,15 +432,13 @@ div.search-bar.on input, div.search-bar.on i{
 }
 div.page-overlay {
     display: none;
-}
-div.page-overlay.on{
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .42);
+    background-color: rgba(0, 0, 0, .75);
     z-index: 30;
+}
+div.page-overlay.on{
     display: block;
 }
 main.content{
@@ -458,11 +453,11 @@ main.content{
     color: #fff;
     border-bottom: 0;
     position: fixed;
-    margin: 5px 0 0 15px !important;
+    margin: 5px 0 0 -3px !important;
     font-size: 18px;
     line-height: 22px;
     width: calc(100% - 520px - 2.6%);
-    z-index: 10;
+    z-index: 40;
 }
 .login-backdrop {
   -webkit-backface-visibility: hidden;
@@ -607,52 +602,40 @@ main.content {
     display: inline-block;
 }
 
-.in-edit-mode header .page-overlay {
-    background-color: rgba(15, 69, 117, 0);
-}
 .in-edit-mode .edit-color, .in-edit-mode .brand-text-color {
     color: #398dee !important;
 }
-.in-edit-mode .menu-content > .menu-logo, .in-edit-mode:before, .in-edit-mode header:before {
+.in-edit-mode .menu-content > .menu-logo, .in-edit-mode:before, .in-edit-mode header, .in-edit-mode header:before {
     background-color: #398dee;
 }
 .in-edit-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgba(7, 28, 47, 0.69) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 
-.in-view-mode header .page-overlay {
-    background-color: rgba(33, 70, 56, 0)
-}
 .in-view-mode .view-color, .in-view-mode .brand-text-color {
     color: #23c6c8 !important;
 }
-.in-view-mode .menu-content > .menu-logo, .in-view-mode:before, .in-view-mode header:before {
+.in-view-mode .menu-content > .menu-logo, .in-view-mode:before, .in-view-mode header, .in-view-mode header:before {
     background-color: #23c6c8;
 }
 .in-view-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(12, 67, 67) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 
-.in-sort-mode header .page-overlay {
-    background-color: rgba(117, 38, 15, 0);
-}
 .in-sort-mode .sorting-color, .in-sort-mode .brand-text-color {
     color: #f8ac59 !important;
 }
-.in-sort-mode .menu-content > .menu-logo, .in-sort-mode:before, .in-sort-mode header:before {
+.in-sort-mode .menu-content > .menu-logo, .in-sort-mode:before, .in-sort-mode header, .in-sort-mode header:before {
     background-color: #f8ac59
 }
 .in-sort-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(84, 58, 30) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
 
-.in-delete-mode header .page-overlay {
-    background-color: rgba(117, 15, 39, 0);
-}
 .in-delete-mode .delete-color, .in-delete-mode .brand-text-color {
     color: #ed5565 !important;
 }
-.in-delete-mode .menu-content > .menu-logo, .in-delete-mode:before, .in-delete-mode header:before {
+.in-delete-mode .menu-content > .menu-logo, .in-delete-mode:before, .in-delete-mode header, .in-delete-mode header:before {
     background-color: #ed5565;
 }
 .in-delete-mode .menu-content > .menu-logo .page-overlay {
@@ -804,6 +787,7 @@ main.content {
         display: none;
     }
     .left-search {
+        margin: 5px 0 0 15px !important;
         left: 42px;
         min-width: 125px;
         width: calc(100% - 260px)
