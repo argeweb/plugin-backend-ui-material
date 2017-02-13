@@ -1328,7 +1328,8 @@ table.dataTable thead .sorting:after {
     -webkit-transition: border-color .15s ease-in-out 0s, box-shadow .15s ease-in-out 0s;
     transition: border-color .15s ease-in-out 0s, box-shadow .15s ease-in-out 0s;
     width: 100%;
-    font-size: 14px
+    font-size: 14px;
+    margin-top: 4px;
 }
 
 .form-control:focus, .single-line:focus {
@@ -6717,14 +6718,13 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 0), not all {
     select.form-control, select.picker__select--month, select.picker__select--year {
-        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFW…4FvMgtHgGekGE8CsyQaTwDWGQZzwIwAEJAPbsC0nMIMADa5XjRmvnODAAAAABJRU5ErkJggg==);
         background-position: 98% 11px;
     }
 }
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
     height: 18px;
     width: 18px;
-    margin: 0 auto !important;
+    margin: 5px 0 0 0 !important;
 }
 .dropdown-menu-group{
     padding: 3px 7px !important;
