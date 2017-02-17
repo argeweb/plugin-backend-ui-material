@@ -7,7 +7,6 @@
 
 {% block layout_content %}
 <div class="wrapper wrapper-content">
-    <iframe name="iframeForm" width="0" height="0" frameborder="0" seamless style="position: absolute; top: -100px;"></iframe>
     <form method="{% block form_tag_method %}POST{% endblock %}"
           class="{% block form_tag_class %}form-horizontal row{% endblock %}"
           action="{% block form_tag_action %}{{ scaffolding.form_action|default(uri(_pass_all=True), True) }}{% endblock %}"
