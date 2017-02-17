@@ -79,6 +79,7 @@ class BackendUiMaterial(Controller):
         if self.host_information is not None:
             self.context['backend_title'] = self.host_information.site_name
 
+    @route_with('/login.json')
     @route_with('/admin/login.json')
     @route_with('/dashboard/login.json')
     def login_json(self):
@@ -101,8 +102,15 @@ class BackendUiMaterial(Controller):
             'is_login': 'true'
         }
 
-    @route_with('/admin/logout')
+    @route_with('/logout')
     def logout(self):
+        self.session['already_login'] = False
+        self.session['application_admin_user_key'] = None
+        self.session['application_admin_user_level'] = None
+        return self.redirect('/')
+
+    @route_with('/admin/logout')
+    def admin_logout(self):
         self.session['already_login'] = False
         self.session['application_admin_user_key'] = None
         self.session['application_admin_user_level'] = None
