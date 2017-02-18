@@ -196,13 +196,13 @@ var form = {
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
             //    if (is_aside()) backend.content_iframe.reload(true);
             //}
+            backend.message.ui.hide();
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
                 form.afterSubmitCallback(j, message);
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
-                backend.message.ui.hide();
                 backend.message.snackbar(message);
                 methods.reloadSidePanel();
             }
@@ -441,12 +441,18 @@ $(function(){
         //remove items from localStorage
     };
     moment.locale('zh-tw');
-    setInterval(function(){
-        $(".moment-from-now").each(function(){
-            $(this).text(moment($(this).data("from-now")).fromNow());
-        });
-    }, 10000);
+    setInterval(refreshMoment, 10000);
 });
+
+function refreshMoment(){
+    $(".moment-from-now").each(function(){
+        $(this).text(moment($(this).data("from-now")).fromNow());
+    });
+    $(".moment-vue-from-now").each(function(){
+        var d = $($(this).context.outerHTML).data("vue-from-now");
+        $(this).text(moment(d).fromNow());
+    });
+}
 // ajax 載入時，需再執行一次
 function pageInit(new_html) {
     page = {};
