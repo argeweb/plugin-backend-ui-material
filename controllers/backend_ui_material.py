@@ -79,7 +79,6 @@ class BackendUiMaterial(Controller):
         if self.host_information is not None:
             self.context['backend_title'] = self.host_information.site_name
 
-    @route_with('/login.json')
     @route_with('/admin/login.json')
     @route_with('/dashboard/login.json')
     def login_json(self):
@@ -89,9 +88,13 @@ class BackendUiMaterial(Controller):
         }
         if self.request.method != 'POST':
             return
+
         from plugins.application_user import get_user, has_record
-        input_account = self.params.get_string('account')
-        input_password = self.params.get_string('password')
+        input_account = self.params.get_string('account').strip()
+        input_password = self.params.get_string('password').strip()
+        if input_account == u'' or input_password == u'':
+            return
+
         self.logging.info(input_account + input_password)
         application_user = get_user(input_account, input_password)
         if application_user is None:
@@ -102,16 +105,8 @@ class BackendUiMaterial(Controller):
             'is_login': 'true'
         }
 
-    @route_with('/logout')
-    def logout(self):
-        self.session['already_login'] = False
-        self.session['application_admin_user_key'] = None
-        self.session['application_admin_user_level'] = None
-        return self.redirect('/')
-
     @route_with('/admin/logout')
     def admin_logout(self):
-        self.session['already_login'] = False
         self.session['application_admin_user_key'] = None
         self.session['application_admin_user_level'] = None
         return self.redirect('/admin')
