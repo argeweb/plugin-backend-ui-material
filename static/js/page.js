@@ -378,23 +378,7 @@ $(function(){
                     // debugger 使用 aside
                     //backend.aside_iframe.load(url);
             }else{
-                backend.swal({
-                    title: "您確定要刪除此記錄嗎",
-                    text: "删除後后将無法恢複，請谨慎操作！",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "删除",
-                    cancelButtonText: "取消",
-                    showLoaderOnConfirm: true
-                }).then(function(){
-                    json(url, null, function (data) {
-                        backend.swal("删除成功！", "您已经永久删除了此記錄。", "success");
-                        backend.content_iframe.reload();
-                    }, function (data) {
-                        backend.swal("删除失敗！", "刪除記錄時發生問題。", "error");
-                    })
-                });
+                deleteRecord(url);
             }
         }
     }).on("change", ".file_picker_div input", function(){
@@ -551,6 +535,28 @@ function checkNavItemAndShow(){
         $(".nav-box").removeClass("hide").addClass("animated").addClass("fadeInUp");
     }
 }
+function deleteRecord(url){
+    backend.swal({
+        title: "您確定要刪除此記錄嗎",
+        text: "删除後后将無法恢複，請謹慎操作！",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "删除",
+        cancelButtonText: "取消",
+        showLoaderOnConfirm: true
+    }).then(function () {
+        show_message("請稍候...", 30000, false);
+        setTimeout(function(){
+            json(url, null, function (data) {
+                backend.swal("删除成功！", "您已经永久删除了此記錄。", "success");
+                backend.content_iframe.reload();
+            }, function (data) {
+                backend.swal("删除失敗！", "刪除記錄時發生問題。", "error");
+            })
+        }, 50);
+    });
+}
 // 處理超連結按下時的動作
 function linkClickProcess(){
     $("body").on("click", "a", function (e) {
@@ -571,24 +577,7 @@ function linkClickProcess(){
         if ($(this).hasClass("btn-json-delete")) {
             e.preventDefault();
             e.stopPropagation();
-            backend.swal({
-                title: "您確定要刪除此記錄嗎",
-                text: "删除後后将無法恢複，請谨慎操作！",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "删除",
-                cancelButtonText: "取消",
-                showLoaderOnConfirm: true,
-                closeOnConfirm: false
-            }, function () {
-                json(_url, null, function (data) {
-                    swal("删除成功！", "您已经永久删除了此記錄。", "success");
-                    location.reload();
-                }, function (data) {
-                    swal("删除失敗！", "刪除記錄時發生問題。", "error");
-                })
-            });
+            deleteRecord(_url);
             return;
         }
         if ($(this).hasClass("gallery-item")) {

@@ -2,4 +2,4 @@
 {%- set list = context[scaffolding.plural] -%}
 {#<h2><span class="hidden-xs">{{ s.scaffold_title(route.action) }}</span><br></h2>#}
 <p class="hidden-xs">{{ s.scaffold_description(route.action) }}</p>
-{% if last_record_date %}<span class="text-muted small pull-right">最後更新：<i class="fa fa-clock-o"></i> {{ print_value(last_record_date) }}</span>{% endif %}
+{% if last_record_date %}<span class="text-muted small pull-right">最後更新：<i class="icon">access_time</i> {{ print_value(last_record_date) }}</span>{% endif %}

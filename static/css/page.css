@@ -3836,13 +3836,15 @@ ul.clear-list:first-child {
     border-top: 1px solid #e7eaec;
     border-bottom: 1px solid #e7eaec;
     border-left: 1px solid #e7eaec;
-    background: #f8f8f8
+    background: #f8f8f8;
+    height: 28px;
+    font-size: 18px;
 }
 
 .timeline-item .date {
     text-align: right;
     width: 110px;
-    position: relative;
+    position: relative !important;
     padding-top: 30px
 }
 
@@ -6421,7 +6423,7 @@ main.content .mail-box .fixed-table-container{
 .timeline-item .content {
     border-left: 1px solid #e7eaec;
     border-top: 1px solid #e7eaec;
-    padding: 0;
+    padding: 13px;
     min-height: 100px;
 }
 .log_msg{
