@@ -401,7 +401,7 @@ var content_iframe = {
                 }
                 clearTimeout(content_iframe.loading_timer);
                 content_iframe.loading_lock = false;
-                content_iframe.instance.contentWindow.pageInit(page);
+                content_iframe.instance.contentWindow.pageInit(page, need_push);
             }, function(page){
                 clearTimeout(content_iframe.loading_timer);
                 content_iframe.loading_lock = false;

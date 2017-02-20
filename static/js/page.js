@@ -438,7 +438,7 @@ function refreshMoment(){
     });
 }
 // ajax 載入時，需再執行一次
-function pageInit(new_html) {
+function pageInit(new_html, need_push) {
     page = {};
     var $body = $("body");
     if (new_html){
@@ -514,6 +514,7 @@ function pageInit(new_html) {
     });
     $("select[readonly] :selected").each(function(){ $(this).parent().data("default", this); });
     $("select[readonly]").change(function() { $($(this).data("default")).prop("selected", true); });
+    if (need_push === true) page_data.last_side_panel_target_id = "";
     setTimeout(function(){
         $(".fbtn-container").fadeIn();
     }, 800);
