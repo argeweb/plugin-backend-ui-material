@@ -35,17 +35,6 @@
 {% endblock %}
 
 {% block layout_head -%}{%- endblock %}
-{% block layout_scripts -%}
-    <script type="text/javascript">
-    (function(page){
-        {%- if change_view_to_edit_function %}page["change_view_to_edit"] = {{ change_view_to_edit_function }};{% endif -%}
-        {%- if change_view_to_view_function %}page["change_view_to_view"] = {{ change_view_to_view_function }};{% endif -%}
-        {%- if change_view_to_sort_function %}page["change_view_to_sort"] = {{ change_view_to_sort_function }};{% endif -%}
-        {%- if change_view_to_delete_function %}page["change_view_to_delete"] = {{ change_view_to_delete_function }};{% endif -%}
-    })(page);
-    </script>
-    {% block page_scripts -%}{% endblock %}
-{%- endblock %}
 
 {% block layout_buttons %}
     {%- if scaffolding %}

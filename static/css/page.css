@@ -6111,6 +6111,9 @@ body{
 .lang{
     display: none;
 }
+#page_url{
+    display: none;
+}
 #dropping {
     position: absolute;
     top: 0;

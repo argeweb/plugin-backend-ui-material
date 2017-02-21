@@ -455,7 +455,7 @@ var content_iframe = {
     },
     "search": function(keyword){
         var url = "";
-        var current = content_iframe.last_url;
+        var current = content_iframe.instance.contentWindow.methods.getSearchingUrl() || content_iframe.last_url;
         if (keyword != undefined && keyword != ""){
             url = replaceParam(current, "query", keyword);
             url = replaceParam(url, "cursor", "");
@@ -659,10 +659,10 @@ var view = {
             this.last = this.current;
             this.current = view_name;
             $("body").removeClass("in-"+this.last+"-mode").addClass("in-"+view_name+"-mode");
-            content_iframe.instance.contentWindow.changeView();
-            aside_iframe.instance.contentWindow.changeView();
+            content_iframe.instance.contentWindow.methods.changeView();
+            aside_iframe.instance.contentWindow.methods.changeView();
             if (aside_iframe.is_open){
-                aside_iframe.instance.contentWindow.changeViewAndReload();
+                aside_iframe.instance.contentWindow.methods.changeViewAndReload();
             }
         }
     }

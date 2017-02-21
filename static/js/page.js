@@ -99,6 +99,33 @@ var page_data = {
     "timeout_lock_saving": null
 };
 var methods = {
+    "getSearchingUrl": function(){ return $("#page_url").data("search-url")},
+    "changeView": function(){
+        $("body").removeClass("in-"+backend.view.last+"-mode").addClass("in-"+backend.view.current+"-mode");
+        var function_name = $("#page_url").data("view-function-"+backend.view.current);
+        if (page && typeof page[function_name] == "function"){
+            page[function_name]();
+        }else{
+            if (typeof methods[function_name] == "function"){
+                methods[function_name]();
+            }
+        }
+    },
+    "changeViewAndReload": function(){
+        if (backend.view.last != backend.view.current) {
+            if (backend.view.current == "edit" || backend.view.current == "view") {
+                $("a." + backend.view.current + "-url").first().click();
+            }
+        }
+    },
+    "goEditPage": function(){
+        var $target = $(".edit-url").first();
+        backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+    },
+    "goViewPage": function(){
+        var $target = $(".view-url").first();
+        backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+    },
     "parseScaffoldMessage": function(j){
         var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
         var message = j['message'];
@@ -140,6 +167,27 @@ var methods = {
         var n = page_data.last_side_panel_target_id;
         page_data.last_side_panel_target_id = "";
         if (n !== ""){ $("#" + n).click(); }
+    },
+    "convertUITimeTOLocalTime": function(uitime, hours){
+        hours = hours || 0;
+        var d1 = new Date(uitime), d2 = new Date(d1);
+        d2.setHours(d1.getHours() + hours);
+        return d2.getFullYear()  + "-" + (d2.getMonth()+1) + "-" + d2.getDate() + " " +
+                d2.getHours() + ":" + d2.getMinutes() + ":" + d2.getSeconds();
+    },
+    "sortByKey": function(array, key){
+        return array.sort(function (a, b) {
+            var x = a[key];
+            var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        })
+    },
+    "reload": function(){
+        if (is_aside()) {
+            backend.aside_iframe.reload();
+        } else {
+            backend.content_iframe.reload();
+        }
     }
 };
 var form = {
@@ -254,13 +302,6 @@ function is_aside(){
 function is_content(){
     return (window.name == "content_iframe");
 }
-function reload(){
-    if (is_aside()) {
-        backend.aside_iframe.reload();
-    }else{
-        backend.content_iframe.reload();
-    }
-}
 function changeLangField(index){
     $("a.btn-lang").eq(index).click();
 }
@@ -323,19 +364,6 @@ function addClass(class_name){
 function removeClass(class_name){
     $("body").removeClass(class_name);
 }
-function changeView(){
-    $("body").removeClass("in-"+backend.view.last+"-mode").addClass("in-"+backend.view.current+"-mode");
-    if (typeof page["change_view_to_"+backend.view.current] == "function"){
-        page["change_view_to_"+backend.view.current]();
-    }
-}
-function changeViewAndReload(){
-    if (backend.view.last != backend.view.current){
-        if (backend.view.current == "edit" || backend.view.current == "view"){
-            $("a."+backend.view.current+"-url").first().click();
-        }
-    }
-}
 function setBodyClass(class_name){
     $("body").addClass(class_name);
 }
@@ -397,15 +425,15 @@ $(function(){
         if ($(this).is(":checked")){
             var enable_text = $(this).data("enable-text");
             json($(this).data("enable-url"), null, function(data){
-                if (data.info == "success"){
-                    backend.message.snackbar(enable_text+"...");
+                if (data.data.info == "success"){
+                    backend.message.snackbar(data.message);
                 }
             });
         }else{
             var disable_text = $(this).data("disable-text");
             json($(this).data("disable-url"), null, function(data){
-                if (data.info == "success"){
-                    backend.message.snackbar(disable_text+"...");
+                if (data.data.info == "success"){
+                    backend.message.snackbar(data.message);
                 }
             });
         }
