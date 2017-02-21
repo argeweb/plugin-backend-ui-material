@@ -8,9 +8,7 @@
         {% set submit_text ="儲存" %}
         {% set submit_and_exit_text ="儲存並離開" %}
     {% endif %}
-    {%- if route.action != 'view' -%}
     <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe"><i class="icon">keyboard_backspace</i> 回上一頁</a>
-    {% endif %}
     <div class="btn-group">
         {%- if route.action != 'view' -%}
         <a href="javascript: saveForm();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
