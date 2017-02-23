@@ -10,7 +10,7 @@ from google.appengine.api.logservice import logservice
 from google.appengine.ext import ndb
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
-from argeweb import Controller, route, route_with, controllers, settings
+from argeweb import Controller, route, route_with, settings
 from argeweb import auth, add_authorizations
 from argeweb.core import time_util
 from itertools import islice
@@ -46,7 +46,7 @@ class BackendUiMaterial(Controller):
             menus = role.menu
 
         self.context['dashboard_name'] = dashboard_name
-        self.context['controllers'] = controllers
+        # self.context['controllers'] = controllers
         self.context['menus'] = self.util.get_menu(menus)
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user

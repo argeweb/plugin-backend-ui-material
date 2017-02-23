@@ -644,12 +644,14 @@ function linkClickProcess(){
                     page_data.last_side_panel_target_id = $(this).attr("id");
                 }
                 backend.aside_iframe.load($(this).attr("href"));
+                e.preventDefault();
+                e.stopPropagation();
             }
             if (typeof target === "undefined" || target == "content_iframe") {
                 backend.content_iframe.load($(this).attr("href"), t, location.pathname);
+                e.preventDefault();
+                e.stopPropagation();
             }
-            e.preventDefault();
-            e.stopPropagation();
         }
     });
 }
