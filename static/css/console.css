@@ -356,6 +356,9 @@ header .dropdown.open .dropdown-toggle {
     z-index: 8;
     top: 0;
 }
+.menu-box .collapse.in {
+    margin-bottom: 60px;
+}
 .menu-back{
     border-bottom: solid 1px #ccc;
 }

@@ -319,8 +319,8 @@ header .btn.btn-primary{
 }
 
 .btn-success.active, .btn-success:active, .btn-success:focus, .btn-success:hover, .open .dropdown-toggle.btn-success {
-    background-color: #1a7bb9;
-    border-color: #1a7bb9;
+    background-color: #164371;
+    border-color: #194472;
     color: #FFF
 }
 
@@ -333,6 +333,10 @@ header .btn.btn-primary{
     border-color: #1f90d8
 }
 
+.btn-success.btn-outline {
+    color: #1c84c6;
+    background-color: transparent;
+}
 .btn-info {
     background-color: #23c6c8;
     border-color: #23c6c8;
@@ -417,6 +421,14 @@ header .btn.btn-primary{
     border-color: #ef6776
 }
 
+.btn-disable.btn-success {
+    background-color: #ef6776;
+    border-color: #ef6776;
+}
+.btn-disable.btn-success.active, .btn-disable.btn-success:active, .btn-disable.btn-success:focus, .btn-disable.btn-success:hover, .open .dropdown-toggle.btn-disable.btn-success {
+    background-color: #ec4758;
+    border-color: #ec4758;
+}
 .btn-link {
     color: inherit
 }
@@ -6385,16 +6397,6 @@ main.content .mail-box .fixed-table-container{
   /* shadow */
   text-shadow: 0 0 5px #444;
 }
-.btn-success, .btn-success.focus, .btn-success:focus{
-    background-color: #1c84c6;
-    border-color: #1c84c6;
-    color: #FFF;
-}
-.btn-success:active, .btn-success:hover  {
-    background-color: #164371 !important;
-    border-color: #194472 !important;
-    color: #FFF !important;
-}
 .forum-item-title {
     color: inherit;
     display: block;
@@ -6453,10 +6455,6 @@ main.content .mail-box .fixed-table-container{
 }
 .pl0 {
     padding-left: 0;
-}
-.btn-success.btn-outline {
-    color: #1c84c6;
-    background-color: transparent;
 }
 #page-top-bar{
     margin-bottom: 0;
