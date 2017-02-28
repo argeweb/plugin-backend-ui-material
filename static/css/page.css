@@ -6354,10 +6354,10 @@ main.content .mail-box .fixed-table-container{
 }
 
 .checkbox, .radio {
-    position: relative;
     display: block;
     margin-top: 0;
     margin-bottom: 0;
+    position: static;
 }
 
 .ui-state-highlight {padding: 8px; width:calc(100% - 60px); min-height: 56px; height: 56px; line-height: 56px; background-color: #1ab394; border: solid 1px #1ab394; }
@@ -6728,6 +6728,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
     height: 18px;
     width: 18px;
     margin: 5px 0 0 0 !important;
+    position: static;
 }
 .dropdown-menu-group{
     padding: 3px 7px !important;
