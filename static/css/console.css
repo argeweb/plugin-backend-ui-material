@@ -8,7 +8,7 @@ body{
     overflow: hidden;
     padding-bottom: 4px;
     background-color: #f3f3f4;
-    height: 101%;
+    height: 100%;
 }
 body:before {
     content: '';
