@@ -76,7 +76,6 @@ header .btn.btn-primary{
 }
 
 .dropdown-menu {
-    border: medium none;
     display: none;
     float: left;
     font-size: 12px;
@@ -88,7 +87,6 @@ header .btn.btn-primary{
     top: 100%;
     z-index: 1000;
     border-radius: 0;
-    box-shadow: 0 0 3px rgba(86, 96, 117, .3)
 }
 
 .dropdown-menu > li > a {
@@ -5964,6 +5962,8 @@ del {
 header{
     padding: 18px 20px 0 15px;
     min-width: 360px;
+    z-index: 999999;
+    position: relative;
 }
 .scrollDiv.on header{
     padding: 18px 15px 0 15px;
