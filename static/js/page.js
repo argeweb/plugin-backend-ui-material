@@ -120,11 +120,13 @@ var methods = {
     },
     "goEditPage": function(){
         var $target = $(".edit-url").first();
-        backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+        if ($target.length)
+            backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "goViewPage": function(){
         var $target = $(".view-url").first();
-        backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+        if ($target.length)
+            backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "parseScaffoldMessage": function(j){
         var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
