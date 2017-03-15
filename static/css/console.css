@@ -49,7 +49,7 @@ body:before {
 
 header{
     z-index: 30;
-    min-width: 420px;
+    min-width: 310px;
     height: 60px;
     color: white;
     position: fixed;
@@ -872,9 +872,9 @@ main.content {
         width: calc(100% - 260px)
     }
 }
-@media screen and (max-width: 420px){
+@media screen and (max-width: 310px){
     body{
-        width: 420px;
+        width: 310px;
     }
     header{
         min-width: 310px;
