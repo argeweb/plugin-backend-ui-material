@@ -8,11 +8,14 @@
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console.css?run={{ framework.app_version }}">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
+    <link rel="stylesheet" href="/static/vendor/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/vendor/blueimp-gallery/blueimp-gallery.min.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console_page.css?run={{ framework.app_version }}">
 </head>
 <body class="in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
-      ondragover="pageDOD(event)" ondrop="pageDOD(event)" ondragenter="pageDOD(event)" ondragleave="pageDOD(event)">
-	<header>
+      ondragover="uploader.onDragOver(event)" ondrop="uploader.onDrop(event)" ondragenter="uploader.onDragStart(event)" ondragleave="uploader.onDragEnd(event)">
+	<header class="print-hide">
         <div class="page-overlay"></div>
 		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
 		<a class="header-logo {% if page_title == backend_title %}header-affix-hide{% else %}{% endif %} margin-left-no margin-right-no gf-title" data-toggle="menu" href="#ui_menu" data-offset-top="100" data-spy="affix">{% if page_title != '{{ backend_title }}' %}{{ backend_title }}{% endif %}</a>
@@ -83,8 +86,7 @@
 		</div>
 	</nav>
 	<main class="content">
-        <div class="page-overlay"></div><div class="iframe_mask" style="top: 56px;bottom: 0;left: 0;right: 0;background: rgba(119, 119, 119, 0.0);position: absolute;"></div>
-        <iframe name="content_iframe" id="content_iframe" width="100%" height="100%" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
+        <div id="content_iframe"></div>
 	</main>
     <iframe name="aside_iframe" id="aside_iframe" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
 	<div class="progress"><div class="progress-bar"></div></div>
@@ -95,8 +97,19 @@
     <script type="text/javascript" src="/static/vendor/keymaster/keymaster.min.js"></script>
     <script type="text/javascript" src="/static/vendor/moment/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/static/vendor/push.js/push.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-export.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-cookie.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-zh-TW.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-reorder-rows.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/vue/vue.min.js"></script>
+
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
-	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/console.js?run={{ framework.app_version }}"></script>
+    <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/tinymce.min.js?app_version={{ framework.app_version }}&backend_version={{ backend_version }}"></script>
+    <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/langs/zh_TW.js"></script>
+	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/console_page.js?run={{ framework.app_version }}"></script>
     {% block javascritp %}{% endblock %}
 </body>
 </html>
