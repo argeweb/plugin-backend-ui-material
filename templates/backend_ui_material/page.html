@@ -51,7 +51,7 @@
         {%- include "backend_ui_material/flash_messages.html" with context %}
     </div>
     <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
-    <div id="page_url"
+    <div class="page_data"
          data-search-url="{% if uri_exists_with_permission(action="list") %}{{ uri_action_link('list') }}{% endif %}"
          data-view-function-edit="{% if change_view_to_edit_function %}{{ change_view_to_edit_function }}{% endif %}"
          data-view-function-view="{% if change_view_to_view_function %}{{ change_view_to_view_function }}{% endif %}"

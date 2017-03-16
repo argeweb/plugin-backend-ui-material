@@ -51,10 +51,10 @@
 					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_iframe">{{ application_user_name }}</a></div>
 				</div>
                 <div class="op-mode">
-                    <a class="btn btn-flat btn-brand enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
-                    <a class="btn btn-flat btn-brand enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
-                    <a class="btn btn-flat btn-brand enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
-                    <a class="btn btn-flat btn-brand enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
                 </div>
                 <div class=" scrollDiv">
                     <ul class="nav" id="main-nav">
@@ -86,7 +86,8 @@
 		</div>
 	</nav>
 	<main class="content">
-        <div id="content_iframe"></div>
+        <div class="page-overlay"></div>
+        <div id="content_area"></div>
 	</main>
     <iframe name="aside_iframe" id="aside_iframe" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
 	<div class="progress"><div class="progress-bar"></div></div>
