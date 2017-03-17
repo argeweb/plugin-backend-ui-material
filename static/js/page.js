@@ -241,7 +241,7 @@ var form = {
         form.unlock();
         if (form.validate(j)) {
             var message = methods.parseScaffoldMessage(j);
-            backend.ui.setUserInformation($("#name").val(), $("#avatar").val());
+            backend.methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
             //    if (is_aside()) backend.content_iframe.reload(true);
@@ -390,8 +390,7 @@ $(function(){
     }
 
     $(document).on('click', function(e){
-        backend.ui.closeSearchBox();
-        backend.ui.closeMessageBox();
+        backend.search.unfocus();
     }).on("click", ".record_item td", function(e){
         if (e.target.outerHTML.indexOf('switch-toggle') > 0 || e.target.outerHTML.indexOf('input') > 0){ return; }
         var url_target = backend.view.current + "-url";
@@ -421,7 +420,7 @@ $(function(){
             $(this).parents(".form-group").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
         }
         if ($(this).attr("id") == "avatar"){
-            backend.ui.setUserInformation($("#name").val(), val);
+            backend.methods.setUserInformation($("#name").val(), val);
         }
     }).on("change", ".record_item td .btn-checkbox-json", function(){
         if ($(this).is(":checked")){

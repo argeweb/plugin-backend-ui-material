@@ -5770,7 +5770,7 @@ main .nav > li > a {
 }
 main.content main.content{
     display: flex;flex-direction: column;
-    height: 100%;
+    height: auto;
     width: 100%;
     padding: 15px 0 15px 0;
 }
@@ -7056,6 +7056,8 @@ header .dropdown.open .dropdown-toggle {
     top: 0;
     left: -300px;
     z-index: 2;
+    overflow-y: scroll;
+    height: calc(100% - 160px);
 }
 .menu-box.in {
     position: relative;
@@ -7238,6 +7240,8 @@ main.content{
     position: absolute;
     top: 0;
     width: 100%;
+    overflow-y: scroll;
+    height: calc(100% - 160px);
 }
 #aside_iframe{
     position: absolute;
@@ -7508,7 +7512,6 @@ main.content {
 .in-delete-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
-
 @media print {
     a, button {
         display: none !important;

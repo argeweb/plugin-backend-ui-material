@@ -21,14 +21,18 @@ var view = {
         this.last = this.current;
         this.current = view_name;
         $("body").removeClass("in-"+this.last+"-mode").addClass("in-"+view_name+"-mode");
+        var function_name = this[view_name];
         try{
-            if (this[view_name]){
-                if (page && typeof page[view_name] == "function"){
-                    page[view_name]();
+            if (function_name){
+                if (page && typeof page[function_name] == "function"){
+                    page[function_name]();
                 }else{
-                    if (typeof methods[view_name] == "function"){
-                        methods[view_name]();
+                    if (typeof methods[function_name] == "function"){
+                        methods[function_name]();
                     }
+                }
+                if (page && typeof page[function_name] == "function"){
+                    page[function_name]();
                 }
             }
         }catch(e){
@@ -1338,14 +1342,6 @@ $(function(){
             });
         }
     });
-
-    key.filter = function(event){
-        var tagName = (event.target || event.srcElement).tagName;
-        key.setScope(/^(INPUT|TEXTAREA|SELECT)$/.test(tagName) ? 'input' : 'doc');
-        return true;
-    };
-    key(shortcut.keys, 'doc', function(event, handler){ return shortcut.catchEvent(window.name, handler.shortcut, handler.scope); });
-    key(shortcut.keys, 'input', function(event, handler){ return shortcut.catchEvent(window.name, handler.shortcut, handler.scope); });
     moment.locale('zh-tw');
     setInterval(refreshMoment, 10000);
     window.onbeforeunload = function(){

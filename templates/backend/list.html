@@ -2,6 +2,7 @@
 
 {% block partial_tr_item %}
 {%- set list = context[scaffolding.plural] -%}
+{% if list %}
 {% for item in list %}
     <tr id="node_{{ item.sort }}" class="record_item"
         {% if uri_exists_with_permission(action="view", item=item) %}data-view-url="{{ uri_action_link('view', item) }}"{% endif %}
@@ -30,4 +31,5 @@
         {%- endfor -%}
     </tr>
 {% endfor -%}
+{% endif %}
 {% endblock %}
