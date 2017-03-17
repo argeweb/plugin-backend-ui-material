@@ -13,42 +13,33 @@ var page = {};
 var view = {
     "current": "edit",
     "last": "edit",
-    "viewFunction": {
-        "edit": null,
-        "view": null,
-        "sort": null,
-        "delete": null
-    },
+    "edit": null,
+    "view": null,
+    "sort": null,
+    "delete": null,
     "change": function(view_name){
         this.last = this.current;
         this.current = view_name;
         $("body").removeClass("in-"+this.last+"-mode").addClass("in-"+view_name+"-mode");
-        //if (aside_iframe.is_open){
-        //    aside_iframe.instance.contentWindow.methods.changeViewAndReload();
-        //}            //if (aside_iframe.is_open){
-        //    aside_iframe.instance.contentWindow.methods.changeViewAndReload();
-        //}
         try{
-            if (this.viewFunction[view_name])
-                this.runFunction(this.viewFunction[view_name]());
+            if (this[view_name]){
+                if (page && typeof page[view_name] == "function"){
+                    page[view_name]();
+                }else{
+                    if (typeof methods[view_name] == "function"){
+                        methods[view_name]();
+                    }
+                }
+            }
         }catch(e){
         }
     },
-    "resetFunction": function(dom){
+    "reset": function(dom){
         var $page_data = $(dom).find(".page_data");
-        this.viewFunction["edit"] = $page_data.data("view-function-edit");
-        this.viewFunction["view"] = $page_data.data("view-function-view");
-        this.viewFunction["sort"] = $page_data.data("view-function-sort");
-        this.viewFunction["delete"] = $page_data.data("view-function-delete");
-    },
-    "runFunction": function(function_name){
-        if (page && typeof page[function_name] == "function"){
-            page[function_name]();
-        }else{
-            if (typeof methods[function_name] == "function"){
-                methods[function_name]();
-            }
-        }
+        this.edit = $page_data.data("view-function-edit");
+        this.view = $page_data.data("view-function-view");
+        this.sort = $page_data.data("view-function-sort");
+        this.delete = $page_data.data("view-function-delete");
     }
 };
 var form = {
@@ -91,15 +82,18 @@ var form = {
         if (page_data.is_saving == true){ return false;}
         form.last_target = $form;
         form.beforeSubmit();
-        $form.submit();
+        $form.ajaxSubmit({
+            "success": function(a, b, c, d){
+                form.afterSubmit(a);
+            }
+        });
     },
-    "afterSubmit": function(){
+    "afterSubmit": function(j){
         // 表單資料儲存完成之後
-        $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
-        var j = JSON.parse($(this).contents().find("body").text());
         form.unlock();
+        $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         if (form.validate(j)) {
-            var message = methods.parseScaffoldMessage(j);
+            var _message = methods.parseScaffoldMessage(j);
             methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
@@ -108,11 +102,11 @@ var form = {
             message.notice.hide();
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
-                form.afterSubmitCallback(j, message);
+                form.afterSubmitCallback(j, _message);
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
-                message.snackbar(message);
+                message.snackbar(_message);
                 methods.reloadSidePanel();
             }
         }
@@ -167,7 +161,13 @@ var shortcut = {
                 changeLangField(parseInt(shortcut_key.replace('alt+', ''))-1);
                 break;
         }
-        if (scope != "input"){
+        if (scope == "input"){
+            switch (shortcut_key) {
+                case 'esc':
+                    search.unfocus();
+                    return false;
+            }
+        }else{
             var s = [];
             var n = 1;
             $(".op-mode a").each(function(){
@@ -178,7 +178,7 @@ var shortcut = {
             });
             switch (shortcut_key) {
                 case '/':
-                    methods.showSearchBox();
+                    search.focus();
                     return false;
                 case 'shift+/':
                     console.log("help");
@@ -204,13 +204,6 @@ var shortcut = {
                         shortcut.lock = false;
                     }, 400);
                     break;
-            }
-        }
-        if (scope == "input"){
-            switch (shortcut_key) {
-                case 'esc':
-                    methods.closeSearchBox();
-                    return false;
             }
         }
         if (jQuery.inArray(shortcut_key, ['ctrl+shift+s', 'ctrl+s', 'ctrl+r', 'ctrl+f5', 'f5', 'ctrl+p']) >-1){
@@ -382,6 +375,47 @@ var message = {
         }
     }
 };
+var search = {
+    "dom": "#keyword",
+    "target_url": "",
+    "init": function(){
+        $(this.dom).focus(this.focus).keyup(function(event){
+            if (event.which == 13) {
+                event.preventDefault();
+                search.getResult($(this).val());
+            }
+        });
+        $(".page-overlay").click(search.unfocus);
+    },
+    "getResult": function(kwyword){
+        var url = "";
+        var current = search.target_url || content_area.getUrl();
+        if (keyword != undefined && keyword != ""){
+            url = replaceParam(current, "query", keyword);
+            url = replaceParam(url, "cursor", "");
+            url = url.replace("?cursor=none", "?");
+            url = url.replace("&cursor=none", "");
+            this.load(url);
+        }
+        if (keyword == ""){
+            url = replaceParam(current, "query", "");
+            url = url.replace("query=", "");
+            this.load(url);
+        }
+    },
+    "focus": function(){
+        $("div.search-bar, .page-overlay").addClass("on");
+        $("body").addClass("on-search");
+    },
+    "unfocus": function(){
+        $("div.search-bar, .page-overlay").removeClass("on");
+        $("body").removeClass("on-search");
+    },
+    "reset": function(dom){
+        var $page_data = $(dom).find(".page_data");
+        this.target_url = $page_data.data("search-url");
+    }
+};
 var uploader = {
     "pickup_target": null,
     "pickup_target_is_editor": false,
@@ -406,17 +440,17 @@ var uploader = {
     "startUpload": function(){
         var fileInput = document.getElementById('image-file-picker');
         var file = fileInput.files[0];
-        uploader.addFile(file, uploader.pickup_target, function(data){
-            if (typeof data.response.data !== "undefined") data = data.response.data;
-            var url = data.url;
-            var item_key = data.item.__key__;
-            if (uploader.pickup_target_is_editor) {
-                uploader.pickup_target.selection.setContent('<img src="' + url + '" />');
+        if (uploader.pickup_target_is_editor) {
+            uploader.addFile(file, uploader.pickup_target.id, uploader.setEditorValue);
+        }else{
+            var randId = getRandID("upload-");
+            if (uploader.pickup_target.hasClass("form-group")){
+                uploader.pickup_target.attr("data-uploadId", randId);
             }else{
-                uploader.pickup_target.val(url).data("key", item_key).change();
+                uploader.pickup_target.parents(".form-group").attr("data-uploadId", randId);
             }
-            $("#image-file-picker").val("");
-        });
+            uploader.addFile(file, randId, uploader.setTargetValue);
+        }
     },
     "addFile": function(file, target_id, callback){
         progress_bar.set(10);
@@ -551,12 +585,15 @@ var uploader = {
         }
     },
     "setTargetValue": function (data){
-        if (typeof data.response.data !== "undefined") data = data.response.data;
         var url = data.url;
-        var item_key = data.item.__key__;
         var target_id = data.target_id;
-        var t = $("*[data-uploadId='" + data.target_id + "']");
-        t.find("input").first().val(data.url).data("key", item_key).show();
+        if (typeof data.response.data !== "undefined"){
+            data = data.response.data;
+            url = data.url;
+        }
+        var item_key = data.item.__key__;
+        var t = $("*[data-uploadId='" + target_id + "']");
+        t.find("input").first().val(url).data("key", item_key).show();
         if (url == ""){
             t.find(".file_picker_item").css("background-image", "none").addClass("file_picker_item_none");
         }else{
@@ -565,9 +602,12 @@ var uploader = {
         }
     },
     "setEditorValue": function (data){
-        if (typeof data.response.data !== "undefined") data = data.response.data;
         var url = data.url;
         var target_id = data.target_id;
+        if (typeof data.response.data !== "undefined"){
+            data = data.response.data;
+            url = data.url;
+        }
         if (tinyMCE.get(target_id)){
             tinyMCE.get(target_id).selection.setContent('<img src="' + url + '" />');
         }
@@ -579,13 +619,15 @@ var content_area = {
         "is_init": false,
         "last_url": null,
         "loading_timer": null,
-        "loading_lock": false,
-        "search_url": "",
+        "loading_lock": false
     },
     "history": {},
-    "init": function(selector){
+    "init": function(){
         if (this.data.is_init) return;
         this.data.is_init = true;
+        $(content_area.dom).on('scroll', function() {
+            methods.affix($(content_area.dom).scrollTop());
+        });
         window.onpopstate = this.popState;
         var h = JSON.parse(localStorage.getItem('content_area.history'));
         if (h != null && h != [] && h != "null") content_area.history = h;
@@ -649,7 +691,7 @@ var content_area = {
             aside_iframe.closeUi();
             this.pushState(url , text, referer_page);
         }
-        showLoading(content_area.dom, function(){
+        methods.showLoading(content_area.dom, function(){
             ajax(url, null, function(page) {
                 var data = content_area.getState();
                 if (need_push) {
@@ -710,27 +752,11 @@ var content_area = {
             content_area.load(s.href, s.text, s.referer_page, false);
         }
     },
-    "search": function(keyword){
-        var url = "";
-        var current = methods.getSearchingUrl() || content_area.getUrl();
-        if (keyword != undefined && keyword != ""){
-            url = replaceParam(current, "query", keyword);
-            url = replaceParam(url, "cursor", "");
-            url = url.replace("?cursor=none", "?");
-            url = url.replace("&cursor=none", "");
-            this.load(url);
-        }
-        if (keyword == ""){
-            url = replaceParam(current, "query", "");
-            url = url.replace("query=", "");
-            this.load(url);
-        }
-    },
     "resetPage": function(new_html){
         page = {};
         if (new_html){
             try{
-                $(content_area.dom).html(new_html);
+                $(content_area.dom).hide().html(new_html).show();
             }catch(e){
                 message.quick_show("發生問題了 " + e.toString());
             }
@@ -741,7 +767,7 @@ var content_area = {
         $(".page_header").each(function(){ if ($(this).text().trim() == "") $(this).hide() });
 
         //TODO if input has val addClass control-highlight
-        checkNavItemAndShow();
+        methods.checkNavItemAndShow();
         $("iframe[name='iframeForm']").load(form.afterSubmit);
 
         tinyMCE.editors=[];
@@ -758,19 +784,21 @@ var content_area = {
         $('#list-table').on('post-body.bs.table', function () {
             makeSortTable();
             makeListOp();
-            checkNavItemAndShow();
+            methods.checkNavItemAndShow();
             $(".sortable-list").removeClass("hidden");
             $(".fixed-table-loading").hide();
-        }).bootstrapTable();
+        });
+        $(".table").bootstrapTable();
         $(".moment-from-now").each(function(){
             $(this).text(moment($(this).data("from-now")).fromNow());
         });
         $("select[readonly] :selected").each(function(){ $(this).parent().data("default", this); });
         $("select[readonly]").change(function() { $($(this).data("default")).prop("selected", true); });
-        view.resetFunction(content_area.dom);
+        view.reset(content_area.dom);
+        search.reset(content_area.dom);
         setTimeout(function(){
             $(".fbtn-container").fadeIn();
-        }, 800);
+        }, 500);
     }
 };
 var aside_iframe = {
@@ -836,7 +864,7 @@ var aside_iframe = {
         }, headers);
     },
     "showUi": function(callback){
-        //content_area.instance.contentWindow.addClass("aside_is_open");
+        $("body").addClass("aside_is_open");
         $("#aside_iframe").stop().animate({
             "width": ($(window).width() < 768) ? $(window).width() + 3 : "400"}, 500, function(){
             aside_iframe.is_open = true;
@@ -845,7 +873,7 @@ var aside_iframe = {
         });
     },
     "closeUi": function(callback){
-        //content_area.instance.contentWindow.removeClass("aside_is_open");
+        $("body").removeClass("aside_is_open");
         $("#aside_iframe").stop().animate({"width": "0"}, 500, function(){
             aside_iframe.is_open = false;
             try{ aside_iframe.instance.contentWindow.removeClass("open"); }catch(e){}
@@ -859,7 +887,6 @@ var page_data = {
     "timeout_lock_saving": null
 };
 var methods = {
-    "getSearchingUrl": function(){ return $(content_area.dom).find(".page_url").data("search-url")},
     "changeViewAndReload": function(){
         if (view.last != view.current) {
             if (view.current == "edit" || view.current == "view") {
@@ -897,7 +924,7 @@ var methods = {
                 "undefined.success": "已成功",
                 "undefined": "未定義的訊息"
             };
-        request_method = request_methods.replace("admin_", "") + "." + status;
+        request_method = request_method.replace("admin_", "") + "." + status;
         if (typeof message === "undefined" || message == "undefined")
             return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
         else
@@ -939,15 +966,6 @@ var methods = {
             content_area.reload();
         }
     },
-    "closeMessageBox": function(){ return; },
-    "showSearchBox": function(){
-        $("div.search-bar, .page-overlay").addClass("on");
-        $("body").addClass("on-search");
-    },
-    "closeSearchBox": function(){
-        $("div.search-bar, .page-overlay").removeClass("on");
-        $("body").removeClass("on-search");
-    },
     "setUserInformation": function(name, blob_url){
         var href = content_area.getUrl();
         var p = $(".user-name a").attr("href");
@@ -973,6 +991,30 @@ var methods = {
     "showTimeout": function (target, callback){
         $(target).html('<div style="margin: 100px auto; width: 40%; font-size: 18px;">連線逾時</div>');
         if (typeof callback === "function") callback(target);
+    },
+    "showLoading": function(target, callback){
+        // loading 畫面
+        $(target).html('<div id="onLoad">' +
+            '<div class="sk-spinner sk-spinner-chasing-dots">' +
+            '<div class="sk-dot1"></div><div class="sk-dot2"></div></div></div>');
+        if (typeof callback === "function") callback();
+    },
+    "checkNavItemAndShow": function (){
+        // 處理頁面上的選單區塊
+        // 預設為第一種語系欄位
+        $("a.btn-lang").first().click();
+        // 沒有 相關操作 項目的話，隱藏
+        $(".list-operations").each(function(){
+            if ($(this).find("li").length > 0){
+                $(this).removeClass("hide");
+            }else{
+                $(this).addClass("hide");
+            }
+        });
+        // 沒有項目的話，整個隱藏
+        if ($(".nav-box li").length > 0){
+            $(".nav-box").removeClass("hide").addClass("animated").addClass("fadeInUp");
+        }
     }
 };
 var saveForm = form.submit;
@@ -1005,23 +1047,7 @@ function refreshMoment(){
         $(this).text(moment(d).fromNow());
     });
 }
-// 處理頁面上的選單區塊
-function checkNavItemAndShow(){
-    // 預設為第一種語系欄位
-    $("a.btn-lang").first().click();
-    // 沒有 相關操作 項目的話，隱藏
-    $(".list-operations").each(function(){
-        if ($(this).find("li").length > 0){
-            $(this).removeClass("hide");
-        }else{
-            $(this).addClass("hide");
-        }
-    });
-    // 沒有項目的話，整個隱藏
-    if ($(".nav-box li").length > 0){
-        $(".nav-box").removeClass("hide").addClass("animated").addClass("fadeInUp");
-    }
-}
+
 function deleteRecord(url){
     swal({
         title: "您確定要刪除此記錄嗎",
@@ -1144,26 +1170,17 @@ function createEditorField(id){
     });
     ed.render();
 }
-function showLoading(target, callback){
-    $(target).html('<div id="onLoad">' +
-        '<div class="sk-spinner sk-spinner-chasing-dots">' +
-        '<div class="sk-dot1"></div>' +
-        '<div class="sk-dot2"></div>' +
-        '</div>' +
-        '</div>');
-    if (typeof callback === "function") callback();
-}
-
 //  初始化
 $(function(){
     uploader.init();
     shortcut.init();
     message.init();
+    search.init();
+    content_area.init();
     //$(document).bind("keydown", function(e) {
     //    short_key(window.name, e);
     //});
 
-    $(".page-overlay").click(methods.closeSearchBox);
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
@@ -1180,19 +1197,6 @@ $(function(){
             $(target_id).animate({"left": 0}, function(){ $(target_id).addClass("in"); });
         }
     });
-    $("#keyword").focus(function(){
-        methods.closeMessageBox();
-        methods.showSearchBox();
-    }).keyup(function(event){
-        if (event.which == 13) {
-            event.preventDefault();
-            content_area.search($(this).val());
-        }
-    });
-    content_area.init(content_area.dom);
-    if (window.name != ""){
-        pageInit();
-    }
     if (is_aside()) {
         aside_iframe.init("#aside_iframe");
         aside_iframe.page = page;
@@ -1202,7 +1206,7 @@ $(function(){
     }
 
     $(document)
-    .on("click", "a", function (e) {
+        .on("click", "a", function (e) {
         // 處理超連結按下時的動作
         var _url = $(this).attr("href");
         if (_url === "/admin/") {location.reload(); return;}

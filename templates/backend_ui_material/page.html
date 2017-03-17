@@ -36,7 +36,6 @@
     {%- block layout_head -%}{{ events.layout_head() }}{%- endblock %}
 </head>
 <body class="iframe-page in-edit-mode {{ aside }}">
-    {% if is_ajax == "true" %}<iframe name="iframeForm" width="0" height="0" frameborder="0" seamless style="position: absolute; top: -100px;"></iframe>{% endif %}
     <div class="page-wrap">
         <div class="page_header">{% block layout_header %}{% endblock %}</div>
         <main class="content">
@@ -50,7 +49,6 @@
         </main>
         {%- include "backend_ui_material/flash_messages.html" with context %}
     </div>
-    <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
     <div class="page_data"
          data-search-url="{% if uri_exists_with_permission(action="list") %}{{ uri_action_link('list') }}{% endif %}"
          data-view-function-edit="{% if change_view_to_edit_function %}{{ change_view_to_edit_function }}{% endif %}"

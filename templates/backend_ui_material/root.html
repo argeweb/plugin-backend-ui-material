@@ -7,10 +7,10 @@
 	<title>{{ backend_title }}</title>
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
     <link rel="stylesheet" href="/static/vendor/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" href="/static/vendor/blueimp-gallery/blueimp-gallery.min.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console_page.css?run={{ framework.app_version }}">
 </head>
 <body class="in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
@@ -90,6 +90,7 @@
         <div id="content_area"></div>
 	</main>
     <iframe name="aside_iframe" id="aside_iframe" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
+    <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
 	<div class="progress"><div class="progress-bar"></div></div>
     <div class="hidden"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
@@ -98,6 +99,7 @@
     <script type="text/javascript" src="/static/vendor/keymaster/keymaster.min.js"></script>
     <script type="text/javascript" src="/static/vendor/moment/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/static/vendor/push.js/push.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/jquery-form/jquery.form.min.js"></script>
     <script type="text/javascript" src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-export.min.js"></script>
