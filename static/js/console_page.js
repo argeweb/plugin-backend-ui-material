@@ -96,14 +96,14 @@ var form = {
         // 表單資料儲存完成之後
         form.unlock();
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
-        if (form.validate(j)) {
+        message.hideAll();
+        if (form.validate(j.data)) {
             var _message = methods.parseScaffoldMessage(j);
             methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
             //    if (is_aside()) content_area.reload(true);
             //}
-            message.notice.hide();
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
                 form.afterSubmitCallback(j, _message);
@@ -377,6 +377,9 @@ var message = {
                 if (mini == false){ message.notice.show(true); }
             }
         }
+    },
+    "hideAll": function(){
+        message.notice.hide();
     }
 };
 var search = {
