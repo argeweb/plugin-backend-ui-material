@@ -86,16 +86,12 @@ var form = {
         if (page_data.is_saving == true){ return false;}
         form.last_target = $form;
         form.beforeSubmit();
-        $form.ajaxSubmit({
-            "success": function(a, b, c, d){
-                form.afterSubmit(a);
-            }
-        });
+        $form.ajaxSubmit({ "success": form.afterSubmit });
     },
-    "afterSubmit": function(j){
+    "afterSubmit": function(j, b , c, d){
         // 表單資料儲存完成之後
-        form.unlock();
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
+        form.unlock();
         message.hideAll();
         if (form.validate(j.data)) {
             var _message = methods.parseScaffoldMessage(j);
@@ -394,7 +390,7 @@ var search = {
         });
         $(".page-overlay").click(search.unfocus);
     },
-    "getResult": function(kwyword){
+    "getResult": function(keyword){
         var url = "";
         var current = search.target_url || content_area.getUrl();
         if (keyword != undefined && keyword != ""){
@@ -402,12 +398,12 @@ var search = {
             url = replaceParam(url, "cursor", "");
             url = url.replace("?cursor=none", "?");
             url = url.replace("&cursor=none", "");
-            this.load(url);
+            content_area.load(url);
         }
         if (keyword == ""){
             url = replaceParam(current, "query", "");
             url = url.replace("query=", "");
-            this.load(url);
+            content_area.load(url);
         }
     },
     "focus": function(){

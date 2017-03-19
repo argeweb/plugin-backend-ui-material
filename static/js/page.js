@@ -121,12 +121,12 @@ var methods = {
     "goEditPage": function(){
         var $target = $(".edit-url").first();
         if ($target.length)
-            backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+            backend.content_area.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "goViewPage": function(){
         var $target = $(".view-url").first();
         if ($target.length)
-            backend.content_iframe.load($target.attr("href"), $target.text(), {}, false, true);
+            backend.content_area.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "parseScaffoldMessage": function(j){
         var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
@@ -188,7 +188,7 @@ var methods = {
         if (is_aside()) {
             backend.aside_iframe.reload();
         } else {
-            backend.content_iframe.reload();
+            backend.content_area.reload();
         }
     }
 };
@@ -232,21 +232,23 @@ var form = {
         if (page_data.is_saving == true){ return false;}
         form.last_target = $form;
         form.beforeSubmit();
-        $form.submit();
+        $form.ajaxSubmit({ "success": form.afterSubmit, "error": from.onError });
     },
-    "afterSubmit": function(){
+    "onError": function(j, b, c, d){
+
+    },
+    "afterSubmit": function(j, b, c, d){
         // 表單資料儲存完成之後
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
-        var j = JSON.parse($(this).contents().find("body").text());
         form.unlock();
-        if (form.validate(j)) {
+        backend.message.hideAll();
+        if (form.validate(j.data)) {
             var message = methods.parseScaffoldMessage(j);
             backend.methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
-            //    if (is_aside()) backend.content_iframe.reload(true);
+            //    if (is_aside()) backend.content_area.reload(true);
             //}
-            backend.message.ui.hide();
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
                 form.afterSubmitCallback(j, message);
@@ -283,7 +285,7 @@ function saveFormAndGoBack(form_id){
 function saveFormAndReloadRecord(form_id){
     saveForm(form_id, function(j, message){
         if (is_content()) {
-            backend.content_iframe.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
+            backend.content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
             backend.message.snackbar(message);
         }
     });
@@ -372,7 +374,7 @@ function setBodyClass(class_name){
 
 function scrollDiv(){
     $(".scrollDiv").addClass("on");
-    backend.content_iframe.removeMask();
+    backend.content_area.removeMask();
 }
 
 // 僅執行一次
@@ -385,8 +387,8 @@ $(function(){
         backend.aside_iframe.init("#aside_iframe");
         backend.aside_iframe.page = page;
     }else{
-        backend.content_iframe.init("#content_iframe");
-        backend.content_iframe.page = page;
+        backend.content_area.init("#content_iframe");
+        backend.content_area.page = page;
     }
 
     $(document).on('click', function(e){
@@ -403,7 +405,7 @@ $(function(){
                 if ($(this).parent().data(backend.view.current + "-iframe") == 'aside')
                     backend.aside_iframe.load(url);
                 else
-                    backend.content_iframe.load(url);
+                    backend.content_area.load(url);
                     // debugger 使用 aside
                     //backend.aside_iframe.load(url);
             }else{
@@ -479,7 +481,7 @@ function pageInit(new_html, need_push) {
     }
     var $header = $("header");
     if (is_content()) {
-        //backend.content_iframe.setTitle($("title").text());
+        //backend.content_area.setTitle($("title").text());
         if (backend.aside_iframe.is_open) {
             methods.reloadSidePanel();
         }
@@ -511,7 +513,7 @@ function pageInit(new_html, need_push) {
     if (window == top) {
         return;
     }
-    //backend.content_iframe.afterOnLoad(location.pathname);
+    //backend.content_area.afterOnLoad(location.pathname);
     $("#onLoad").remove();
     $body.removeClass("body-hide");
     checkNavItemAndShow();
@@ -580,7 +582,7 @@ function deleteRecord(url){
         setTimeout(function(){
             json(url, null, function (data) {
                 backend.swal("删除成功！", "您已经永久删除了此記錄。", "success");
-                backend.content_iframe.reload();
+                backend.content_area.reload();
             }, function (data) {
                 backend.swal("删除失敗！", "刪除記錄時發生問題。", "error");
             })
@@ -623,7 +625,7 @@ function linkClickProcess(){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
                 }else{
                     if (is_content()) {
-                        backend.content_iframe.reload();
+                        backend.content_area.reload();
                     }
                 }
             }, function(data){
@@ -639,7 +641,7 @@ function linkClickProcess(){
         if (_url.indexOf("javascript:") <0 && _url.indexOf("#") <0 ){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
-            var target = $(this).attr("target");
+            var target = "aside_iframe";
             if (target == "aside_iframe"){
                 if ($(this).hasClass("field-type-side-panel-field")){
                     page_data.last_side_panel_target_id = $(this).attr("id");
@@ -649,7 +651,7 @@ function linkClickProcess(){
                 e.stopPropagation();
             }
             if (typeof target === "undefined" || target == "content_iframe") {
-                backend.content_iframe.load($(this).attr("href"), t, location.pathname);
+                backend.content_area.load($(this).attr("href"), t, location.pathname);
                 e.preventDefault();
                 e.stopPropagation();
             }
