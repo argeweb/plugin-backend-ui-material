@@ -14,11 +14,11 @@
         <div class="mail-box sortable-list margin-0">
             <table class="table table-hover margin-0" data-cookie-id-table="{{ scaffolding.plural }}_{{ route.action }}" data-show-columns="true" data-toggle="table" data-cookie="true" id="list-table">
                 <thead>
-                <tr>
-                    <th data-field="sortable" class="col-1 sorting-mode text-center">排序</th>
+                <tr>{% block partial_thead_tr %}
+                    <th data-field="sortable" class="sorting-mode text-center srot-filed" style="width: 100px;">排序</th>
                     {% for property in scaffolding.display_in_list -%}
                         <th data-field="{{ property }}" class="text-center">{{ s.scaffold_field_name(property) }}</th>
-                    {% endfor -%}
+                    {% endfor -%}{% endblock %}
                 </tr>
                 </thead>
                 <tbody>

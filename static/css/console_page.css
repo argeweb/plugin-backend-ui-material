@@ -6232,6 +6232,9 @@ td.hide-sorting-mode, th.hide-sorting-mode{
 .in-sort-mode .hide-sorting-mode{
     display: none !important;
 }
+.in-sort-mode .srot-filed{
+    width: 100px!important;
+}
 .fixed-table-container tbody tr:first-child td {
     border-top: 1px solid #e7eaec !important;
 }
@@ -7418,7 +7421,7 @@ main.content {
 
 #content_area{
     height: 100%;
-    width: calc(100% - 215px);
+    width: calc(100% - 212px);
     overflow-y: scroll;
 }
 .page_header > h1{
