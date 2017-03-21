@@ -2325,11 +2325,6 @@ body, body.full-height-layout #page-wrapper, body.full-height-layout #wrapper, h
     overflow: hidden;
 }
 
-#page-wrapper {
-    min-height: auto;
-}
-
-
 .block {
     display: block
 }
@@ -5676,9 +5671,6 @@ del {
     overflow: hidden;
 }
 
-.body-hide {
-    overflow: hidden;
-}
 .iframe-page .ui-content-header {
     background-position: 50% 50%;
     background-repeat: no-repeat;
@@ -5691,10 +5683,8 @@ del {
 body.aside {
     background-color: #fff !important;
 }
-body.aside .scrollDiv.on header{
-    min-width: 360px;
-    width: 100%;
-    margin: 0;
+.body-hide {
+    overflow: hidden;
 }
 
 .aside header h1{
@@ -5710,57 +5700,6 @@ main .nav > li > a {
     min-height: 25px;
 }
 
-.scrollDiv {
-    overflow: hidden;
-    padding-right: 0;
-    margin-top: 0;
-    height: 100%;
-}
-.scrollDiv.on {
-    height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    overflow-scrolling: touch;
-}
-
-.no-header .scrollDiv, .no-header .scrollDiv.on {
-    margin-top: 0;
-}
-.scrollDiv::-webkit-scrollbar {
-    margin-top: 10px;
-    width: 0;
-    position: fixed;
-    top: 50px;
-}
-
-.scrollDiv.on::-webkit-scrollbar {
-    width: 5px;
-}
-/* Track 捲軸的底 */
-.scrollDiv::-webkit-scrollbar-track {
-    background: transparent;
-    -webkit-box-shadow: transparent;
-}
-
-/* Handle 捲軸的 Bar */
-.scrollDiv::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    width: 3px;
-    background: transparent;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-.scrollDiv.on::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    background: rgba(70, 70, 70, 0.7);
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-.scrollDiv::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(70, 70, 70, 0.3);
-}
 .ibox-content.m-b-sm.border-bottom{
     margin: 0 0 10px 0;
     border-radius: 2px;
@@ -5772,10 +5711,7 @@ main.content main.content{
     display: flex;flex-direction: column;
     height: auto;
     width: 100%;
-    padding: 15px 0 15px 0;
-}
-.scrollDiv.on main.content{
-    width: calc(100% + 5px);
+    padding: 0 0 15px 0;
 }
 .record_item{
     cursor: pointer;
@@ -6145,10 +6081,6 @@ main.content .mail-box .fixed-table-container{
     margin-bottom: 10px;
 }
 
-.scrollDiv{
-    /*margin-top: -100%;*/
-    height: 100%;
-}
 .action-edit .wrapper-content, .action-view .wrapper-content{
     padding: 0;
 }
@@ -6618,9 +6550,6 @@ img.descPicture.descPictureClose { width:150px; }
     padding-right: 0;
     padding-left: 0;
 }
-.aside .scrollDiv.on main.content{
-    width: calc(100% + 5px);
-}
 .aside header .dropdown-menu i.icon {
     font-size: 18px;
     line-height: 25px;
@@ -6681,9 +6610,6 @@ body.aside .btn-display-in-iframe{
 .field-type-side-panel-field {
     line-height: 35px;
     font-size: 16px;
-}
-body.aside_is_open .scrollDiv.on::-webkit-scrollbar-thumb{
-    background-color: #eee;
 }
 .progress {
     background-color: #f3f3f3;
@@ -7025,6 +6951,9 @@ header .dropdown.open .dropdown-toggle {
     height: 60px;
     width: 215px;
 }
+.menu.in .menu-content > .menu-logo{
+    width: 100%;
+}
 .menu-content > .menu-logo a{
     color: #fff;
     text-decoration: none;
@@ -7059,7 +6988,7 @@ header .dropdown.open .dropdown-toggle {
     top: 0;
     left: -300px;
     z-index: 2;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: calc(100% - 160px);
 }
 .menu-box.in {
@@ -7196,55 +7125,12 @@ main.content{
     background-color: rgba(154, 154, 154, 0.68) !important;
 }
 
-.scrollDiv {
-    position: relative;
-    overflow: hidden;
-    padding-right: 0;
-    margin-top: 0;
-    width: calc(100% + 4px);
-}
-.scrollDiv::-webkit-scrollbar {
-    width: 0;
-}
-.scrollDiv::-webkit-scrollbar-track {
-    background: transparent;
-    -webkit-box-shadow: transparent;
-}
-.scrollDiv::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    width: 3px;
-    background: rgba(26, 118, 199, 0.7);
-    -webkit-box-shadow: inset 0 0 6px rgba(26, 118, 199, 0.5);
-}
-.scrollDiv::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(70, 70, 70, 0.3);
-}
-.scrollDiv.on {
-    height: calc(100% - 142px);
-    overflow-y: scroll;
-    overflow-x: hidden;
-    overflow-scrolling: touch;
-}
-.scrollDiv.on #main-nav{
-    width: calc(100% + 5px);
-}
-.scrollDiv.on::-webkit-scrollbar {
-    width: 5px;
-}
-.scrollDiv.on::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 4px;
-    border-radius: 4px;
-    background: rgba(26, 118, 199, 0.7);
-    -webkit-box-shadow: inset 0 0 6px rgba(26, 118, 199, 0.5);
-}
-
 #main-nav{
     position: absolute;
     top: 0;
     width: 100%;
-    overflow-y: scroll;
-    height: calc(100% - 160px);
+    overflow-y: auto;
+    height: calc(100% - 42px);
 }
 #aside_iframe{
     position: absolute;
@@ -7418,7 +7304,14 @@ main.content {
 .top100-12{
     top: calc(100% + 12px) !important;
 }
-
+.scrollDiv {
+    position: relative;
+    height: calc(100% - 142px);
+    overflow: hidden;
+    padding-right: 0;
+    margin-top: 0;
+    width: calc(100% + 4px);
+}
 #content_area{
     height: 100%;
     width: calc(100% - 212px);
@@ -7431,7 +7324,7 @@ main.content {
     line-height: 30px;
 }
 .page_header{
-    padding: 15px;
+    padding: 15px 15px 25px 15px;
 }
 
 .in-view-mode .edit-mode, .in-view-mode .view-mode, .in-view-mode .delete-mode, .in-view-mode .sorting-mode,
@@ -7515,6 +7408,7 @@ main.content {
 .in-delete-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
+
 @media print {
     a, button {
         display: none !important;
@@ -7534,9 +7428,6 @@ main.content {
     }
     .page-wrap {
         height: auto !important;
-    }
-    .aside .scrollDiv{
-        margin-top: 10px !important;
     }
     #content_area {
         width: 100% !important;
@@ -7855,9 +7746,7 @@ main.content {
 
     body.has-keyboard main.content .container {
         position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 10px;
+        top: 3px;
     }
 
     .op-mode .btn {
@@ -7922,9 +7811,6 @@ main.content {
 @media only screen and (max-width: 400px) {
     .aside main.content {
         width: calc(100% - 20px);
-    }
-    .aside .scrollDiv.on main.content {
-        width: calc(100% - 15px);
     }
     body.aside_is_open #onLoad {
         width: calc(100% - 398px);

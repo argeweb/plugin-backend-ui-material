@@ -33,9 +33,10 @@
 			</li>
             <li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
                 <ul class="dropdown-menu dropdown-menu-right top100-12">
-                    <li><a class="waves-attach" href="javascript:content_iframe.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
+                    <li><a class="waves-attach" href="javascript:methods.toggleFullScreen();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;全螢幕</a></li>
+                    <li><a class="waves-attach" href="javascript:content_area.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
-                    <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_iframe"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>
+                    <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_area"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout" target="content_iframe"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>

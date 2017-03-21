@@ -1018,6 +1018,28 @@ var methods = {
         if ($(".nav-box li").length > 0){
             $(".nav-box").removeClass("hide").addClass("animated").addClass("fadeInUp");
         }
+    },
+    "toggleFullScreen": function(){
+        var doc = window.document;
+        var docEl = doc.documentElement;
+
+        if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+            methods.requestFullScreen.call(docEl);
+        }
+        else {
+            methods.cancelFullScreen.call(doc);
+        }
+    },
+    "requestFullScreen": function(doc, docEl){
+        doc = doc || window.document;
+        docEl = docEl || doc.documentElement;
+        var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+        requestFullScreen.call(docEl);
+    },
+    "cancelFullScreen": function(doc){
+        doc = doc || window.document;
+        var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+        cancelFullScreen.call(doc);
     }
 };
 var saveForm = form.submit;
@@ -1175,6 +1197,7 @@ function createEditorField(id){
 }
 //  初始化
 $(function(){
+    methods.requestFullScreen();
     uploader.init();
     shortcut.init();
     message.init();
