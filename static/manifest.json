@@ -1,0 +1,8 @@
+{
+  "name": "網站管理",
+  "short_name": "網站管理",
+  "start_url": "/admin",
+  "display": "fullscreen",
+  "background_color": "#1C5D87",
+  "theme_color": "#1C5D87"
+}

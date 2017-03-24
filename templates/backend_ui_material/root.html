@@ -5,6 +5,7 @@
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
 	<title>{{ backend_title }}</title>
+    <link rel="manifest"  href="/plugins/backend_ui_material/static/manifest.json">
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
@@ -33,7 +34,7 @@
 			</li>
             <li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
                 <ul class="dropdown-menu dropdown-menu-right top100-12">
-                    <li><a class="waves-attach" href="javascript:methods.toggleFullScreen();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;全螢幕</a></li>
+                    <li><a class="waves-attach" href="javascript:methods.toggleFullScreen();"><span class="icon icon-lg margin-right-sm">fullscreen</span>&nbsp;全螢幕</a></li>
                     <li><a class="waves-attach" href="javascript:content_area.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_area"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>

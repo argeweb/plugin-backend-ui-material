@@ -38,16 +38,13 @@ class BackendUiMaterial(Controller):
         except:
             self.context['backend_title'] = u'網站後台'
 
-        role = self.application_user.role.get()
         menus = dashboard_name = 'admin'
         if self.request.path.find('/admin') >= 0:
             dashboard_name = 'admin'
-        if hasattr(role, 'menu') and role.menu != u'':
-            menus = role.menu
 
         self.context['dashboard_name'] = dashboard_name
         # self.context['controllers'] = controllers
-        self.context['menus'] = self.util.get_menu(menus)
+        self.context['menus'] = self.util.get_menu('backend')
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user
         self.context['application_user_name'] = self.application_user.name

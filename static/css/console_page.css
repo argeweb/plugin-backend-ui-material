@@ -6710,7 +6710,7 @@ header .small-title {
 }
 header .right-menu{
     justify-content: flex-end;
-    padding-right: calc(1.5% + 18px);
+    padding-right: calc(1.5% + 5px);
     margin-top: 14px !important;
     width: 250px;
 }
@@ -6867,8 +6867,6 @@ header .dropdown.open .dropdown-toggle {
 .menu-scroll {
     height: 100%;
     min-width: 210px;
-    max-width: 85%;
-    max-width: calc(100% - 64px);
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
@@ -6880,7 +6878,7 @@ header .dropdown.open .dropdown-toggle {
     -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.72, -0.19, 0.74, 0.05);
     transition: -webkit-transform 0.3s cubic-bezier(0.72, -0.19, 0.74, 0.05);
     transition: transform 0.3s cubic-bezier(0.72, -0.19, 0.74, 0.05), -webkit-transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 320px;
+    width: 250px;
     z-index: 1;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;
@@ -6989,7 +6987,7 @@ header .dropdown.open .dropdown-toggle {
     left: -300px;
     z-index: 2;
     overflow-y: auto;
-    height: calc(100% - 160px);
+    height: calc(100% - 42px);
 }
 .menu-box.in {
     position: relative;
