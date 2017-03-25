@@ -79,12 +79,12 @@ var form = {
         }
     },
     "submit": function(form_id, callback){
-        if (typeof form_id === "undefined") form_id = "form";
+        if (typeof form_id === "undefined") form_id = "form:not(#file-form)";
         if (typeof callback === "function") form.afterSubmitCallback = callback;
         var $form = $(form_id);
         if ($form.length <=0){ return false;}
         if (page_data.is_saving == true){ return false;}
-        form.last_target = $form;
+        form.last_target = $form.first();
         form.beforeSubmit();
         $form.ajaxSubmit({ "success": form.afterSubmit });
     },
@@ -93,7 +93,10 @@ var form = {
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         form.unlock();
         message.hideAll();
-        if (form.validate(j.data)) {
+        var data = (typeof j.data !== "undefined") && j.data || j;
+        var result = (typeof j.result !== "undefined") && j.result || j;
+
+        if (form.validate(data) || result === "success" || result === true) {
             var _message = methods.parseScaffoldMessage(j);
             methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為

@@ -94,7 +94,7 @@
     <iframe name="aside_iframe" id="aside_iframe" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
     <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
 	<div class="progress"><div class="progress-bar"></div></div>
-    <div class="hidden"><form><input type="file" id="image-file-picker" accept="image/*" /></form></div>
+    <div class="hidden"><form id="file-form"><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
     <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
