@@ -80,7 +80,7 @@ var form = {
     },
     "submit": function(form_id, callback){
         if (typeof form_id === "undefined") form_id = "form:not(#file-form)";
-        if (typeof callback === "function") form.afterSubmitCallback = callback;
+        if (typeof callback === "function" || typeof callback === "undefined") form.afterSubmitCallback = callback;
         var $form = $(form_id);
         if ($form.length <=0){ return false;}
         if (page_data.is_saving == true){ return false;}

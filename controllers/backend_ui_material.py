@@ -10,11 +10,10 @@ from google.appengine.api.logservice import logservice
 from google.appengine.ext import ndb
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
-from argeweb import Controller, route, route_with, settings
 from argeweb import auth, add_authorizations
-from argeweb.core import time_util
+from argeweb import Controller, scaffold, route_menu, route_with, route, settings
+from google.appengine.api import app_identity
 from itertools import islice
-from textwrap import dedent
 import datetime
 import logging
 import time
@@ -48,6 +47,10 @@ class BackendUiMaterial(Controller):
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user
         self.context['application_user_name'] = self.application_user.name
+
+    def admin_list(self):
+        url = self.uri('admin:backend_ui_material:backend_ui_material:welcome')
+        return self.redirect(url)
 
     @route_with('/admin/welcome')
     def admin_welcome(self):
