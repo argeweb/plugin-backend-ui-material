@@ -218,10 +218,10 @@ var form = {
             }
             $(this).change();
         });
-        if ($("input[name$='response_return_encode']").length == 0){
+        if ($("input[name$='response_content_type']").length == 0){
             var r = form.last_target.data("return-encoding");
             if (typeof r === "undefined") r = "application/json";
-            $('<input type="hidden" name="response_return_encode" value="' + r + '" />').appendTo(form.last_target);
+            $('<input type="hidden" name="response_content_type" value="' + r + '" />').appendTo(form.last_target);
         }
     },
     "submit": function(form_id, callback){

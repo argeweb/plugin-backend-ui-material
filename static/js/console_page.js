@@ -72,10 +72,10 @@ var form = {
             }
             $(this).change();
         });
-        if ($("input[name$='response_return_encode']").length == 0){
+        if ($("input[name$='response_content_type']").length == 0){
             var r = form.last_target.data("return-encoding");
             if (typeof r === "undefined") r = "application/json";
-            $('<input type="hidden" name="response_return_encode" value="' + r + '" />').appendTo(form.last_target);
+            $('<input type="hidden" name="response_content_type" value="' + r + '" />').appendTo(form.last_target);
         }
     },
     "submit": function(form_id, callback){
@@ -931,7 +931,7 @@ var methods = {
                 "undefined": "未定義的訊息"
             };
         request_method = request_method.replace("admin_", "") + "." + status;
-        if (typeof message === "undefined" || message == "undefined")
+        if (typeof message === "undefined" || message == "")
             return (typeof msg[request_method] === "undefined") && msg["undefined"] || msg[request_method];
         else
             return message;
