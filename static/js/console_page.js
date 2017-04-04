@@ -95,9 +95,10 @@ var form = {
         message.hideAll();
         var data = (typeof j.data !== "undefined") && j.data || j;
         var result = (typeof j.result !== "undefined") && j.result || j;
+        var _message = j.message;
 
         if (form.validate(data) || result === "success" || result === true) {
-            var _message = methods.parseScaffoldMessage(j);
+            _message = methods.parseScaffoldMessage(j);
             methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
@@ -112,6 +113,8 @@ var form = {
                 message.snackbar(_message);
                 methods.reloadSidePanel();
             }
+        }else{
+            message.snackbar(_message);
         }
         form.last_target = undefined;
     },
@@ -752,7 +755,6 @@ var content_area = {
     },
     "popState": function(event){
         var s = event.state;
-        console.log(s);
         if (s){
             aside_iframe.closeUi();
             content_area.load(s.href, s.text, s.referer_page, false);
@@ -1200,7 +1202,6 @@ function createEditorField(id){
 }
 //  初始化
 $(function(){
-    methods.requestFullScreen();
     uploader.init();
     shortcut.init();
     message.init();

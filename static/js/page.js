@@ -195,6 +195,7 @@ var methods = {
 var form = {
     "last_target": null,
     "validate": function(j){
+        if (typeof j == "undefined") return true;
         var err = j["errors"];
         if (err){
             for (var key in err) {
@@ -232,7 +233,7 @@ var form = {
         if (page_data.is_saving == true){ return false;}
         form.last_target = $form;
         form.beforeSubmit();
-        $form.ajaxSubmit({ "success": form.afterSubmit, "error": from.onError });
+        $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
     "onError": function(j, b, c, d){
 
@@ -242,8 +243,12 @@ var form = {
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         form.unlock();
         backend.message.hideAll();
-        if (form.validate(j.data)) {
-            var message = methods.parseScaffoldMessage(j);
+        var data = (typeof j.data !== "undefined") && j.data || j;
+        var result = (typeof j.result !== "undefined") && j.result || j;
+        var _message = j.message;
+
+        if (form.validate(data) || result === "success" || result === true) {
+            _message = methods.parseScaffoldMessage(j);
             backend.methods.setUserInformation($("#name").val(), $("#avatar").val());
             // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
             //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
@@ -251,13 +256,15 @@ var form = {
             //}
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
-                form.afterSubmitCallback(j, message);
+                form.afterSubmitCallback(j, _message);
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
-                backend.message.snackbar(message);
+                backend.message.snackbar(_message);
                 methods.reloadSidePanel();
             }
+        }else{
+            backend.message.snackbar(_message);
         }
         form.last_target = undefined;
     },
@@ -540,6 +547,27 @@ function pageInit(new_html, need_push) {
         $(".sortable-list").removeClass("hidden");
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
+
+    $('.autocomplete').each(function(){
+        var service_url = $(this).data("service-url");
+        var before_search_function_name = $(this).data("before");
+        var callback_function_name = $(this).data("callback");
+        $(this).autocomplete({
+            serviceUrl: service_url,
+            minChars: 2,
+            deferRequestBy: 1000,
+            onSearchStart: function(query){
+                if (before_search_function_name && typeof page[before_search_function_name] == "function"){
+                    query = page[before_search_function_name](query);
+                }
+            },
+            onSelect: function (suggestion) {
+                if (callback_function_name && typeof page[callback_function_name] == "function"){
+                    page[callback_function_name](suggestion);
+                }
+            }
+        });
+    });
     $(".moment-from-now").each(function(){
         $(this).text(moment($(this).data("from-now")).fromNow());
     });

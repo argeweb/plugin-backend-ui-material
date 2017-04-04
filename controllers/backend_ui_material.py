@@ -10,6 +10,7 @@ from google.appengine.api.logservice import logservice
 from google.appengine.ext import ndb
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
+from argeweb.components.search import Search
 from argeweb import auth, add_authorizations
 from argeweb import Controller, scaffold, route_menu, route_with, route, settings
 from google.appengine.api import app_identity
@@ -24,9 +25,6 @@ backend_version = '0.1.12'
 
 
 class BackendUiMaterial(Controller):
-    class Meta:
-        components = ()
-
     @route_with('/admin/')
     @route_with('/admin')
     @add_authorizations(auth.require_admin)
@@ -248,6 +246,24 @@ class BackendUiMaterial(Controller):
         self.context['first_link'] = 'size=%s&log_level=%s' % (size, log_level)
         self.context['next_link'] = next_link
         self.context['this_link'] = 'size=%s&offset=%s' % (size, current_offset)
+
+    @route
+    def admin_model_suggestions(self):
+        self.meta.change_view('json')
+        model_ix = 'auto_ix_%s' % self.params.get_string('model')
+        value_field_name = self.params.get_string('value_field_name', 'title')
+        data_field_name = self.params.get_string('data_field_name', 'key')
+        query = self.params.get_string('query', '')
+        suggestions = []
+        for item in self.components.search(model_ix, query=query):
+            item_data = getattr(item, data_field_name)
+            if data_field_name == 'key':
+                item_data = self.util.encode_key(item_data)
+            suggestions.append({
+                'value': getattr(item, value_field_name),
+                'data': item_data
+            })
+        self.context['data'] = {'suggestions': suggestions}
 
     @route
     def admin_set_domain(self):

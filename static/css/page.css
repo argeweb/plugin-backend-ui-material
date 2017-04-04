@@ -7120,3 +7120,9 @@ select.form-control, select.picker__select--month, select.picker__select--year{
 .mce-tinymce.mce-container.mce-panel {
     width: calc(100% - 1px) !important;
 }
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
