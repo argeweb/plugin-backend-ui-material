@@ -3,9 +3,9 @@
 // Version 1.01 (2016/08/21)
 // @requires jQuery v2 or later
 // Copyright (c) 2016 Qi-Liang Wen 啟良
-function ajax(url,data,successCallback,errorCallback,headers){$.ajax({url:url,type:"GET",headers: headers,cache: true,data:data,async:1,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{show_message(thrownError.message)}}})};
-function json(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",dataType:"json",data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(d.message):errorCallback(d.message)}})};
-function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",cache: false,dataType:"json",data:data,async:1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(d.message):errorCallback(d.message)}})};
+function ajax(url,data,successCallback,errorCallback,headers){$.ajax({url:url,type:"GET",headers: headers,cache: true,data:data,async:1,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{alert(thrownError.message)}}})};
+function json(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",dataType:"json",data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(d.message)}})};
+function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",cache: false,dataType:"json",data:data,async:1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(d.message)}})};
 function replaceParam(a,b,c){a=a.replace("#/","");var d="";var m=a.substring(0,a.indexOf("?"));var s=a.substring(a.indexOf("?"),a.length);var j=0;if(a.indexOf("?")>=0){var i=s.indexOf(b+"=");if(i>=0){j=s.indexOf("&",i);if(j>=0){d=s.substring(i+b.length+1,j);s=a.replace(b+"="+d,b+"="+c)}else{d=s.substring(i+b.length+1,s.length);s=a.replace(b+"="+d,b+"="+c)}}else{s=a+"&"+b+"="+c}}else{s=a+"?"+b+"="+c}return s};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
 
@@ -63,7 +63,7 @@ var form = {
         return true;
     },
     "beforeSubmit": function(){
-        show_message("請稍候...", 30000, false);
+        alert("請稍候...", 30000, false);
         form.lock();
         form.last_target.find(".field-type-rich-text-field").each(function(){
             var id = $(this).attr("id");
@@ -88,11 +88,24 @@ var form = {
         form.beforeSubmit();
         $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
+    "submitAndGoBack": function(form_id){
+        form.submit(form_id, function(j, message){
+            methods.goBack();
+            message.snackbar(message);
+        });
+    },
+    "submitAndReload": function(form_id){
+        form.submit(form_id, function(j, message){
+            if (is_content()) {
+                content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
+                message.snackbar(message);
+            }
+        });
+    },
     "afterSubmit": function(j, b , c, d){
         // 表單資料儲存完成之後
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         form.unlock();
-        message.hideAll();
         var data = (typeof j.data !== "undefined") && j.data || j;
         var result = (typeof j.result !== "undefined") && j.result || j;
         var _message = j.message;
@@ -120,7 +133,9 @@ var form = {
     },
     "afterSubmitCallback": undefined,
     "onError": function(j, b, c, d){
-        debugger;
+        console.log(j, b, c, d);
+        form.unlock();
+        message.alert("發生錯誤了，詳情請見 console ...");
     },
     "lock": function(s){
         s = s || 5000;
@@ -135,6 +150,10 @@ var form = {
         page_data.timeout_lock_saving = setTimeout(function () { page_data.is_saving = false; }, s);
     }
 };
+var saveForm = form.submit;
+var saveFormAndGoBack = form.submitAndGoBack;
+var saveFormAndReloadRecord = form.submitAndReload;
+
 var shortcut = {
     keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
     'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
@@ -278,9 +297,10 @@ var message = {
             }
         });
     },
-    "quick_show": function(msg, timeout, allowOutsideClick){
+    "alert": function(msg, timeout, allowOutsideClick){
         if (typeof allowOutsideClick === "undefined") allowOutsideClick = true;
         if (timeout !== undefined){
+            swal.closeModal();
             swal({
                 title: "",
                 html: msg,
@@ -293,6 +313,7 @@ var message = {
         }
     },
     "snackbar": function(msg, sec){
+        message.hideAll();
 		$('body').snackbar({
             alive: sec,
 			content: msg,
@@ -387,6 +408,7 @@ var message = {
         message.notice.hide();
     }
 };
+var alert = message.alert;
 var search = {
     "dom": "#keyword",
     "target_url": "",
@@ -769,7 +791,7 @@ var content_area = {
             try{
                 $(content_area.dom).hide().html(new_html).show();
             }catch(e){
-                message.quick_show("發生問題了 " + e.toString());
+                message.alert("發生問題了 " + e.toString());
             }
         }
         if (aside_iframe.is_open) {
@@ -949,7 +971,7 @@ var methods = {
     },
     "setBackendMethods": function(){
         //  此文件在 parent 準備好之前就載入完畢
-        show_message = message.quick_show;
+        alert = message.alert;
     },
     "reloadSidePanel": function(){
         var n = page_data.last_side_panel_target_id;
@@ -1050,27 +1072,6 @@ var methods = {
         cancelFullScreen.call(doc);
     }
 };
-var saveForm = form.submit;
-
-
-function saveFormAndGoBack(form_id){
-    saveForm(form_id, function(j, message){
-        methods.goBack();
-        message.snackbar(message);
-    });
-}
-function saveFormAndReloadRecord(form_id){
-    saveForm(form_id, function(j, message){
-        if (is_content()) {
-            content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            message.snackbar(message);
-        }
-    });
-}
-// 訊息 (簡單的方式)
-function show_message(msg, timeout, allowOutsideClick){
-    message.quick_show(msg, timeout, allowOutsideClick);
-}
 function refreshMoment(){
     $(".moment-from-now").each(function(){
         $(this).text(moment($(this).data("from-now")).fromNow());
@@ -1092,7 +1093,7 @@ function deleteRecord(url){
         cancelButtonText: "取消",
         showLoaderOnConfirm: true
     }).then(function () {
-        show_message("請稍候...", 30000, false);
+        alert("請稍候...", 30000, false);
         setTimeout(function(){
             json(url, null, function (data) {
                 swal("删除成功！", "您已经永久删除了此記錄。", "success");
@@ -1286,9 +1287,9 @@ $(function(){
                 }
             }, function(data){
                 if (data.code == "404"){
-                    show_message("找不到目標頁面");
+                    alert("找不到目標頁面");
                 }else{
-                    show_message(data.error);
+                    alert(data.error);
                 }
             });
             return;

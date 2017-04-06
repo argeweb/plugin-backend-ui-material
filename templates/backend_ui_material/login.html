@@ -193,7 +193,7 @@
         });
 
         function send_login() {
-            show_message("正在進行登入中...");
+            alert("正在進行登入中...");
             var d = $("form").serialize();
             if (c == null){
                 c = d;
@@ -217,7 +217,7 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         c = null;
-                        show_message(thrownError.message);
+                        alert(thrownError.message);
                     }
                 });
             } catch (e) {
@@ -228,17 +228,17 @@
         // 顯示 json 回應的訊息
         function json_message(data) {
             if (data.is_login == "true"){
-                show_message("登入成功，請稍候...");
+                alert("登入成功，請稍候...");
                 setTimeout(function(){
                     location.href = "/admin";
                 }, 2000);
             }else{
-                show_message("登入失敗，帳號密碼有誤...");
+                alert("登入失敗，帳號密碼有誤...");
             }
         }
 
         // 顯示訊息
-        function show_message(text) {
+        function alert(text) {
             $("#messagebox").html(text).slideDown();
             setTimeout('hide_message()', 3100);
         }

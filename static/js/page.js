@@ -1,5 +1,5 @@
-function json(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
-function json_async(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:1 ,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?show_message(b.responseJSON.error):errorCallback(b.responseJSON)}})};
+function json(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(b.responseJSON.error):errorCallback(b.responseJSON)}})};
+function json_async(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",dataType:"json",cache: false,data:data,async:1 ,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(b.responseJSON.error):errorCallback(b.responseJSON)}})};
 function ajax_post(url,data,successCallback,errorCallback) {$.ajax({url:url,type:"POST",cache: true,data:data,async:true,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{window.alert(thrownError.message)}}})};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
 var backend = parent;
@@ -162,7 +162,7 @@ var methods = {
     },
     "setBackendMethods": function(){
         //  此文件在 parent 準備好之前就載入完畢
-        show_message = backend.message.quick_show;
+        alert = backend.message.alert;
         start_filepicker = backend.uploader.pickup;
     },
     "reloadSidePanel": function(){
@@ -209,7 +209,7 @@ var form = {
         return true;
     },
     "beforeSubmit": function(){
-        show_message("請稍候...", 30000, false);
+        alert("請稍候...", 30000, false);
         form.lock();
         form.last_target.find(".field-type-rich-text-field").each(function(){
             var id = $(this).attr("id");
@@ -234,11 +234,24 @@ var form = {
         form.beforeSubmit();
         $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
+    "submitAndGoBack": function(form_id){
+        form.submit(form_id, function(j, message){
+            methods.goBack();
+            backend.message.snackbar(message);
+        });
+    },
+    "submitAndReload": function(form_id){
+        form.submit(form_id, function(j, message){
+            if (is_content()) {
+                backend.content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
+                backend.message.snackbar(message);
+            }
+        });
+    },
     "afterSubmit": function(j, b , c, d){
         // 表單資料儲存完成之後
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         form.unlock();
-        backend.message.hideAll();
         var data = (typeof j.data !== "undefined") && j.data || j;
         var result = (typeof j.result !== "undefined") && j.result || j;
         var _message = j.message;
@@ -262,7 +275,9 @@ var form = {
     },
     "afterSubmitCallback": undefined,
     "onError": function(j, b, c, d){
-        debugger;
+        console.log(j, b, c, d);
+        form.unlock();
+        message.alert("發生錯誤了，詳情請見 console ...");
     },
     "lock": function(s){
         s = s || 5000;
@@ -278,24 +293,12 @@ var form = {
     }
 };
 var saveForm = form.submit;
-function saveFormAndGoBack(form_id){
-    saveForm(form_id, function(j, message){
-        methods.goBack();
-        backend.message.snackbar(message);
-    });
-}
-function saveFormAndReloadRecord(form_id){
-    saveForm(form_id, function(j, message){
-        if (is_content()) {
-            backend.content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            backend.message.snackbar(message);
-        }
-    });
-}
+var saveFormAndGoBack = form.submitAndGoBack;
+var saveFormAndReloadRecord = form.submitAndReload;
 
 // 訊息 (簡單的方式)
-function show_message(msg, timeout, allowOutsideClick){
-    backend.message.quick_show(msg, timeout, allowOutsideClick);
+function alert(msg, timeout, allowOutsideClick){
+    backend.message.alert(msg, timeout, allowOutsideClick);
 }
 
 // 確保 file picker 與 message 被正常載入
@@ -478,7 +481,7 @@ function pageInit(new_html, need_push) {
         try{
             $body.html(new_html);
         }catch(e){
-            backend.message.quick_show("發生問題了 " + e.toString());
+            backend.message.alert("發生問題了 " + e.toString());
         }
     }
     var $header = $("header");
@@ -601,7 +604,7 @@ function deleteRecord(url){
         cancelButtonText: "取消",
         showLoaderOnConfirm: true
     }).then(function () {
-        show_message("請稍候...", 30000, false);
+        alert("請稍候...", 30000, false);
         setTimeout(function(){
             json(url, null, function (data) {
                 backend.swal("删除成功！", "您已经永久删除了此記錄。", "success");
@@ -653,9 +656,9 @@ function linkClickProcess(){
                 }
             }, function(data){
                 if (data.code == "404"){
-                    show_message("找不到目標頁面");
+                    alert("找不到目標頁面");
                 }else{
-                    show_message(data.error);
+                    alert(data.error);
                 }
             });
             return;
