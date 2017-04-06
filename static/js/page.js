@@ -129,7 +129,7 @@ var methods = {
             backend.content_area.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "parseScaffoldMessage": function(j){
-        var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
+        var status = (j["scaffold"] && j["scaffold"]["response_result"]) && j["scaffold"]["response_result"] || null;
         var message = j['message'];
         var scaffold = j["scaffold"];
         var request_method = "undefined";
@@ -195,7 +195,6 @@ var methods = {
 var form = {
     "last_target": null,
     "validate": function(j){
-        if (typeof j == "undefined") return true;
         var err = j["errors"];
         if (err){
             for (var key in err) {
@@ -204,7 +203,7 @@ var form = {
             if (form.last_target.attr("action").indexOf("/_ah/upload/") >= 0) {
                 form.last_target.attr("action", j["new_form_action"]);
             }
-            backend.message.snackbar("表單欄位有誤");
+            message.snackbar("表單欄位有誤");
             return false;
         }
         return true;
@@ -226,19 +225,16 @@ var form = {
         }
     },
     "submit": function(form_id, callback){
-        if (typeof form_id === "undefined") form_id = "form";
-        if (typeof callback === "function") form.afterSubmitCallback = callback;
+        if (typeof form_id === "undefined") form_id = "form:not(#file-form)";
+        if (typeof callback === "function" || typeof callback === "undefined") form.afterSubmitCallback = callback;
         var $form = $(form_id);
         if ($form.length <=0){ return false;}
         if (page_data.is_saving == true){ return false;}
-        form.last_target = $form;
+        form.last_target = $form.first();
         form.beforeSubmit();
         $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
-    "onError": function(j, b, c, d){
-
-    },
-    "afterSubmit": function(j, b, c, d){
+    "afterSubmit": function(j, b , c, d){
         // 表單資料儲存完成之後
         $(".form-group").removeClass("has-error has-danger").find(".help-block").text("");
         form.unlock();
@@ -248,12 +244,8 @@ var form = {
         var _message = j.message;
 
         if (form.validate(data) || result === "success" || result === true) {
-            _message = methods.parseScaffoldMessage(j);
+            _message = backend.methods.parseScaffoldMessage(j);
             backend.methods.setUserInformation($("#name").val(), $("#avatar").val());
-            // 停用 2017/2/2 側邊欄應由主編輯區開啟，不該有此行為
-            //if (j["scaffold"]["response_method"] == "add" || j["scaffold"]["response_method"] == "edit") {
-            //    if (is_aside()) backend.content_area.reload(true);
-            //}
             if (typeof form.afterSubmitCallback === "function"){
                 // 儲存並離開、建立並繼續編輯 會有 callback
                 form.afterSubmitCallback(j, _message);
@@ -261,7 +253,7 @@ var form = {
             }else{
                 // 儲存
                 backend.message.snackbar(_message);
-                methods.reloadSidePanel();
+                backend.methods.reloadSidePanel();
             }
         }else{
             backend.message.snackbar(_message);
@@ -269,6 +261,9 @@ var form = {
         form.last_target = undefined;
     },
     "afterSubmitCallback": undefined,
+    "onError": function(j, b, c, d){
+        debugger;
+    },
     "lock": function(s){
         s = s || 5000;
         page_data.is_saving = true;

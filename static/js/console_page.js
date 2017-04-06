@@ -86,7 +86,7 @@ var form = {
         if (page_data.is_saving == true){ return false;}
         form.last_target = $form.first();
         form.beforeSubmit();
-        $form.ajaxSubmit({ "success": form.afterSubmit });
+        $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
     "afterSubmit": function(j, b , c, d){
         // 表單資料儲存完成之後
@@ -119,6 +119,9 @@ var form = {
         form.last_target = undefined;
     },
     "afterSubmitCallback": undefined,
+    "onError": function(j, b, c, d){
+        debugger;
+    },
     "lock": function(s){
         s = s || 5000;
         page_data.is_saving = true;
@@ -913,7 +916,7 @@ var methods = {
             content_area.load($target.attr("href"), $target.text(), {}, false, true);
     },
     "parseScaffoldMessage": function(j){
-        var status = (j["scaffold"] && j["scaffold"]["response_info"]) && j["scaffold"]["response_info"] || null;
+        var status = (j["scaffold"] && j["scaffold"]["response_result"]) && j["scaffold"]["response_result"] || null;
         var message = j['message'];
         var scaffold = j["scaffold"];
         var request_method = "undefined";

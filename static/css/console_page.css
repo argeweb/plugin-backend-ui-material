@@ -7460,9 +7460,6 @@ main.content {
     body.aside_is_open #content_area{
         width: calc(100% - 610px);
     }
-    body.aside_is_open #onLoad {
-        width: calc(100% - 398px);
-    }
 }
 @media (max-width: 992px) {
     .forum-info {
