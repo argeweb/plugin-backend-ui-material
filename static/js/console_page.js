@@ -734,7 +734,7 @@ var content_area = {
                     if (need_replace) history.replaceState(data, text, "#" + url);
                 }
                 content_area.unlock();
-                content_area.resetPage(page, need_push);
+                content_area.resetPage(page);
             }, function(page){
                 content_area.unlock();
                 content_area.resetPage(page);
@@ -801,8 +801,6 @@ var content_area = {
 
         //TODO if input has val addClass control-highlight
         methods.checkNavItemAndShow();
-        $("iframe[name='iframeForm']").load(form.afterSubmit);
-
         tinyMCE.editors=[];
         $(".field-type-rich-text-field").each(function() {
             var label_name = $(this).prev().text();
@@ -813,7 +811,6 @@ var content_area = {
                 createEditorField(id);
             }
         });
-
         $('#list-table').on('post-body.bs.table', function () {
             makeSortTable();
             makeListOp();
@@ -821,7 +818,6 @@ var content_area = {
             $(".sortable-list").removeClass("hidden");
             $(".fixed-table-loading").hide();
         });
-        $(".table").bootstrapTable();
         $(".moment-from-now").each(function(){
             $(this).text(moment($(this).data("from-now")).fromNow());
         });
@@ -829,6 +825,7 @@ var content_area = {
         $("select[readonly]").change(function() { $($(this).data("default")).prop("selected", true); });
         view.reset(content_area.dom);
         search.reset(content_area.dom);
+        try{ $(".table").bootstrapTable(); } catch(e){}
         setTimeout(function(){
             $(".fbtn-container").fadeIn();
         }, 500);

@@ -157,8 +157,7 @@ var methods = {
     },
     "goBack": function(n){
         n = n || 1;
-        if (is_aside()) setTimeout(backend.aside_iframe.closeUi(), 10);
-        if (is_content()) setTimeout(history.go(-Math.abs(n)), 10);
+        setTimeout(backend.aside_iframe.closeUi(), 10);
     },
     "setBackendMethods": function(){
         //  此文件在 parent 準備好之前就載入完畢
@@ -242,10 +241,8 @@ var form = {
     },
     "submitAndReload": function(form_id){
         form.submit(form_id, function(j, message){
-            if (is_content()) {
-                backend.content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
-                backend.message.snackbar(message);
-            }
+            backend.content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
+            backend.message.snackbar(message);
         });
     },
     "afterSubmit": function(j, b , c, d){
@@ -305,12 +302,6 @@ function alert(msg, timeout, allowOutsideClick){
 //  此文件在 parent 準備好之後才載入完畢
 if (backend && backend.uploader && backend.uploader.pickup) start_filepicker = backend.uploader.pickup;
 
-function is_aside(){
-    return (window.name == "aside_iframe");
-}
-function is_content(){
-    return (window.name == "content_iframe");
-}
 function changeLangField(index){
     $("a.btn-lang").eq(index).click();
 }
@@ -384,17 +375,10 @@ function scrollDiv(){
 
 // 僅執行一次
 $(function(){
-    if (window.name != ""){
-        pageInit();
-    }
+    backend.aside_iframe.init("#aside_iframe");
+    backend.aside_iframe.page = page;
+    pageInit();
     linkClickProcess();
-    if (is_aside()) {
-        backend.aside_iframe.init("#aside_iframe");
-        backend.aside_iframe.page = page;
-    }else{
-        backend.content_area.init("#content_iframe");
-        backend.content_area.page = page;
-    }
 
     $(document).on('click', function(e){
         backend.search.unfocus();
@@ -485,12 +469,6 @@ function pageInit(new_html, need_push) {
         }
     }
     var $header = $("header");
-    if (is_content()) {
-        //backend.content_area.setTitle($("title").text());
-        if (backend.aside_iframe.is_open) {
-            methods.reloadSidePanel();
-        }
-    }
     if($header.text().trim() != ""){
         $body.addClass("has-header").removeClass("no-header");
     }else{
@@ -501,19 +479,6 @@ function pageInit(new_html, need_push) {
         backend.aside_iframe.closeUi();
     });
 
-    $(".scrollDiv").hover(function(){
-        scrollDiv();
-    }, function(){
-        $(this).removeClass("on");
-    }).mouseover(function(){
-        scrollDiv();
-    }).mouseleave(function() {
-        $(this).removeClass("on");
-    }).scroll(function() {
-        if (is_content()){
-            backend.affix($(this).scrollTop());
-        }
-    });
     //TODO if input has val addClass control-highlight
     if (window == top) {
         return;
@@ -522,12 +487,10 @@ function pageInit(new_html, need_push) {
     $("#onLoad").remove();
     $body.removeClass("body-hide");
     checkNavItemAndShow();
-    $("iframe[name='iframeForm']").load(form.afterSubmit);
+    tinyMCE.editors=[];
     $(".filepicker").click(function(){
         start_filepicker($(this).parents(".input-group").find("input"), false);
     });
-
-    tinyMCE.editors=[];
     $(".field-type-rich-text-field").each(function() {
         var label_name = $(this).prev().text();
         $(this).prev().remove();
@@ -537,7 +500,6 @@ function pageInit(new_html, need_push) {
             createEditorField(id);
         }
     });
-
     $('#list-table').on('post-body.bs.table', function () {
         makeSortTable();
         makeListOp();
@@ -545,7 +507,6 @@ function pageInit(new_html, need_push) {
         $(".sortable-list").removeClass("hidden");
         $(".fixed-table-loading").hide();
     }).bootstrapTable();
-
     $('.autocomplete').each(function(){
         var service_url = $(this).data("service-url");
         var before_search_function_name = $(this).data("before");
@@ -649,10 +610,6 @@ function linkClickProcess(){
             json(_url, null, function (data) {
                 if (callback !== undefined && callback !== "undefined"){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
-                }else{
-                    if (is_content()) {
-                        backend.content_area.reload();
-                    }
                 }
             }, function(data){
                 if (data.code == "404"){

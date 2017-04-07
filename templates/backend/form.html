@@ -12,8 +12,7 @@
           action="{% block form_tag_action %}{{ scaffolding.form_action|default(uri(_pass_all=True), True) }}{% endblock %}"
           data-return-encoding="{% block form_tag_return_encoding %}{{ scaffolding.form_return_encoding }}{% endblock %}"
           enctype="{% block form_tag_enctype %}{{ scaffolding.form_encoding }}{% endblock %}"
-          accept-charset="{% block form_tag_charset %}UTF-8{% endblock %}"
-          target="{% block form_tag_target %}iframeForm{% endblock %}" role="form">
+          accept-charset="{% block form_tag_charset %}UTF-8{% endblock %}" role="form">
         {% block form_body %}
         <div class="col-sm-12" style=" margin-top: 10px;margin-bottom: 30px;">
             <div class="tabs-container form-tabs">{% if scaffolding.get_tab_pages() %}
