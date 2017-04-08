@@ -89,16 +89,16 @@ var form = {
         $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
     },
     "submitAndGoBack": function(form_id){
-        form.submit(form_id, function(j, message){
+        form.submit(form_id, function(j, message_text){
             methods.goBack();
-            message.snackbar(message);
+            message.snackbar(message_text);
         });
     },
     "submitAndReload": function(form_id){
-        form.submit(form_id, function(j, message){
+        form.submit(form_id, function(j, message_text){
             if (is_content()) {
                 content_area.load(j["scaffold"]["method_record_edit_url"], "", {}, false, true);
-                message.snackbar(message);
+                message.snackbar(message_text);
             }
         });
     },
