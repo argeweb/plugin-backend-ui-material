@@ -119,7 +119,7 @@ class BackendUiMaterial(Controller):
         s = ''
         record_list = []
         for item_key in str_key_list:
-            item = self.util.decode_key(item_key).get()
+            item = self.params.get_ndb_record(item_key)
             item.sort = float(sort_list[j])
             record_list.append(item)
             j += 1
@@ -260,7 +260,7 @@ class BackendUiMaterial(Controller):
             if data_field_name == 'key':
                 item_data = self.util.encode_key(item_data)
             suggestions.append({
-                'value': getattr(item, value_field_name),
+                'label': getattr(item, value_field_name),
                 'data': item_data
             })
         self.context['data'] = {'suggestions': suggestions}

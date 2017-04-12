@@ -26,20 +26,20 @@
         <ul class="nav nav-list pull-right right-menu">
 			<li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" href="/" target="_blank" title="檢視前台畫面"><span class="w32h32"><i class="icon icon-lg">personal_video</i></span></a></li>
 			<li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" aria-expanded="true" title="訊息"><span class="w32h32"><i class="icon icon-lg">notifications</i></span></a>
-				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no top100-12" style="min-width: 288px;">
+				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no top100-6" style="min-width: 288px;">
 					<div class="tile"><div class="tile-inner text-black"><strong>通知</strong></div></div>
 					<div id="message-box"></div>
 					<a class="tile waves-attach" href="javascript:void(0)" target="aside_iframe" ><div class="tile-inner text-black text-right"><span>顯示全部</span><i class="icon icon-lg">navigate_next</i></div></a>
 				</div>
 			</li>
             <li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
-                <ul class="dropdown-menu dropdown-menu-right top100-12">
+                <ul class="dropdown-menu dropdown-menu-right top100-6">
                     <li><a class="waves-attach" href="javascript:methods.toggleFullScreen();"><span class="icon icon-lg margin-right-sm">fullscreen</span>&nbsp;全螢幕</a></li>
                     <li><a class="waves-attach" href="javascript:content_area.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_area"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>
                     <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_config:config') }}" target="content_area"><span class="icon icon-lg margin-right-sm">settings_applications</span>&nbsp;後台設定</a></li>
-                    <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout" target="content_iframe"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
+                    <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout" target="content_area"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
 		</ul>
@@ -51,7 +51,7 @@
 				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a></div>
                 <div class="user-box">
 					<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>
-					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_iframe">{{ application_user_name }}</a></div>
+					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_area">{{ application_user_name }}</a></div>
 				</div>
                 <div class="op-mode">
                     <a class="btn btn-flat btn-brand view-change enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
@@ -66,7 +66,7 @@
                         {%- if item.need_hr_parent %}
                         <li class="hr"></li>{% endif %}
                         <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>{% else %}
-                        <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_iframe" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
+                        <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_area" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
                         {%- endfor %}
                     </ul>
                     {% set menu_n = 0 -%}{%- for item in menus -%}
@@ -78,7 +78,7 @@
                             {%- for subitem in item.submenu -%}{% if subitem.need_hr %}
                             <li class="hr"></li>{% endif -%}{% if subitem.text == "gt" -%}
                             <li class="gt" data-sort="{{ subitem.sort }}">{{ subitem.group_title }}</li>{% else %}
-                            <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_iframe" data-sort="{{ subitem.sort }}">{{ subitem.text }}</a></li>{%- endif -%}
+                            <li><a class="waves-attach main-link" href="{{ subitem.url }}" target="content_area" data-sort="{{ subitem.sort }}">{{ subitem.text }}</a></li>{%- endif -%}
                             {%- endfor %}
                         </ul>
                      </div>
@@ -92,9 +92,9 @@
         <div class="page-overlay"></div>
         <div id="content_area"></div>
 	</main>
-    <iframe name="aside_iframe" id="aside_iframe" class="print-hide" frameborder="0" seamless="" src="/{{ dashboard_name }}/page_init"></iframe>
+    <div id="aside_area" class="print-hide"></div>
     <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
-	<div class="progress"><div class="progress-bar"></div></div>
+	<div class="progress console-progress"><div class="progress-bar"></div></div>
     <div class="hidden"><form id="file-form"><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
     <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>

@@ -46,7 +46,8 @@ main .nav > li > a {
     background: #fff
 }
 .nav > li > a i {
-    margin-right: 6px
+    margin-right: 4px;
+    margin-left: 4px;
 }
 
 .navbar {
@@ -5680,15 +5681,11 @@ del {
     padding-bottom: 27px;
 }
 
-body.aside {
+#aside_area {
     background-color: #fff !important;
 }
 .body-hide {
     overflow: hidden;
-}
-
-.aside header h1{
-    display: none;
 }
 main .nav > li > a {
     color: #a7b1c2;
@@ -6595,10 +6592,14 @@ body.aside .btn-display-in-iframe{
 }
 .form-tabs .nav-tabs li a{
     position: inherit;
-    padding: 0 10px;
+    padding: 10px;
 }
 .tab-content {
     border-top: 1px solid #e7eaec;
+    height: calc(100% - 40px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 40px;
 }
 .tabs-container .nav-tabs+.tab-content {
     border-top: 0;
@@ -6720,8 +6721,9 @@ header .search-bar{
 header .nav > li > a, header .nav > li > .a {
     height: 26px;
     min-height: 26px;
-    line-height: 34px;
-    margin-top: 5px;
+    line-height: 30px;
+    margin: 5px 2px;
+    display: inherit;
 }
 header .dropdown.open .dropdown-toggle {
     background-color: transparent;
@@ -6761,12 +6763,11 @@ header .dropdown.open .dropdown-toggle {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
     min-height: 48px;
     padding: 0 16px;
     position: relative;
+    outline: none;
 }
 .nav li > a:focus, .nav li > a:hover, .nav li > .a:focus, .nav li > .a:hover {
     text-decoration: none;
@@ -6827,9 +6828,6 @@ header .dropdown.open .dropdown-toggle {
 }
 .nav-justified>li>a {
     margin-bottom: 0;
-}
-.nav li > a, .nav li > .a{
-    outline: none;
 }
 .nav-drawer.nav-drawer-md {
     z-index: 32;
@@ -7090,6 +7088,9 @@ main.content{
     position: relative;
     padding: 60px 0 0 0;
 }
+#aside_area main.content{
+    padding: 0 0 0 0;
+}
 
 .left-search{
     left: calc(210px + 1.3%);
@@ -7130,7 +7131,7 @@ main.content{
     overflow-y: auto;
     height: calc(100% - 42px);
 }
-#aside_iframe{
+#aside_area{
     position: absolute;
     top: 60px;
     height: calc(100% - 60px);
@@ -7226,10 +7227,14 @@ main.content {
     top: 12px;
 }
 .progress{
-    position: absolute;top: 0;width: 100%;height: 4px;z-index: 999;margin: 0;background: transparent;
+    top: 0;width: 100%;height: 4px;z-index: 999;margin: 0;
 }
-.progress-bar{
-    background-color: rgba(78, 66, 70, 0.47);
+.console-progress{
+    position: absolute;
+    background: transparent;
+}
+.console-progress .progress-bar{
+    background-color: #2f4050;
 }
 .swal2-modal h2{
     font-size: 28px;
@@ -7299,8 +7304,8 @@ main.content {
     width: 32px;
     height: 32px;
 }
-.top100-12{
-    top: calc(100% + 12px) !important;
+.top100-6{
+    top: calc(100% + 6px) !important;
 }
 .scrollDiv {
     position: relative;
@@ -7315,16 +7320,15 @@ main.content {
     width: calc(100% - 212px);
     overflow-y: scroll;
 }
+.page_header{
+    padding: 15px;
+}
 .page_header > h1{
     display: inline-block;
     margin: 0;
     font-size: 18px;
     line-height: 30px;
 }
-.page_header{
-    padding: 15px 15px 25px 15px;
-}
-
 .in-view-mode .edit-mode, .in-view-mode .view-mode, .in-view-mode .delete-mode, .in-view-mode .sorting-mode,
 .in-edit-mode .edit-mode, .in-edit-mode .view-mode, .in-edit-mode .delete-mode, .in-edit-mode .sorting-mode,
 .in-delete-mode .edit-mode, .in-delete-mode .view-mode, .in-delete-mode .delete-mode, .in-delete-mode .sorting-mode,
@@ -7406,7 +7410,6 @@ main.content {
 .in-delete-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
-
 @media print {
     a, button {
         display: none !important;
@@ -7691,7 +7694,7 @@ main.content {
         margin-left: 320px;
     }
 
-    main.content main.content {
+    #content_area main.content, #aside_area main.content {
         margin-left: 0;
         padding-top: 0;
     }
@@ -7805,7 +7808,7 @@ main.content {
 }
 @media only screen and (max-width: 400px) {
     .aside main.content {
-        width: calc(100% - 20px);
+        width: calc(100% - 5px);
     }
     body.aside_is_open #onLoad {
         width: calc(100% - 398px);
