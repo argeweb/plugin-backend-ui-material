@@ -196,8 +196,9 @@ var shortcut = {
             var s = [];
             var n = 1;
             $(".op-mode a").each(function(){
+                console.log(shortcut_key);
                 if (shortcut_key == $(this).data("view-key") || shortcut_key == n.toString()){
-                    $(this).click();
+                    view.change($(this).data("view"));
                 }
                 n++;
             });
@@ -801,7 +802,7 @@ var content_area = {
             }
         }
         if (aside_area.data.is_open) {
-            methods.reloadSidePanel();
+            aside_area.reload();
         }
         methods.checkPageHeader(content_area);
         methods.checkNavItemAndShow(content_area);
@@ -905,6 +906,9 @@ var methods = {
     "goBack": function(n){
         n = n || 1;
         setTimeout(history.go(-Math.abs(n)), 10);
+    },
+    "reload": function(){
+        content_area.reload();
     },
     "convertUITimeTOLocalTime": function(uitime, hours){
         hours = hours || 0;
@@ -1168,10 +1172,6 @@ $(function(){
     search.init();
     content_area.init();
     aside_area.init();
-    //$(document).bind("keydown", function(e) {
-    //    short_key(window.name, e);
-    //});
-
     $(".menu-link").click(function(event){
         var target_id = $(this).attr("href");
         if ($(target_id).hasClass("in")){
@@ -1326,7 +1326,6 @@ $(function(){
         if (aside_area.data.is_open){
             aside_area.showUi();
         }
-        //$("#aside_area.open").stop().animate({"width": ($(window).width() < 992) ? "100%" : "72%"}, 200);
     });
     moment.locale('zh-tw');
     methods.refreshMoment(1000);
