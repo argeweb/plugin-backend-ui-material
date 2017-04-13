@@ -8,9 +8,10 @@
     <link rel="manifest"  href="/backend_ui_material/backend_config/manifest_json">
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
-    <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
+    <link rel="stylesheet" href="/static/vendor/vue-multiselect/vue-multiselect.min.css">
     <link rel="stylesheet" href="/static/vendor/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" href="/static/vendor/blueimp-gallery/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console_page.css?run={{ framework.app_version }}">
 </head>
@@ -29,7 +30,7 @@
 				<div class="dropdown-menu dropdown-menu-right padding-bottom-no padding-top-no top100-6" style="min-width: 288px;">
 					<div class="tile"><div class="tile-inner text-black"><strong>通知</strong></div></div>
 					<div id="message-box"></div>
-					<a class="tile waves-attach" href="javascript:void(0)" target="aside_iframe" ><div class="tile-inner text-black text-right"><span>顯示全部</span><i class="icon icon-lg">navigate_next</i></div></a>
+					<a class="tile waves-attach" href="javascript:void(0)" target="aside_area" ><div class="tile-inner text-black text-right"><span>顯示全部</span><i class="icon icon-lg">navigate_next</i></div></a>
 				</div>
 			</li>
             <li class="dropdown"><a class="dropdown-toggle waves-attach padding-left-no padding-right-no text-center" data-toggle="dropdown" title="設定"><span class="w32h32"><i class="icon icon-lg">more_vert</i></span></a>
@@ -54,10 +55,10 @@
 					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_area">{{ application_user_name }}</a></div>
 				</div>
                 <div class="op-mode">
-                    <a class="btn btn-flat btn-brand view-change enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式"><i class="icon icon-2x edit-color">edit</i></a>
-                    <a class="btn btn-flat btn-brand view-change enter-view-mode" data-view="view" data-view-key="v" title="檢視模式"><i class="icon icon-2x view-color">remove_red_eye</i></a>
-                    <a class="btn btn-flat btn-brand view-change enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
-                    <a class="btn btn-flat btn-brand view-change enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式"><i class="icon icon-2x delete-color">delete</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式 (e,1)"><i class="icon icon-2x edit-color">edit</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-view-mode" data-view="view" data-view-key="v" title="檢視模式 (v,2)"><i class="icon icon-2x view-color">remove_red_eye</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-sorting-mode" data-view="sort" data-view-key="s" title="排序模式 (s,3)"><i class="icon icon-2x sorting-color">sort_by_alpha</i></a>
+                    <a class="btn btn-flat btn-brand view-change enter-delete-mode" data-view="delete" data-view-key="d" title="刪除模式 (d,4)"><i class="icon icon-2x delete-color">delete</i></a>
                 </div>
                 <div class=" scrollDiv">
                     <ul class="nav" id="main-nav">
@@ -111,6 +112,7 @@
     <script type="text/javascript" src="/static/vendor/bootstrap-table/bootstrap-table-reorder-rows.min.js"></script>
     <script type="text/javascript" src="/static/vendor/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
     <script type="text/javascript" src="/static/vendor/vue/vue.min.js"></script>
+    <script type="text/javascript" src="/static/vendor/vue-multiselect/vue-multiselect.min.js"></script>
 
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/tinymce.min.js?app_version={{ framework.app_version }}&backend_version={{ backend_version }}"></script>

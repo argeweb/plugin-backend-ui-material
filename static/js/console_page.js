@@ -676,6 +676,68 @@ var uploader = {
         }
     }
 };
+var console_history = {
+    "data": null,
+    "init": function(){
+        window.onpopstate = this.popState;
+        var h = JSON.parse(localStorage.getItem('content_area.history'));
+        if (h != null && h != [] && h != "null") this.data = h;
+    },
+    "getState": function(url){
+        if (typeof url === "undefined") url = content_area.getUrl();
+        if (console_history.data && url in console_history.data){
+            return console_history.data[url];
+        }
+        return null;
+    },
+    "updateState": function(url, page_title, need_push, need_replace){
+        var data = this.getState(url);
+        if (need_push) {
+            this.pushState("#" + url, page_title, data);
+        } else {
+            if (need_replace) this.replaceState("#" + url, page_title, data);
+        }
+    },
+    "pushState": function(url, text, referer_page){
+        var referer_page_data = this.getState(referer_page);
+        if (referer_page_data && referer_page_data.referer_page){
+            referer_page = referer_page_data.referer_page;
+        }
+        var history_item = null;
+        if (url in this.data){
+            history_item = this.data[url];
+            history_item.last_date = Date.now();
+            if (history_item.visit){
+                history_item.visit++;
+            }else{
+                history_item.visit = 1
+            }
+            localStorage.setItem('console.history', JSON.stringify(console_history.data));
+            return false;
+        }
+        var data = {
+            "href": url,
+            "text": text,
+            "visit": 1,
+            "last_date": Date.now(),
+            "referer_page": referer_page
+        };
+        this.data[url] = data;
+        history.pushState(data, text, url);
+        localStorage.setItem('console.history', JSON.stringify(console_history.data));
+    },
+    "popState": function(event){
+        var s = event.state;
+        if (s){
+            var url = s.href.substring(s.href.indexOf("#") + 1);
+            aside_area.closeUi();
+            content_area.load(url, s.text, s.referer_page, false);
+        }
+    },
+    "replaceState": function(url, page_title, data){
+        history.replaceState(data, page_title, "#" + url);
+    }
+};
 var content_area = {
     "dom": null,
     "page": null,
@@ -684,15 +746,11 @@ var content_area = {
         "loading_timer": null,
         "loading_lock": false
     },
-    "history": {},
     "init": function(){
         content_area.dom = $("#content_area");
         content_area.dom.on('scroll', function() {
             methods.affix(content_area.dom.scrollTop());
         });
-        window.onpopstate = this.popState;
-        var h = JSON.parse(localStorage.getItem('content_area.history'));
-        if (h != null && h != [] && h != "null") content_area.history = h;
         //  常用項目 (利用本機儲存記錄各頁面查看次數，用以顯示為常用項目)
         //var sort_list = [];
         //var $menu_usually = $("#menu_usually");
@@ -710,7 +768,7 @@ var content_area = {
         // ====
         if(window.location.hash) {
             var hash = window.location.hash.replace("#", "");
-            var last_page = this.getState(hash);
+            var last_page = console_history.getState(hash);
             if (last_page != null){
                 content_area.load(hash, last_page.text, last_page.referer_page, false);
             }else{
@@ -731,82 +789,25 @@ var content_area = {
         return content_area.data.last_url;
     },
     "load": function(url, page_title, referer_page, need_push, need_replace){
-        if (this.loading_lock == true) return false;
-        methods.affix(0);
+        if (this.data.loading_lock == true) return false;
         if (typeof need_push === "undefined"){ need_push = true }
         if (typeof need_replace === "undefined"){ need_replace = false }
-        if (need_push === true) aside_area.data.last_target_id = "";
         if (need_push){
+            aside_area.data.last_target_id = "";
             aside_area.closeUi();
-            this.pushState(url , page_title, referer_page);
         }
+        methods.affix(0);
         methods.runAjax(content_area, url, {
-            "is_ajax": "true",
             "page_view": view.current
-        }, function(page){
-            var data = content_area.getState();
-            if (need_push) {
-                history.pushState(data, page_title, "#" + url);
-            } else {
-                if (need_replace) history.replaceState(data, page_title, "#" + url);
-            }
-        });
+        }, function(new_html){
+            console_history.updateState(url, page_title, need_push, need_replace);
+            content_area.afterLoad(new_html);
+        }, content_area.afterLoad);
     },
-    "getState": function(url) {
-        if (typeof url === "undefined") url = content_area.getUrl();
-        if (url in content_area.history){
-            return content_area.history[url];
-        }
-        return null;
-    },
-    "pushState": function(url, text, referer_page){
-        var referer_page_data = this.getState(referer_page);
-        if (referer_page_data && referer_page_data.referer_page){
-            referer_page = referer_page_data.referer_page;
-        }
-        var history_item = null;
-        if (url in content_area.history){
-            history_item = content_area.history[url];
-            history_item.last_date = Date.now();
-            if (history_item.visit){
-                history_item.visit++;
-            }else{
-                history_item.visit = 1
-            }
-            localStorage.setItem('content_area.history', JSON.stringify(content_area.history));
-            return false;
-        }
-        content_area.history[url] ={
-            "href": url,
-            "text": text,
-            "visit": 1,
-            "last_date": Date.now(),
-            "referer_page": referer_page
-        };
-        localStorage.setItem('content_area.history', JSON.stringify(content_area.history));
-    },
-    "popState": function(event){
-        var s = event.state;
-        if (s){
-            aside_area.closeUi();
-            content_area.load(s.href, s.text, s.referer_page, false);
-        }
-    },
-    "resetPage": function(new_html){
-        page = content_area.page = {};
-        if (new_html){
-            try{
-                content_area.dom.hide().html(new_html).show();
-            }catch(e){
-                message.alert("發生問題了 " + e.toString());
-            }
-        }
+    "afterLoad": function(new_html){
         if (aside_area.data.is_open) {
             aside_area.reload();
         }
-        methods.checkPageHeader(content_area);
-        methods.checkNavItemAndShow(content_area);
-        methods.checkEditor(content_area);
         $('#list-table').on('post-body.bs.table', function () {
             makeSortTable();
             makeListOp();
@@ -845,23 +846,15 @@ var aside_area = {
         aside_area.dom = $("#aside_area");
     },
     "load": function(url){
-        if (this.loading_lock == true) return false;
+        if (this.data.loading_lock == true) return false;
         if (this.data.is_open == false) aside_area.showUi();
         methods.runAjax(aside_area, url, {
-            "is_ajax": "true",
+            "page_view": view.current,
             "aside": "aside_area"
-        });
+        }, aside_area.afterLoad, aside_area.afterLoad);
     },
-    "resetPage": function(new_html){
-        page = aside_area.page = {};
-        if (new_html){
-            try{
-                aside_area.dom.hide().html(new_html).show();
-            }catch(e){
-                message.alert("發生問題了 " + e.toString());
-            }
-        }
-        methods.checkPageHeader(aside_area);
+    "afterLoad": function(new_html){
+        //
     },
     "reload": function(){
         //aside_area.load(aside_area.data.last_url);
@@ -1063,16 +1056,30 @@ var methods = {
         target.data.last_url = url;
         methods.lock(target);
         methods.showLoading(target, function(){
-            ajax(url, null, function(page){
-                if (typeof callback == "function") callback(page);
+            ajax(url, null, function(new_html){
                 methods.unlock(target);
-                target.resetPage(page);
-            }, function(page){
-                if (typeof callback == "function") error_callback(page);
+                methods.setPageHtml(target, new_html);
+                if (typeof callback == "function") callback(new_html);
+            }, function(new_html){
                 methods.unlock(target);
-                target.resetPage(page);
+                methods.setPageHtml(target, new_html);
+                if (typeof error_callback == "function") error_callback(new_html);
             }, headers);
         });
+    },
+    "setPageHtml": function(target, new_html){
+        page = target.page = {};
+        if (new_html) {
+            try {
+                target.dom.hide().html(new_html);
+            } catch (e) {
+                message.alert("發生問題了 " + e.toString());
+            }
+        }
+        methods.checkPageHeader(target);
+        methods.checkNavItemAndShow(target);
+        methods.checkEditor(target);
+        setTimeout(function(){ target.dom.show() }, 100)
     },
     "lock": function(target, s){
         s = s || 30000;
@@ -1170,6 +1177,7 @@ $(function(){
     shortcut.init();
     message.init();
     search.init();
+    console_history.init();
     content_area.init();
     aside_area.init();
     $(".menu-link").click(function(event){
@@ -1249,7 +1257,7 @@ $(function(){
             var i_text = $(this).find(".icon").text() ? ($(this).find(".icon").length>0) : "";
             var t = $(this).text().replace(i_text, "").trim();
             var target = $(this).attr("target");
-            if (target == "aside_iframe"){
+            if (target == "aside_area"){
                 if ($(this).hasClass("field-type-side-panel-field")){
                     aside_area.data.last_target_id = $(this).attr("id");
                 }
