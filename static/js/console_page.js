@@ -33,6 +33,7 @@ var view = {
                 }
             }
         }catch(e){
+            console.log(e);
         }
     },
     "reset": function(dom){
@@ -129,7 +130,7 @@ var form = {
     "afterSubmitCallback": undefined,
     "onError": function(j, b, c, d){
         console.log(j, b, c, d);
-        form.unlock();
+        methods.unlock(form);
         message.alert("發生錯誤了，詳情請見 console ...");
     },
     "lock": function(s){
@@ -143,7 +144,7 @@ var form = {
         form.data.loading_lock = false;
     },
     "timeout": function(){
-        form.unlock();
+        methods.unlock(form);
         alert("連線逾時");
     }
 };
@@ -699,7 +700,7 @@ var console_history = {
         }
     },
     "pushState": function(url, text, referer_page){
-        var referer_page_data = this.getState(referer_page);
+        var referer_page_data = this.getState(url);
         if (referer_page_data && referer_page_data.referer_page){
             referer_page = referer_page_data.referer_page;
         }
@@ -707,23 +708,18 @@ var console_history = {
         if (url in this.data){
             history_item = this.data[url];
             history_item.last_date = Date.now();
-            if (history_item.visit){
-                history_item.visit++;
-            }else{
-                history_item.visit = 1
-            }
-            localStorage.setItem('console.history', JSON.stringify(console_history.data));
-            return false;
+            history_item.visit == history_item.visit && ++history_item.visit || 1;
+        }else{
+            history_item = {
+                "href": url,
+                "text": text,
+                "visit": 1,
+                "last_date": Date.now(),
+                "referer_page": referer_page
+            };
         }
-        var data = {
-            "href": url,
-            "text": text,
-            "visit": 1,
-            "last_date": Date.now(),
-            "referer_page": referer_page
-        };
-        this.data[url] = data;
-        history.pushState(data, text, url);
+        console_history.data[url] = history_item;
+        history.pushState(history_item, text, url);
         localStorage.setItem('console.history', JSON.stringify(console_history.data));
     },
     "popState": function(event){
@@ -780,7 +776,7 @@ var content_area = {
     },
     "reload": function(keep_aside){
         if (!(keep_aside && keep_aside == true)) aside_area.closeUi();
-        var last_page = this.getState();
+        var last_page = console_history.getState();
         if (last_page != null) {
             content_area.load(last_page.href, last_page.text, last_page.referer_page, false);
         }
@@ -828,8 +824,8 @@ var content_area = {
         }, 500);
     },
     "timeout": function(){
-        content_area.unlock();
-        methods.showTimeout(content_area.dom);
+        methods.unlock(content_area);
+        methods.showTimeout(content_area);
     }
 };
 var aside_area = {
@@ -876,6 +872,10 @@ var aside_area = {
             aside_area.data.is_open = false;
             if (typeof callback === "function") callback();
         });
+    },
+    "timeout": function(){
+        methods.unlock(aside_area);
+        methods.showTimeout(aside_area);
     }
 };
 var methods = {
