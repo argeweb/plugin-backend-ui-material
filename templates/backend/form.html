@@ -30,15 +30,6 @@
                         </div>
                     </div>{%- endfor %}
                     {%- endblock %}
-
-                    {% block form_actions %}
-                    <div class="col-xs-12 text-right">
-                        {% block submit_button -%}
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="icon">save</i> {% block submit_text %}{% endblock %}</button>
-                        <a class="backToList btn btn-white btn-sm"><i class="icon">close</i></a>
-                        {%- endblock %}
-                    </div>
-                    {%- endblock %}
                     {{ events.after_form_fields() }}
                 </div>
             </div>
@@ -46,8 +37,4 @@
         {% endblock %}
     </form>
 </div>
-{% endblock %}
-
-{% block layout_buttons %}
-    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: saveForm();"><span class="fbtn-text fbtn-text-left">{% block submit_text_f %}{% endblock %}</span><span class="icon icon-lg">save</span></a>
 {% endblock %}
