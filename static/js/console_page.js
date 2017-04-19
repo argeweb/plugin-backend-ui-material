@@ -190,7 +190,7 @@ var shortcut = {
         if (scope == "input"){
             switch (shortcut_key) {
                 case 'esc':
-                    search.unfocus();
+                    search.esc();
                     return false;
             }
         }else{
@@ -461,11 +461,13 @@ var search = {
             url = url.replace("?cursor=none", "?");
             url = url.replace("&cursor=none", "");
             content_area.load(url);
+            this.unfocus();
         }
         if (keyword == ""){
             url = replaceParam(current, "query", "");
             url = url.replace("query=", "");
             content_area.load(url);
+            this.unfocus();
         }
     },
     "focus": function(){
@@ -473,11 +475,19 @@ var search = {
         $("body").addClass("on-search");
     },
     "unfocus": function(){
+        $(this.dom).blur();
         $("div.search-bar, .page-overlay").removeClass("on");
         $("body").removeClass("on-search");
     },
     "reset": function(dom){
         this.target_url = dom.find(".page_data").data("search-url");
+    },
+    "esc": function(){
+        if ($(this.dom).val().length > 0){
+            $(this.dom).val("");
+        }else{
+            search.unfocus();
+        }
     }
 };
 var uploader = {
@@ -678,7 +688,7 @@ var uploader = {
     }
 };
 var console_history = {
-    "data": null,
+    "data": [],
     "init": function(){
         window.onpopstate = this.popState;
         var h = JSON.parse(localStorage.getItem('content_area.history'));
@@ -704,19 +714,17 @@ var console_history = {
         if (referer_page_data && referer_page_data.referer_page){
             referer_page = referer_page_data.referer_page;
         }
-        var history_item = null;
-        if (url in this.data){
+        var history_item = {
+            "href": url,
+            "text": text,
+            "visit": 1,
+            "last_date": Date.now(),
+            "referer_page": referer_page
+        };
+        if (console_history.data && url in console_history.data){
             history_item = this.data[url];
             history_item.last_date = Date.now();
-            history_item.visit == history_item.visit && ++history_item.visit || 1;
-        }else{
-            history_item = {
-                "href": url,
-                "text": text,
-                "visit": 1,
-                "last_date": Date.now(),
-                "referer_page": referer_page
-            };
+            history_item.visit++;
         }
         console_history.data[url] = history_item;
         history.pushState(history_item, text, url);
