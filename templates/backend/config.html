@@ -1,3 +1,6 @@
 {% extends "backend/form.html" %}
 {%- block layout_header -%}{% endblock %}
-{% block submit_text_f %}儲存設定{% endblock %}
+
+{% block layout_buttons %}
+    <a href="{{ uri_action_link('config') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light"><span class="fbtn-text fbtn-text-left">儲存設定</span><span class="icon icon-lg">save</span></a>
+{% endblock %}

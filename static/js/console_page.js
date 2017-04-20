@@ -48,8 +48,8 @@ var form = {
     "data": {
         "last_url": null,
         "last_target": null,
-        "loading_timer": null,
-        "loading_lock": false
+        "lock_timer": null,
+        "is_lock": false
     },
     "validate": function(j){
         var err = j["errors"];
@@ -66,7 +66,7 @@ var form = {
         return true;
     },
     "beforeSubmit": function(){
-        if (this.loading_lock == true) return false;
+        if (form.data.is_lock == true) return false;
         methods.lock(form);
         alert("請稍候...", 30000, false);
         form.data.last_target.find(".field-type-rich-text-field").each(function(){
@@ -83,7 +83,7 @@ var form = {
         }
     },
     "submit": function(form_id, callback){
-        if (form.data.loading_lock == true){ return false;}
+        if (form.data.is_lock == true){ return false;}
         if (typeof form_id === "undefined") form_id = "form:not(#file-form)";
         if (typeof callback === "function" || typeof callback === "undefined") form.afterSubmitCallback = callback;
         var $form = $(form_id);
@@ -135,13 +135,13 @@ var form = {
     },
     "lock": function(s){
         s = s || 5000;
-        form.data.loading_lock = true;
-        clearTimeout(form.data.loading_timer);
-        form.data.loading_timer = setTimeout(form.timeout, s);
+        form.data.is_lock = true;
+        clearTimeout(form.data.lock_timer);
+        form.data.lock_timer = setTimeout(form.timeout, s);
     },
     "unlock": function(){
-        clearTimeout(form.data.loading_timer);
-        form.data.loading_lock = false;
+        clearTimeout(form.data.lock_timer);
+        form.data.is_lock = false;
     },
     "timeout": function(){
         methods.unlock(form);
@@ -155,8 +155,10 @@ var saveFormAndReloadRecord = form.submitAndReload;
 var shortcut = {
     keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
     'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
-    timer: null,
-    lock: false,
+    "data": {
+        "lock_timer": null,
+        "is_lock": false
+    },
     "init": function(){
         var s = [];
         var n = 1;
@@ -194,14 +196,8 @@ var shortcut = {
                     return false;
             }
         }else{
-            var s = [];
-            var n = 1;
-            $(".op-mode a").each(function(){
-                console.log(shortcut_key);
-                if (shortcut_key == $(this).data("view-key") || shortcut_key == n.toString()){
-                    view.change($(this).data("view"));
-                }
-                n++;
+            $(".op-mode a").each(function(index){
+                if (shortcut_key == $(this).data("view-key") || shortcut_key == (index+1).toString()) view.change($(this).data("view"));
             });
             switch (shortcut_key) {
                 case '/':
@@ -220,16 +216,12 @@ var shortcut = {
                         aside_area.showUi();
                     break;
                 case 'esc':
-                    if (shortcut.lock == true){
-                        shortcut.lock = false;
+                    if (shortcut.data.is_lock){
+                        methods.unlock(shortcut);
                         aside_area.closeUi();
                         return false;
                     }
-                    shortcut.lock = true;
-                    clearTimeout(shortcut.timer);
-                    shortcut.timer = setTimeout(function(){
-                        shortcut.lock = false;
-                    }, 400);
+                    methods.lock(shortcut, 400);
                     break;
             }
         }
@@ -643,7 +635,6 @@ var uploader = {
         }
         for (var i=0; i<files.length; i++) {
             var t = evt.target;
-            console.log(t);
             var randId = getRandID("upload-");
             if ($(t).hasClass("form-group")){
                 $(t).attr("data-uploadId", randId);
@@ -691,20 +682,23 @@ var console_history = {
     "data": [],
     "init": function(){
         window.onpopstate = this.popState;
-        var h = JSON.parse(localStorage.getItem('content_area.history'));
+        var h = JSON.parse(localStorage.getItem('console.history'));
         if (h != null && h != [] && h != "null") this.data = h;
     },
     "getState": function(url){
+        var item = null;
         if (typeof url === "undefined") url = content_area.getUrl();
-        if (console_history.data && url in console_history.data){
-            return console_history.data[url];
+        if (console_history.data){
+            $.map(console_history.data, function( val, i ) {
+                if (val.href == url) item = val;
+            });
         }
-        return null;
+        return item;
     },
     "updateState": function(url, page_title, need_push, need_replace){
         var data = this.getState(url);
         if (need_push) {
-            this.pushState("#" + url, page_title, data);
+            this.pushState(url, page_title, data);
         } else {
             if (need_replace) this.replaceState("#" + url, page_title, data);
         }
@@ -725,9 +719,10 @@ var console_history = {
             history_item = this.data[url];
             history_item.last_date = Date.now();
             history_item.visit++;
+        }else{
+            console_history.data.push(history_item);
         }
-        console_history.data[url] = history_item;
-        history.pushState(history_item, text, url);
+        history.pushState(history_item, text, "#" + url);
         localStorage.setItem('console.history', JSON.stringify(console_history.data));
     },
     "popState": function(event){
@@ -747,8 +742,8 @@ var content_area = {
     "page": null,
     "data": {
         "last_url": null,
-        "loading_timer": null,
-        "loading_lock": false
+        "lock_timer": null,
+        "is_lock": false
     },
     "init": function(){
         content_area.dom = $("#content_area");
@@ -793,7 +788,7 @@ var content_area = {
         return content_area.data.last_url;
     },
     "load": function(url, page_title, referer_page, need_push, need_replace){
-        if (this.data.loading_lock == true) return false;
+        if (content_area.data.is_lock == true) return false;
         if (typeof need_push === "undefined"){ need_push = true }
         if (typeof need_replace === "undefined"){ need_replace = false }
         if (need_push){
@@ -841,8 +836,8 @@ var aside_area = {
     "page": null,
     "data": {
         "is_open": false,
-        "loading_timer": null,
-        "loading_lock": false,
+        "lock_timer": null,
+        "is_lock": false,
         "last_url": null,
         "last_target_id": null
     },
@@ -850,8 +845,8 @@ var aside_area = {
         aside_area.dom = $("#aside_area");
     },
     "load": function(url){
-        if (this.data.loading_lock == true) return false;
-        if (this.data.is_open == false) aside_area.showUi();
+        if (aside_area.data.is_lock == true) return false;
+        if (aside_area.data.is_open == false) aside_area.showUi();
         methods.runAjax(aside_area, url, {
             "page_view": view.current,
             "aside": "aside_area"
@@ -1091,13 +1086,13 @@ var methods = {
     },
     "lock": function(target, s){
         s = s || 30000;
-        clearTimeout(target.data.loading_timer);
-        target.data.loading_lock = true;
-        target.data.loading_timer = setTimeout(target.timeout, s);
+        clearTimeout(target.data.lock_timer);
+        target.data.is_lock = true;
+        target.data.lock_timer = setTimeout(target.timeout, s);
     },
     "unlock": function(target, s){
-        clearTimeout(target.data.loading_timer);
-        target.data.loading_lock = false;
+        clearTimeout(target.data.lock_timer);
+        target.data.is_lock = false;
     }
 };
 function deleteRecord(url){

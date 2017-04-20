@@ -5617,10 +5617,11 @@ main .nav > li > a {
 
 .ibox-content.m-b-sm.border-bottom{
     margin: 0 0 10px 0;
-    border-radius: 2px;
+    border-radius: 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     z-index: 1;
     border-bottom: solid 1px #888 !important;
+    min-height: 119px;
 }
 main.content main.content{
     display: flex;flex-direction: column;
