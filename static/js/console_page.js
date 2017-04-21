@@ -806,6 +806,8 @@ var content_area = {
     "afterLoad": function(new_html){
         if (aside_area.data.is_open) {
             aside_area.reload();
+        }else{
+            if ($(window).width() > 690) $(".side_panel_open_auto").click();
         }
         $('#list-table').on('post-body.bs.table', function () {
             makeSortTable();
@@ -1292,7 +1294,7 @@ $(function(){
                 deleteRecord(url);
             }
         }
-    }).on("click", ".aside-close", function(e){
+    }).on("click", ".aside-close, .close-side-panel", function(e){
         aside_area.closeUi();
     }).on("click", ".filepicker", function(e){
         uploader.pickup($(this).parents(".input-group").find("input"), false);

@@ -6054,7 +6054,7 @@ main.content .mail-box .fixed-table-container{
     line-height: 18px;
 }
 .aside-close{
-    float: right;color: #fff;margin: 12px 0;
+    display: none !important;
 }
 .padding40{
     padding: 20px 40px;
@@ -7709,6 +7709,9 @@ main.content{
         left: 42px;
         min-width: 125px;
         width: calc(100% - 260px)
+    }
+    .aside_is_open .aside-close{
+        display: inline-block !important;
     }
 }
 @media only screen and (max-width: 420px) {
