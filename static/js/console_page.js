@@ -801,7 +801,10 @@ var content_area = {
         }, function(new_html){
             console_history.updateState(url, page_title, need_push, need_replace);
             content_area.afterLoad(new_html);
-        }, content_area.afterLoad);
+        }, function(new_html){
+            console_history.updateState(url, page_title, need_push, need_replace);
+            content_area.afterLoad(new_html);
+        });
     },
     "afterLoad": function(new_html){
         if (aside_area.data.is_open) {
