@@ -95,13 +95,13 @@ var form = {
     "submitAndGoBack": function(form_id){
         form.submit(form_id, function(data){
             methods.goBack();
-            message.snackbar(message.parseScaffoldMessage(data));
+            message.snackbar(message.parse(data));
         });
     },
     "submitAndReload": function(form_id){
         form.submit(form_id, function(data){
             content_area.load(data["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            message.snackbar(message.parseScaffoldMessage(data));
+            message.snackbar(message.parse(data));
         });
     },
     "afterSubmit": function(j, b , c, d){
@@ -119,11 +119,11 @@ var form = {
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
-                message.snackbar(message.parseScaffoldMessage(j));
+                message.snackbar(message.parse(j));
                 aside_area.reload();
             }
         }else{
-            message.snackbar(message.parseScaffoldMessage(j));
+            message.snackbar(message.parse(j));
         }
         form.data.last_target = undefined;
     },
@@ -400,7 +400,7 @@ var message = {
     "hideAll": function(){
         message.notice.hide();
     },
-    "parseScaffoldMessage": function(scaffold_data){
+    "parse": function(scaffold_data){
         var j = scaffold_data;
         var message = j['message'];
         try{
@@ -1325,14 +1325,14 @@ $(function(){
             var enable_text = $(this).data("enable-text");
             json($(this).data("enable-url"), null, function(data){
                 if (data.data.info == "success"){
-                    message.snackbar(message.parseScaffoldMessage(data));
+                    message.snackbar(message.parse(data));
                 }
             });
         }else{
             var disable_text = $(this).data("disable-text");
             json($(this).data("disable-url"), null, function(data){
                 if (data.data.info == "success"){
-                    message.snackbar(message.parseScaffoldMessage(data));
+                    message.snackbar(message.parse(data));
                 }
             });
         }
