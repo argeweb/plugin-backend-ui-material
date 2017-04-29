@@ -830,6 +830,9 @@ var content_area = {
         setTimeout(function(){
             $(".fbtn-container").fadeIn();
         }, 500);
+        if (content_area.page["afterLoad"] && typeof content_area.page["afterLoad"] === "function"){
+            content_area.page["afterLoad"]();
+        }
     },
     "timeout": function(){
         methods.unlock(content_area);
