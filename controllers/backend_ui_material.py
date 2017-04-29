@@ -52,6 +52,7 @@ class BackendUiMaterial(Controller):
 
     @route_with('/admin/welcome')
     def admin_welcome(self):
+        self.context['menus'] = self.util.get_menu('welcome')
         try:
             self.context['backend_title'] = (self.host_information.site_name is not None) and \
                             self.host_information.site_name or u'網站後台'

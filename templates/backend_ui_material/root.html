@@ -40,7 +40,6 @@
                     <li><a class="waves-attach" href="javascript:content_area.reload();"><span class="icon icon-lg margin-right-sm">cached</span>&nbsp;重新整理頁面</a></li>
                     <li><a class="waves-attach" href="javascript:print();"><span class="icon icon-lg margin-right-sm">print</span>&nbsp;列印此頁面</a></li>
                     <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_ui_material:log') }}" target="content_area"><span class="icon icon-lg margin-right-sm">error_outline</span>&nbsp;系統日誌</a></li>
-                    <li><a class="waves-attach" href="{{ uri('admin:backend_ui_material:backend_config:config') }}" target="content_area"><span class="icon icon-lg margin-right-sm">settings_applications</span>&nbsp;後台設定</a></li>
                     <li><a class="padding-right-lg waves-attach waves-effect" href="/{{ dashboard_name }}/logout" target="content_area"><span class="icon icon-lg margin-right">exit_to_app</span>登出</a></li>
                 </ul>
             </li>
@@ -63,17 +62,13 @@
                 </div>
                 <div class=" scrollDiv">
                     <ul class="nav" id="main-nav">
-                        {%- set menu_n = 0 -%}{% for item in menus %}
-                        {%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}
-                        {%- if item.need_hr_parent %}
+                        {%- set menu_n = 0 -%}{% for item in menus %}{%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}{%- if item.need_hr_parent %}
                         <li class="hr"></li>{% endif %}
                         <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>{% else %}
                         <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_area" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
                         {%- endfor %}
                     </ul>
-                    {% set menu_n = 0 -%}{%- for item in menus -%}
-                    {%- if item.submenu -%}
-                    {%- set menu_n = menu_n + 1 -%}
+                    {% set menu_n = 0 -%}{%- for item in menus -%}{%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}
                     <div class="nav menu-box"  id="menu_box_{{ menu_n }}">
 						<ul class="menu-collapse collapse in" id="menu_{{ menu_n }}">
                             <li class="menu-back"><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}"><i class="icon material-icons float-icon">keyboard_arrow_left</i> {{ item.text }}</a></li>
