@@ -15,7 +15,8 @@
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console_page.css?run={{ framework.app_version }}">
 </head>
-<body class="in-edit-mode" data-user="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
+<body class="in-edit-mode" data-user-key="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
+      data-user-name="{{ application_user_name }}" data-user-image="{{ application_user.avatar }}" data-profile-url="{{ uri('admin:application_user:application_user:profile') }}"
       ondragover="uploader.onDragOver(event)" ondrop="uploader.onDrop(event)" ondragenter="uploader.onDragStart(event)" ondragleave="uploader.onDragEnd(event)">
 	<header class="print-hide">
         <div class="page-overlay"></div>
@@ -50,9 +51,9 @@
 			<div class="menu-content">
                 <div class="page-overlay"></div>
 				<div class="menu-logo"><a class="gf-title anonymous-high-light" href="/{{ dashboard_name }}/">{{ backend_title }}</a></div>
-                <div class="user-box">
-					<div class="avatar" style="background-image: url({{ application_user.avatar }})"></div>
-					<div class="user-name"><a href="{{ uri('admin:application_user:application_user:profile') }}" target="content_area">{{ application_user_name }}</a></div>
+                <div class="user-box" id="user-box">
+					<div class="avatar" :style="{ backgroundImage: 'url(' + image + ')' }"></div>
+					<div class="user-name"><a :href="profile_url" target="content_area">{{name}}</a></div>
 				</div>
                 <div class="op-mode">
                     <a class="btn btn-flat btn-brand view-change enter-edit-mode" data-view="edit" data-view-key="e" title="編輯模式 (e,1)"><i class="icon icon-2x edit-color">edit</i></a>
@@ -88,7 +89,7 @@
 	<main class="content">
         <div class="page-overlay"></div>
         <div id="content_area"></div>
-	</main>
+	</main>.
     <div id="aside_area" class="print-hide"></div>
     <div id="dropping"><div class="helper-text">將您所拖曳的文件上傳到伺服器</div></div>
 	<div class="progress console-progress"><div class="progress-bar"></div></div>
@@ -109,7 +110,6 @@
     <script type="text/javascript" src="/static/vendor/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
     <script type="text/javascript" src="/static/vendor/vue/vue.min.js"></script>
     <script type="text/javascript" src="/static/vendor/vue-multiselect/vue-multiselect.min.js"></script>
-
 	<script type="text/javascript" src="/plugins/backend_ui_material/static/js/material.min.js"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/tinymce.min.js?app_version={{ framework.app_version }}&backend_version={{ backend_version }}"></script>
     <script type="text/javascript" src="/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/langs/zh_TW.js"></script>

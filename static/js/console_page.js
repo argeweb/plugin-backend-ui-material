@@ -9,8 +9,17 @@ function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type
 function replaceParam(a,b,c){a=a.replace("#/","");var d="";var m=a.substring(0,a.indexOf("?"));var s=a.substring(a.indexOf("?"),a.length);var j=0;if(a.indexOf("?")>=0){var i=s.indexOf(b+"=");if(i>=0){j=s.indexOf("&",i);if(j>=0){d=s.substring(i+b.length+1,j);s=a.replace(b+"="+d,b+"="+c)}else{d=s.substring(i+b.length+1,s.length);s=a.replace(b+"="+d,b+"="+c)}}else{s=a+"&"+b+"="+c}}else{s=a+"?"+b+"="+c}return s};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
 
-var page = null;
-var view = {
+let page = null;
+const user = new Vue({
+    el: "#user-box",
+    data: {
+        "name": "",
+        "image": "",
+        "key": "",
+        "profile_url": ""
+    }
+});
+const view = {
     "current": "edit",
     "last": "edit",
     "edit": null,
@@ -44,7 +53,7 @@ var view = {
         this.delete = $page_data.data("view-function-delete");
     }
 };
-var form = {
+const form = {
     "data": {
         "last_url": null,
         "last_target": null,
@@ -95,13 +104,13 @@ var form = {
     "submitAndGoBack": function(form_id){
         form.submit(form_id, function(data){
             methods.goBack();
-            message.snackbar(message.parse(data));
+            message.snackbar(data);
         });
     },
     "submitAndReload": function(form_id){
         form.submit(form_id, function(data){
             content_area.load(data["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            message.snackbar(message.parse(data));
+            message.snackbar(data);
         });
     },
     "afterSubmit": function(j, b , c, d){
@@ -119,11 +128,11 @@ var form = {
                 form.afterSubmitCallback = null;
             }else{
                 // 儲存
-                message.snackbar(message.parse(j));
+                message.snackbar(j);
                 aside_area.reload();
             }
         }else{
-            message.snackbar(message.parse(j));
+            message.snackbar(j);
         }
         form.data.last_target = undefined;
     },
@@ -148,11 +157,11 @@ var form = {
         alert("連線逾時");
     }
 };
-var saveForm = form.submit;
-var saveFormAndGoBack = form.submitAndGoBack;
-var saveFormAndReloadRecord = form.submitAndReload;
+const saveFormAndGoBack = form.submitAndGoBack;
+const saveForm = form.submit;
+const saveFormAndReloadRecord = form.submitAndReload;
 
-var shortcut = {
+const shortcut = {
     keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
     'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
     "data": {
@@ -230,7 +239,7 @@ var shortcut = {
         }
     }
 };
-var progress_bar = {
+const progress_bar = {
     "dom": $(".progress-bar"),
     "set": function(n){
         setTimeout(function(){ progress_bar.dom.width(n + "%"); }, 0);
@@ -239,7 +248,7 @@ var progress_bar = {
         }
     }
 };
-var message = {
+const message = {
     "list": [],
     "snackbarText": 1,
     "notice":{
@@ -292,6 +301,7 @@ var message = {
     "alert": function(msg, timeout, allowOutsideClick){
         if (typeof allowOutsideClick === "undefined") allowOutsideClick = true;
         if (typeof msg === "undefined") return false;
+        msg = message.parse(msg);
         if (timeout !== undefined){
             swal.closeModal();
             swal({
@@ -306,6 +316,7 @@ var message = {
         }
     },
     "snackbar": function(msg, sec){
+        msg = message.parse(msg);
         message.hideAll();
 		$('body').snackbar({
             alive: sec,
@@ -400,8 +411,8 @@ var message = {
     "hideAll": function(){
         message.notice.hide();
     },
-    "parse": function(scaffold_data){
-        var j = scaffold_data;
+    "parse": function(j){
+        if (typeof j === "undefined" || typeof j === "string") return j;
         var message = j['message'];
         try{
             var status = (j["scaffold"] && j["scaffold"]["response_result"]) && j["scaffold"]["response_result"] || null;
@@ -432,9 +443,11 @@ var message = {
         }
     }
 };
-var search = {
+const search = {
     "dom": "#keyword",
     "target_url": "",
+    "prev_word": "",
+    "post_word": "",
     "init": function(){
         $(this.dom).focus(this.focus).keyup(function(event){
             if (event.which == 13) {
@@ -448,6 +461,7 @@ var search = {
         var url = "";
         var current = search.target_url || content_area.getUrl();
         if (keyword != undefined && keyword != ""){
+            keyword = search.prev_word + keyword + search.post_word;
             url = replaceParam(current, "query", keyword);
             url = replaceParam(url, "cursor", "");
             url = url.replace("?cursor=none", "?");
@@ -473,6 +487,8 @@ var search = {
     },
     "reset": function(dom){
         this.target_url = dom.find(".page_data").data("search-url");
+        this.prev_word = dom.find(".page_data").data("search-prev-word");
+        this.post_word = dom.find(".page_data").data("search-post-word");
     },
     "esc": function(){
         if ($(this.dom).val().length > 0){
@@ -482,14 +498,12 @@ var search = {
         }
     }
 };
-var uploader = {
+const uploader = {
     "pickup_target": null,
     "pickup_target_is_editor": false,
     "visual_timer": 3,
     "init": function(){
-        $(document).on('change','#image-file-picker' , function(){
-            uploader.startUpload();
-        });
+        $(document).on('change','#image-file-picker', uploader.startUpload);
     },
     "pickup": function($target, ed){
         uploader.pickup_target = $target;
@@ -678,7 +692,7 @@ var uploader = {
         }
     }
 };
-var console_history = {
+const console_history = {
     "data": [],
     "init": function(){
         window.onpopstate = this.popState;
@@ -737,7 +751,7 @@ var console_history = {
         history.replaceState(data, page_title, "#" + url);
     }
 };
-var content_area = {
+const content_area = {
     "dom": null,
     "page": null,
     "data": {
@@ -839,7 +853,7 @@ var content_area = {
         methods.showTimeout(content_area);
     }
 };
-var aside_area = {
+const aside_area = {
     "dom": null,
     "page": null,
     "data": {
@@ -889,7 +903,7 @@ var aside_area = {
         methods.showTimeout(aside_area);
     }
 };
-var methods = {
+const methods = {
     "changeViewAndReload": function(){
         if (view.last != view.current) {
             if (view.current == "edit" || view.current == "view") {
@@ -929,18 +943,10 @@ var methods = {
         })
     },
     "setUserInformation": function(name, blob_url){
-        var href = content_area.getUrl();
-        var p = $(".user-name a").attr("href");
-        var pe = p.replace("profile", "%3A");
-        if (href.indexOf(pe) >= 0) {
-            if (href.indexOf($("body").data("user")) > 0) {
-                $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
-                $(".user-name a").text(name);
-            }
-        }
-        if (href.indexOf(p) >= 0){
-            $(".user-box .avatar").css({"background-image": 'url(' + blob_url + ')'});
-            $(".user-name a").text(name);
+        let href = content_area.getUrl();
+        if (href.indexOf(user.key) > 0 || href.indexOf(user.profile_url) >= 0){
+            user.image = blob_url;
+            user.name = name;
         }
     },
     "affix": function(top) {
@@ -1320,25 +1326,8 @@ $(function(){
         }else{
             $(this).parents(".form-group").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
         }
-        if ($(this).attr("id") == "avatar"){
-            methods.setUserInformation($("#name").val(), val);
-        }
     }).on("change", ".record_item td .btn-checkbox-json", function(){
-        if ($(this).is(":checked")){
-            var enable_text = $(this).data("enable-text");
-            json($(this).data("enable-url"), null, function(data){
-                if (data.data.info == "success"){
-                    message.snackbar(message.parse(data));
-                }
-            });
-        }else{
-            var disable_text = $(this).data("disable-text");
-            json($(this).data("disable-url"), null, function(data){
-                if (data.data.info == "success"){
-                    message.snackbar(message.parse(data));
-                }
-            });
-        }
+        json($(this).is(":checked") && $(this).data("enable-url") || $(this).data("disable-url"), null, message.snackbar);
     });
 
     $(window).resize(function(){
@@ -1354,4 +1343,9 @@ $(function(){
         //clean up cookies
         //remove items from localStorage
     };
+    let $ubox = $("body");
+    user.name = $ubox.data("user-name");
+    user.image = $ubox.data("user-image");
+    user.profile_url = $ubox.data("profile-url");
+    user.key = $ubox.data("user-key");
 });

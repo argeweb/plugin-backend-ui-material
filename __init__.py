@@ -9,7 +9,7 @@
 
 plugins_helper = {
     'title': u'Material Backend',
-    'desc': u'Material Backend',
+    'desc': u'Material 風格的響應式管理後台',
     'controllers': {
         'backend_ui_material': {
             'group': u'網站管理後台',
