@@ -6115,6 +6115,12 @@ header .dropdown.open .dropdown-toggle {
 }
 .menu-content > div.user-box > .user-name a {
     color: #fff;
+    width: 120px;
+    overflow: hidden;
+    display: block;
+    height: 50px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .menu-box{
     position: absolute;
