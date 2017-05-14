@@ -824,7 +824,9 @@ const content_area = {
         if (aside_area.data.is_open) {
             aside_area.reload();
         }else{
-            if ($(window).width() > 690) $(".side_panel_open_auto").click();
+            let $f = $(".side_panel_open_auto").first();
+            if ($(window).width() > 690 && !$f.parents(".form-group").hasClass('hidden'))
+                $f.click();
         }
         $('#list-table').on('post-body.bs.table', function () {
             makeSortTable();
