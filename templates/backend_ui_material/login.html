@@ -45,6 +45,22 @@
         body{
             transition: all 0.5s ease;
         }
+        @media screen and (max-height: 700px) {
+            .hidden-700 {
+                display: none;
+            }
+            main.content {
+                padding: 10px 0 0 0;
+            }
+        }
+        @media screen and (max-height: 500px) {
+            .hidden-500 {
+                display: none;
+            }
+            main.content {
+                padding: 0 0 0 0;
+            }
+        }
     </style>
 </head>
 
@@ -59,13 +75,13 @@
 					<section class="content-inner">
 						<div class="card">
 							<div class="card-main">
-								<div class="card-header">
+								<div class="card-header hidden-500">
 									<div class="card-inner">
 										<h1 class="card-heading">Login</h1>
 									</div>
 								</div>
 								<div class="card-inner">
-									<p class="text-center">
+									<p class="text-center hidden-700">
 										<span class="avatar avatar-inline avatar-lg">
 											<img alt="Login" src="/plugins/backend_ui_material/static/images/users/avatar-001.jpg">
 										</span>

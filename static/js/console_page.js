@@ -99,7 +99,7 @@ const form = {
         if ($form.length <=0){ return false;}
         form.data.last_target = $form.first();
         form.beforeSubmit();
-        $form.ajaxSubmit({ "success": form.afterSubmit, "error": form.onError });
+        $form.ajaxSubmit({"success": form.afterSubmit, "error": form.onError});
     },
     "submitAndGoBack": function(form_id){
         form.submit(form_id, function(data){
@@ -734,7 +734,7 @@ const console_history = {
             history_item.last_date = Date.now();
             history_item.visit++;
         }else{
-            console_history.data.push(history_item);
+            console_history.data[url] = history_item;
         }
         history.pushState(history_item, text, "#" + url);
         localStorage.setItem('console.history', JSON.stringify(console_history.data));
