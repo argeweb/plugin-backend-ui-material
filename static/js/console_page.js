@@ -703,9 +703,11 @@ const console_history = {
         var item = null;
         if (typeof url === "undefined") url = content_area.getUrl();
         if (console_history.data){
-            $.map(console_history.data, function( val, i ) {
-                if (val.href == url) item = val;
-            });
+            for (var key in console_history.data) {
+                var value = console_history.data[key];
+                if (value.href == url)
+                    item = value;
+            }
         }
         return item;
     },
