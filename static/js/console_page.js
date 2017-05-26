@@ -297,6 +297,7 @@ const message = {
                 return n;
             }
         });
+        window["snackbar"] = message.snackbar;
     },
     "alert": function(msg, timeout, allowOutsideClick){
         if (typeof allowOutsideClick === "undefined") allowOutsideClick = true;
@@ -973,14 +974,23 @@ const methods = {
     },
     "checkEditor": function(target){
         tinyMCE.editors=[];
-        target.dom.find(".field-type-rich-text-field").each(function() {
-            var label_name = $(this).prev().text();
+        target.dom.find(".field-type-rich-text-field, .field-type-code-json-field, .field-type-code-js-field, .field-type-code-css-field").each(function() {
             $(this).prev().remove();
             var id = $(this).attr("id");
             if (id == undefined){ id = $(this).attr("name"); $(this).attr("id", id); }
-            if (id) {
-                methods.createEditorField(id);
-            }
+        });
+        target.dom.find(".field-type-rich-text-field").each(function() {
+            $(this).prev().remove();
+            methods.createEditorField($(this).attr("id"));
+        });
+        target.dom.find(".field-type-code-json-field").each(function() {
+            methods.createCodeField($(this).attr("id"), 'application/ld+json');
+        });
+        target.dom.find(".field-type-code-js-field").each(function() {
+            methods.createCodeField($(this).attr("id"), 'javascript');
+        });
+        target.dom.find(".field-type-code-css-field").each(function() {
+            methods.createCodeField($(this).attr("id"), 'css');
         });
     },
     "checkPageHeader": function(target){
@@ -1004,9 +1014,10 @@ const methods = {
         }
     },
     "createEditorField": function(id) {
+        if (!id) return false;
         var ed = tinyMCE.createEditor(id, {
             theme: 'modern',
-            content_css: ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/skins/lightgray/content.min.css"],
+            content_css: ["/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/skins/lightgray/content.min.css"],
             height: 400,
             plugins: [
                 "link image media code table preview hr anchor pagebreak textcolor fullscreen colorpicker "
@@ -1017,7 +1028,7 @@ const methods = {
             setup: function (ed) {
                 ed.addButton('upload_image', {
                     title: '插入圖片',
-                    image: '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/upload_image.png',
+                    image: '/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/themes/upload_image.png',
                     onclick: function () {
                         uploader.pickup(ed, true)
                     }
@@ -1025,7 +1036,7 @@ const methods = {
 
                 ed.addButton('custom_fullscreen', {
                     title: '擴大編輯區',
-                    image: '/plugins/backend_ui_material/static/plugins/TinyMCE/4.2.5/themes/fullscreen.png',
+                    image: '/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/themes/fullscreen.png',
                     onclick: function () {
                         ed.execCommand('mceFullScreen');
                         $(".page-header").toggle();
@@ -1039,6 +1050,25 @@ const methods = {
             remove_script_host: false
         });
         ed.render();
+    },
+    "createCodeField": function(editor_id, target_type){
+        if (target_type == "html") target_type = "text/html";
+        code_editor = CodeMirror.fromTextArea(document.getElementById(editor_id), {
+            mode: target_type,
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true,
+            foldGutter: true,
+            autofocus: true,
+            extra_keywords: ["sql", "response"]
+        });
+        code_editor.on('change',function(cMirror){
+            $("#" + editor_id).val(cMirror.getValue()).change();
+        });
+
+        var totalLines = code_editor.lineCount();
+        debugger;
+        code_editor.autoFormatRange({line:0, ch:0}, {line:totalLines});
     },
     "toggleFullScreen": function(){
         var doc = window.document;
@@ -1352,4 +1382,51 @@ $(function(){
     user.image = $ubox.data("user-image");
     user.profile_url = $ubox.data("profile-url");
     user.key = $ubox.data("user-key");
+});
+
+CodeMirror.defineExtension("autoFormatRange", function (from, to) {
+    var cm = this;
+    var outer = cm.getMode(), text = cm.getRange(from, to).split("\n");
+    var state = CodeMirror.copyState(outer, cm.getTokenAt(from).state);
+    var tabSize = cm.getOption("tabSize");
+
+    var out = "", lines = 0, atSol = from.ch == 0;
+    function newline() {
+        out += "\n";
+        atSol = true;
+        ++lines;
+    }
+
+    for (var i = 0; i < text.length; ++i) {
+        var stream = new CodeMirror.StringStream(text[i], tabSize);
+        while (!stream.eol()) {
+            var inner = CodeMirror.innerMode(outer, state);
+            var style = outer.token(stream, state), cur = stream.current();
+            stream.start = stream.pos;
+            if (!atSol || /\S/.test(cur)) {
+                out += cur;
+                atSol = false;
+            }
+            if (!atSol && inner.mode.newlineAfterToken &&
+                inner.mode.newlineAfterToken(style, cur, stream.string.slice(stream.pos) || text[i+1] || "", inner.state))
+                newline();
+        }
+        if (!stream.pos && outer.blankLine) outer.blankLine(state);
+        if (!atSol) newline();
+    }
+
+    cm.operation(function () {
+        cm.replaceRange(out, from, to);
+        for (var cur = from.line + 1, end = from.line + lines; cur <= end; ++cur)
+            cm.indentLine(cur, "smart");
+    });
+});
+
+CodeMirror.defineExtension("autoIndentRange", function (from, to) {
+    var cmInstance = this;
+    this.operation(function () {
+        for (var i = from.line; i <= to.line; i++) {
+            cmInstance.indentLine(i, "smart");
+        }
+    });
 });
