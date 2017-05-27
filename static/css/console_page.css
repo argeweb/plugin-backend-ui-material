@@ -6982,10 +6982,7 @@ main.content{
         width: calc(100% - 180px) !important;
     }
 }
-
-.CodeMirror pre {
-    padding-left: 32px;
-}
 .field-type-code-json-field{
     width: 90%;
+    height: 300px;
 }

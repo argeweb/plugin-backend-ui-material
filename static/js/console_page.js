@@ -977,7 +977,7 @@ const methods = {
         target.dom.find(".field-type-rich-text-field, .field-type-code-json-field, .field-type-code-js-field, .field-type-code-css-field").each(function() {
             $(this).prev().remove();
             var id = $(this).attr("id");
-            if (id == undefined){ id = $(this).attr("name"); $(this).attr("id", id); }
+            if (id == undefined){ id = $(this).attr("name"); $(this).attr("id", id).height(300); }
         });
         target.dom.find(".field-type-rich-text-field").each(function() {
             $(this).prev().remove();
@@ -985,7 +985,7 @@ const methods = {
         });
         target.dom.find(".field-type-code-json-field").each(function() {
             methods.createCodeField($(this).attr("id"), 'application/ld+json');
-        });
+        }).change();
         target.dom.find(".field-type-code-js-field").each(function() {
             methods.createCodeField($(this).attr("id"), 'javascript');
         });
@@ -1059,16 +1059,18 @@ const methods = {
             indentUnit: 4,
             matchBrackets: true,
             foldGutter: true,
-            autofocus: true,
+            autoRefresh: true,
+            autofocus: false,
             extra_keywords: ["sql", "response"]
         });
         code_editor.on('change',function(cMirror){
             $("#" + editor_id).val(cMirror.getValue()).change();
         });
-
         var totalLines = code_editor.lineCount();
-        debugger;
+        var n = 30 * (totalLines + 2);
+        if (n > 300) n = 300;
         code_editor.autoFormatRange({line:0, ch:0}, {line:totalLines});
+        code_editor.setSize('100%', n);
     },
     "toggleFullScreen": function(){
         var doc = window.document;
@@ -1430,3 +1432,40 @@ CodeMirror.defineExtension("autoIndentRange", function (from, to) {
         }
     });
 });
+(function(CodeMirror) {
+  "use strict"
+
+  CodeMirror.defineOption("autoRefresh", false, function(cm, val) {
+    if (cm.state.autoRefresh) {
+      stopListening(cm, cm.state.autoRefresh)
+      cm.state.autoRefresh = null
+    }
+    if (val && cm.display.wrapper.offsetHeight == 0)
+      startListening(cm, cm.state.autoRefresh = {delay: val.delay || 250})
+  })
+
+  function startListening(cm, state) {
+    function check() {
+      if (cm.display.wrapper.offsetHeight) {
+        stopListening(cm, state)
+        if (cm.display.lastWrapHeight != cm.display.wrapper.clientHeight)
+          cm.refresh()
+      } else {
+        state.timeout = setTimeout(check, state.delay)
+      }
+    }
+    state.timeout = setTimeout(check, state.delay)
+    state.hurry = function() {
+      clearTimeout(state.timeout)
+      state.timeout = setTimeout(check, 50)
+    }
+    CodeMirror.on(window, "mouseup", state.hurry)
+    CodeMirror.on(window, "keyup", state.hurry)
+  }
+
+  function stopListening(_cm, state) {
+    clearTimeout(state.timeout)
+    CodeMirror.off(window, "mouseup", state.hurry)
+    CodeMirror.off(window, "keyup", state.hurry)
+  }
+})(CodeMirror);
