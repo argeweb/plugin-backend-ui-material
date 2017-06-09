@@ -13,9 +13,6 @@ from google.appengine.api import app_identity
 
 
 class BackendConfig(Controller):
-    class Meta:
-        components = (scaffold.Scaffolding, Pagination, Search)
-
     class Scaffold:
         hidden_in_form = ('name', 'title', 'use')
 
@@ -24,7 +21,7 @@ class BackendConfig(Controller):
         return self.redirect(url)
 
     @route
-    @route_menu(list_name=u'backend', icon='settings_applicationsgtfre ksgrjop]mrtflE:', text=u'後台設定', sort=9952, group=u'系統設定')
+    @route_menu(list_name=u'backend', text=u'後台設定', sort=9952, group=u'系統設定')
     def admin_config(self):
         self.context['application_id'] = app_identity.get_application_id()
         record = self.meta.Model.find_by_name(self.namespace)

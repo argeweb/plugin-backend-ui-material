@@ -14,7 +14,7 @@
           enctype="{% block form_tag_enctype %}{{ scaffolding.form_encoding }}{% endblock %}"
           accept-charset="{% block form_tag_charset %}UTF-8{% endblock %}" role="form">
         {% block form_body %}
-        <div class="col-sm-12" style=" margin-top: 10px;margin-bottom: 30px;">
+        <div class="col-sm-12" style=" margin-top: 10px;">
             <div class="tabs-container form-tabs">{% if scaffolding.get_tab_pages() %}
                 <ul class="nav nav-tabs">{% for tab_page in scaffolding.get_tab_pages() -%}{% if loop.index == 1 %}
                     <li class="active"><a data-toggle="tab" href="#tab-{{ loop.index }}" aria-expanded="true"> {{ tab_page }}</a></li>{% else %}
