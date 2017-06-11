@@ -19,6 +19,11 @@
                     {% for property in scaffolding.display_in_list -%}
                         <th data-field="{{ property }}" class="text-center">{{ s.scaffold_field_name(property) }}</th>
                     {% endfor -%}{% endblock %}
+                    {% if len(scaffolding.actions_in_list) %}
+                        {% for action in scaffolding.actions_in_list %}
+                            <th data-field="{{ action.name }}" class="text-center">{{ action.title }}</th>
+                        {% endfor %}
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>

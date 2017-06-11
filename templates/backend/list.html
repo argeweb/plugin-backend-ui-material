@@ -32,6 +32,12 @@
                 {%- endif -%}
             </td>
         {%- endfor -%}
+        {% if len(scaffolding.actions_in_list) %}
+            {% for action in scaffolding.actions_in_list %}
+                <td><a class="btn btn-sm {{ action.button_class }}"
+                       href="{{ uri_action_link(action, item) }}">{{ action.button }}</a> </td>
+            {% endfor %}
+        {% endif %}
     </tr>
 {% endfor -%}
 {% endif %}
@@ -40,7 +46,8 @@
 {% block layout_buttons %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action="add") -%}
-                <a href="{{ uri_action_link('add') }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
+            {% set q = params.get_string('query', '') %}
+            <a href="{{ uri_action_link('add') }}?{{ q }}" class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("add") }}</span><span class="icon icon-lg">edit</span></a>
         {%- endif -%}
     {%- endif %}
 {% endblock %}

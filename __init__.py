@@ -16,6 +16,12 @@ plugins_helper = {
             'actions': [
                 {'action': 'login_json', 'name': u'登入後台'},
             ]
+        },
+        'backend_config': {
+            'group': u'後台設定',
+            'actions': [
+                {'action': 'config', 'name': u'後台設定'},
+            ]
         }
     }
 }

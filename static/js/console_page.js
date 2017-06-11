@@ -1287,6 +1287,7 @@ $(function(){
         // Json 操作
         if ($(this).hasClass("btn-json")) {
             e.preventDefault();
+            e.stopPropagation();
             var parent_is_content = $(this).parents("#content_area").length;
             var callback = $(this).data("callback");
             json(_url, null, function (data) {
