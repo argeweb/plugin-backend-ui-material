@@ -1294,6 +1294,8 @@ $(function(){
                 if (callback !== undefined && callback !== "undefined"){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
                 }else{
+                    if (typeof data["message"] !== "undefined" && data["message"] !== "")
+                        alert(data["message"]);
                     if (parent_is_content)
                         content_area.reload();
                 }
