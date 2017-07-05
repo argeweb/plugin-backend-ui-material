@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="/static/vendor/codemirror/codemirror.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/skins/lightgray/skin.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/skins/lightgray/content.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/material.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/console_page.css?run={{ framework.app_version }}">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/base.min.css">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/style_{{ config.style }}.css?run={{ framework.app_version }}">
 </head>
 <body class="in-edit-mode" data-user-key="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
       data-user-name="{{ application_user_name }}" data-user-image="{{ application_user.avatar }}" data-profile-url="{{ uri('admin:application_user:application_user:profile') }}"

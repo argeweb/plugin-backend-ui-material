@@ -764,9 +764,9 @@ const content_area = {
     },
     "init": function(){
         content_area.dom = $("#content_area");
-        content_area.dom.on('scroll', function() {
-            methods.affix(content_area.dom.scrollTop());
-        });
+        // content_area.dom.on('scroll', function() {
+        //     methods.affix(content_area.dom.scrollTop());
+        // });
         //  常用項目 (利用本機儲存記錄各頁面查看次數，用以顯示為常用項目)
         //var sort_list = [];
         //var $menu_usually = $("#menu_usually");
@@ -808,6 +808,7 @@ const content_area = {
         if (content_area.data.is_lock == true) return false;
         if (typeof need_push === "undefined"){ need_push = true }
         if (typeof need_replace === "undefined"){ need_replace = false }
+        $("#sortableListsBase").remove();
         if (need_push){
             aside_area.data.last_target_id = "";
             aside_area.closeUi();

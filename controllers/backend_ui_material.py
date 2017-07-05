@@ -8,11 +8,9 @@
 
 from google.appengine.api.logservice import logservice
 from google.appengine.ext import ndb
-from google.appengine.api import namespace_manager
-from google.appengine.api import memcache
-from argeweb.components.search import Search
 from argeweb import auth, add_authorizations
 from argeweb import Controller, scaffold, route_menu, route_with, route, settings
+from ..models.backend_config_model import BackendConfigModel
 from google.appengine.api import app_identity
 from itertools import islice
 import datetime
@@ -25,6 +23,58 @@ backend_version = '0.1.12'
 
 
 class BackendUiMaterial(Controller):
+    class Meta:
+        Model = BackendConfigModel
+
+    class Scaffold:
+        hidden_in_form = ('name', 'title', 'use')
+
+    def admin_list(self):
+        url = self.uri('admin:backend_ui_material:backend_config:config')
+        return self.redirect(url)
+
+    @route
+    @route_menu(list_name=u'backend', text=u'後台設定', sort=9952, group=u'系統設定')
+    def admin_config(self):
+        self.context['application_id'] = app_identity.get_application_id()
+        record = self.meta.Model.find_by_name(self.namespace)
+        if record is None:
+            record = self.meta.Model()
+            record.name = self.namespace
+            record.put()
+        return scaffold.edit(self, record.key)
+
+    @route
+    def manifest_json(self):
+        self.context['application_id'] = app_identity.get_application_id()
+        record = self.meta.Model.find_by_name(self.namespace)
+        backend_title = (self.host_information.site_name is not None) and \
+                        self.host_information.site_name or u'網站後台'
+        if record is None:
+            record = self.meta.Model()
+            record.name = self.namespace
+            record.put()
+        return self.json({
+            'name': backend_title,
+            'short_name': backend_title,
+            'start_url': record.start_url,
+            'display': record.display,
+            'background_color': record.background_color,
+            'theme_color': record.theme_color,
+            'icons': [
+                {
+                    'src': record.icon_128,
+                    'sizes': '128x128',
+                    'type': 'image/png'
+                },
+                {
+                    'src': record.icon_256,
+                    'sizes': '256x256',
+                    'type': 'image/png'
+                }
+            ]
+        })
+
     @route_with('/admin/')
     @route_with('/admin')
     @add_authorizations(auth.require_admin)
@@ -41,6 +91,7 @@ class BackendUiMaterial(Controller):
 
         self.context['dashboard_name'] = dashboard_name
         # self.context['controllers'] = controllers
+        self.context['config'] = self.meta.Model.find_by_name(self.namespace)
         self.context['menus'] = self.util.get_menu('backend')
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user

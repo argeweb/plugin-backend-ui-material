@@ -2332,8 +2332,8 @@ a.forum-item-title:hover {
 }
 
 body {
-    font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 13px;
+    font-family: arial, sans-serif;
+    font-size: 14px;
     color: #676a6c;
     overflow-x: hidden
 }
@@ -4745,12 +4745,12 @@ del {
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
 }
 
 ::-webkit-scrollbar {
     width: 6px;
-    /*background-image: linear-gradient( #398dee, #398dee 40px, #f5f5f5 10px, #f5f5f5 100%);*/
+    /*background-image: linear-gradient( #1A77C9, #1A77C9 92px, #f5f5f5 92px, #f5f5f5 100%);*/
 }
 
 ::-webkit-scrollbar-thumb {
@@ -5063,7 +5063,7 @@ main.content main.content{
 .list-operations>a:first-child{
     flex: 1 0;
     border: solid 1px #fcfcfc;
-    padding: 7px;
+    padding: 6px;
     display: inline-block;
     min-width: 80px;
 }
@@ -5448,6 +5448,7 @@ td.hide-sorting-mode, th.hide-sorting-mode{
     margin: 3px 0;
     padding: 3px 10px;
     box-shadow: none !important;
+    background: #fff;
 }
 .btn-group.op-mode .btn:hover, .btn-group.op-mode .btn:focus, .btn-group.op-mode .btn:after {
     background: transparent !important;
@@ -5850,7 +5851,7 @@ header .small-title {
 header .right-menu{
     justify-content: flex-end;
     padding-right: calc(1.5% + 5px);
-    margin-top: 14px !important;
+    margin-top: 20px !important;
     width: 250px;
 }
 header .search-bar{
@@ -6163,6 +6164,7 @@ header .dropdown.open .dropdown-toggle {
     background-image: url('/plugins/backend_ui_material/static/images/background-user-box.jpg');
     background-size: 180%;
     background-position: 50%;
+    display: none;
 }
 .offline .user-box{
     border: solid 2px #9b9b9b;
@@ -6217,8 +6219,9 @@ div.page-overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .75);
+    background-color: rgba(0, 0, 0, .55);
     z-index: 30;
+    left: 0;
 }
 div.page-overlay.on{
     display: block;
@@ -6230,7 +6233,7 @@ main.content{
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     position: relative;
-    padding: 60px 0 0 0;
+    padding: 60px 0px 0 10px;
     transition: all .3s ease-in-out;
 }
 
@@ -6239,7 +6242,7 @@ main.content{
     color: #fff;
     border-bottom: 0;
     position: fixed;
-    margin: 5px 0 0 -3px !important;
+    margin: 12px 0 0 10px !important;
     font-size: 18px;
     line-height: 22px;
     width: calc(100% - 520px - 2.6%);
@@ -6275,37 +6278,36 @@ main.content{
 }
 
 .op-mode {
-    border-top: solid 1px #888;
-    border-bottom: solid 1px #888;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin: 0 0 5px 0;
+    margin: 0 0 0 0;
+    padding: 39.5px 0 10px 8px;
     width: 100%;
-    background: #efefef;
 }
 .op-mode .btn{
-    padding: 3px 10px;
-    box-shadow: none !important;
     border: solid 1px transparent;
-    display: inline-block;
-    color:#afafaf !important;
-    height: 40px;
-    width: 42px;
-    font-size: 15px;
-    line-height: 37px;
-    margin: 0 2px 0 5px;
+    background: #fff;
     border-radius: 50%;
+    display: inline-block;
+    color:#fff !important;
+    height: 42px;
+    width: 42px;
+    font-size: 11px;
+    line-height: 35px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 0 0 3px;
+    padding-left: 9px;
 }
 .op-mode .btn+.btn{
-    border-left: solid 1px #e8e8e8;
+    /*border-left: solid 1px #e8e8e8;*/
 }
 .op-mode .btn i{
-    color: #999;
+    /*color: #999;*/
+    font-size: 22px;
 }
 .op-mode .btn.action i{
     color: #03a9f4;
 }
 .op-mode .btn:hover, .op-mode .btn:focus, .op-mode .btn:after {
-    background: transparent !important;
+    /*background: transparent !important;*/
     outline: none;
 }
 .op-mode .btn:after {
@@ -6449,20 +6451,22 @@ main.content{
     padding-right: 0;
     margin-top: 0;
     width: calc(100% + 4px);
+    background: #f3f3f4;
 }
 .page_header{
-    padding: 15px;
+    padding: 11px 15px 11px 15px;
 }
 .page_header > h1{
     display: inline-block;
     margin: 0;
     font-size: 18px;
     line-height: 30px;
+    color: #fff;
 }
 
 #content_area{
     height: 100%;
-    width: calc(100% - 212px);
+    width: calc(100% - 207px);
     overflow-y: scroll;
 }
 #aside_area{
@@ -6497,49 +6501,58 @@ main.content{
     background: rgba(33, 150, 243, 0.49);
 }
 .in-edit-mode main .btn-flat.btn-brand,main  .in-edit-mode .edit-color,main  .in-edit-mode .brand-text-color,
-.in-edit-mode .edit-color, .in-edit-mode .brand-text-color {
-    color: #398dee !important;
+.in-edit-mode .edit-color, .in-edit-mode .brand-text-color,.in-edit-mode .btn-flat.btn-brand {
+    color: #1A77C9 !important;
 }
 .in-edit-mode main .sk-spinner-chasing-dots .sk-dot1,.in-edit-mode main .sk-spinner-chasing-dots .sk-dot2,
 .in-edit-mode main:before,.in-edit-mode main .page-brand .header-transparent:before,
 .in-edit-mode main .menu-content > .menu-logo:first-child,.in-edit-mode main.page-brand .ui-header,
-.in-edit-mode main .op-mode,.in-edit-mode main .brand-bg-color,
+.in-edit-mode main .op-mode,.in-edit-mode main .brand-bg-color,.in-edit-mode .op-mode,.in-edit-mode main.content::before,
 .in-edit-mode .menu-content > .menu-logo, .in-edit-mode:before, .in-edit-mode header, .in-edit-mode header:before{
-    background-color: #398dee;
+    background-color: #1A77C9;
 }
 .in-edit-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgba(7, 28, 47, 0.69) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
+}
+
+.in-edit-mode::-webkit-scrollbar {
+    width: 6px;
+    background-image: linear-gradient( #1A77C9, #1A77C9 92px, #f5f5f5 92px, #f5f5f5 100%);
 }
 
 .in-view-mode .bootstrap-table .table,.in-view-mode .page-wrap .page-header, .in-view-mode .tableFloatingHeaderOriginal{
     background: rgb(124, 221, 222);
 }
 .in-view-mode main .btn-flat.btn-brand,.in-view-mode main .view-color,.in-view-mode main .brand-text-color,
-.in-view-mode .view-color, .in-view-mode .brand-text-color{
+.in-view-mode .view-color, .in-view-mode .brand-text-color,.in-view-mode .btn-flat.btn-brand{
     color: #23c6c8 !important;
 }
 .in-view-mode main .sk-spinner-chasing-dots .sk-dot1,.in-view-mode main .sk-spinner-chasing-dots .sk-dot2,
 .in-view-mode main:before,.in-view-mode main .page-brand .header-transparent:before,
 .in-view-mode main .menu-content > .menu-logo:first-child,.in-view-mode main.page-brand .ui-header,
-.in-view-mode main .op-mode,.in-view-mode main .brand-bg-color,
+.in-view-mode main .op-mode,.in-view-mode main .brand-bg-color,.in-view-mode .op-mode,.in-view-mode main.content::before,
 .in-view-mode .menu-content > .menu-logo, .in-view-mode:before, .in-view-mode header, .in-view-mode header:before {
     background-color: #23c6c8;
 }
 .in-view-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(12, 67, 67) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
 }
+.in-edit-mode::-webkit-scrollbar {
+    width: 6px;
+    background-image: linear-gradient( #23c6c8, #23c6c8 92px, #f5f5f5 92px, #f5f5f5 100%);
+}
 
 .in-sort-mode .bootstrap-table .table,.in-sort-mode .page-wrap .page-header, .in-sort-mode .tableFloatingHeaderOriginal{
     background: rgb(251, 206, 156);
 }
 .in-sort-mode main .btn-flat.btn-brand,.in-sort-mode main .sort-color,main .in-sort-mode main .brand-text-color,
-.in-sort-mode .sorting-color, .in-sort-mode .brand-text-color{
+.in-sort-mode .sorting-color, .in-sort-mode .brand-text-color,.in-sort-mode .btn-flat.btn-brand{
     color: #f8ac59 !important;
 }
 .in-sort-mode main .sk-spinner-chasing-dots .sk-dot1,.in-sort-mode main .sk-spinner-chasing-dots .sk-dot2,
 .in-sort-mode main:before,.in-sort-mode main .page-brand .header-transparent:before,
 .in-sort-mode main .menu-content > .menu-logo:first-child,.in-sort-mode main.page-brand .ui-header,
-.in-sort-mode main .op-mode,.in-sort-mode main .brand-bg-color,
+.in-sort-mode main .op-mode,.in-sort-mode main .brand-bg-color,.in-sort-mode .op-mode,.in-sort-mode main.content::before,
 .in-sort-mode .menu-content > .menu-logo, .in-sort-mode:before, .in-sort-mode header, .in-sort-mode header:before {
     background-color: #f8ac59
 }
@@ -6551,18 +6564,29 @@ main.content{
     background: rgb(244, 154, 163);
 }
 .in-delete-mode main .btn-flat.btn-brand,.in-delete-mode main .delete-color,.in-delete-mode main .brand-text-color,
-.in-delete-mode .delete-color, .in-delete-mode .brand-text-color{
+.in-delete-mode .delete-color, .in-delete-mode .brand-text-color,.in-delete-mode .btn-flat.btn-brand{
     color: #ed5565 !important;
 }
 .in-delete-mode main .sk-spinner-chasing-dots .sk-dot1,.in-delete-mode main .sk-spinner-chasing-dots .sk-dot2,
 .in-delete-mode main:before,.in-delete-mode main .page-brand .header-transparent:before,
 .in-delete-mode main .menu-content > .menu-logo:first-child,.in-delete-mode main.page-brand .ui-header,
-.in-delete-mode main .op-mod,.in-delete-mode main .brand-bg-color,
+.in-delete-mode main .op-mod,.in-delete-mode main .brand-bg-color,.in-delete-mode .op-mode,.in-delete-mode main.content::before,
 .in-delete-mode .menu-content > .menu-logo, .in-delete-mode:before, .in-delete-mode header, .in-delete-mode header:before {
     background-color: #ed5565;
 }
 .in-delete-mode .menu-content > .menu-logo .page-overlay {
     background-image: linear-gradient(rgba(1, 3, 4, 0.42), rgb(80, 28, 34) 60px, rgba(62, 62, 62, 0.77) 10px, rgba(62, 62, 62, 0.77) 100%);
+}
+.bg-color-222{
+    background: rgba(222, 222, 222, 0.48);
+}
+.field-type-code-json-field{
+    width: 90%;
+    height: 300px;
+}
+body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-delete-mode .enter-delete-mode, body.in-sort-mode .enter-sorting-mode
+{
+    background: #fff;
 }
 
 @media print {
@@ -6771,7 +6795,6 @@ main.content{
     }
 
     .nav-drawer.nav-drawer-md {
-        box-shadow: rgba(0, 0, 0, 0.498039) 0 1px 10px;
         width: 210px;
     }
 }
@@ -6983,7 +7006,27 @@ main.content{
         width: calc(100% - 180px) !important;
     }
 }
-.field-type-code-json-field{
-    width: 90%;
-    height: 300px;
+
+main.content::before {
+    content: "";
+    position: absolute;
+    top: 52px;
+    height: 100px;
+    width: 100%;
+    left: 0;
+    z-index: -1;
+}
+main.content main.content::before {
+    width:0;
+    height:0;
+}
+body::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 152px;
+    width: 100%;
+}
+.btn-group, .btn-group-vertical{
+    margin-top: -1px;
 }
