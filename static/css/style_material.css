@@ -2468,7 +2468,15 @@ video {
 }
 
 .wrapper {
-    padding: 0;
+    padding: 0 0 0 0;
+    margin-top: 87px;
+    margin-bottom: -11px;
+    overflow: scroll;
+}
+.page-header-big + .wrapper{
+    padding: 42px 0 0 0;
+    margin-top: 72px;
+    overflow: scroll;
 }
 
 #page-wrapper {
@@ -2900,7 +2908,7 @@ code {
     border-radius: 2px;
     background-color: #fff;
     color: inherit;
-    padding: 15px 20px 21px;
+    padding: 5px 20px 5px 20px;
     border-color: #e7eaec;
     -webkit-border-image: none;
     -o-border-image: none;
@@ -3926,7 +3934,7 @@ ul.notes li div {
     overflow: hidden;
     padding: 15px 10px 15px 10px;
     position: absolute;
-    z-index: 999;
+    z-index: 25;
     bottom: 0;
     right: 0;
     left: 0;
@@ -4851,17 +4859,30 @@ main .nav > li > a {
     min-height: 25px;
 }
 
-.ibox-content.m-b-sm.border-bottom{
+.ibox-content.m-b-sm.border-bottom, .page-header-big{
     margin: 0 0 10px 0;
-    border-radius: 0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 2px;
+    box-shadow: 0 1px 25px rgba(0, 0, 0, 0.15);
     z-index: 1;
-    border-bottom: solid 1px #888 !important;
-    min-height: 119px;
+    border-bottom: solid 1px rgba(136, 136, 136, 0.44) !important;
+    min-height: 101px;
+    position: fixed;
+    top: 70px;
+    left: 235px;
+    width: calc(100% - 255px);
+}
+.page-header-big::after {
+    content: "";
+    position: absolute;
+    height: 30px;
+    width: 100%;
+    top: 101%;
+    left: 0;
+    background: -webkit-linear-gradient(top, rgb(241, 241, 242) 0%,rgba(0,0,0,0) 100%);
 }
 main.content main.content{
     display: flex;flex-direction: column;
-    height: auto;
+    height: 100%;
     width: 100%;
     padding: 0 0 15px 0;
 }
@@ -5733,8 +5754,8 @@ body.aside .btn-display-in-iframe{
 }
 .tab-content {
     border-top: 1px solid #e7eaec;
-    height: calc(100% - 40px);
-    overflow-y: scroll;
+    /*height: calc(100% - 40px);*/
+    overflow-y: hidden;
     overflow-x: hidden;
     padding-bottom: 40px;
 }
@@ -5824,7 +5845,7 @@ body:before {
 
 header{
     z-index: 30;
-    min-width: 310px;
+    min-width: 321px;
     height: 60px;
     color: white;
     position: fixed;
@@ -5846,7 +5867,10 @@ header a {
     z-index: 1;
 }
 header .small-title {
-    margin: 16px 0 0 1.5%;
+    margin: 20px 0 0 6px;
+}
+header .small-title .icon-lg{
+    font-size: 27px;
 }
 header .right-menu{
     justify-content: flex-end;
@@ -5883,7 +5907,7 @@ header .dropdown.open .dropdown-toggle {
 }
 .header-logo {
     font-size: 20px;
-    margin-top: 4px;
+    margin-top: 8px;
 }
 .header-logo:focus, .header-logo:hover, .header-text:focus, .header-text:hover {
     outline: 0;
@@ -6081,7 +6105,7 @@ header .dropdown.open .dropdown-toggle {
     margin-top: 0 !important;
     margin-bottom: 0;
     border-bottom: 0;
-    padding-top: 18px;
+    padding-top: 22px;
     padding-bottom: 14px;
     height: 60px;
     width: 215px;
@@ -6130,7 +6154,7 @@ header .dropdown.open .dropdown-toggle {
     left: -300px;
     z-index: 2;
     overflow-y: auto;
-    height: calc(100% - 42px);
+    height: 100%;
 }
 .menu-box.in {
     position: relative;
@@ -6209,19 +6233,27 @@ div.search-bar i{
 div.search-bar input {
     width: 100%;
 }
-div.search-bar.on input, div.search-bar.on i{
+div.search-bar.on input{
     background: #fff;
     border: 0;
     color: #222;
+    border-radius: 0 2px 2px 0;
+}
+div.search-bar.on i{
+    background: #fff;
+    border: 0;
+    color: #222;
+    border-radius: 2px 0 0 2px;
 }
 div.page-overlay {
     display: none;
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: calc(100% + 10px);
     background-color: rgba(0, 0, 0, .55);
     z-index: 30;
     left: 0;
+    margin-top: -10px;
 }
 div.page-overlay.on{
     display: block;
@@ -6229,16 +6261,19 @@ div.page-overlay.on{
 main.content{
     display: flex;flex-direction: column;
     height: 100%;
-    width: 100%;
+    width: calc(100% + 2px);
     overflow-scrolling: touch;
     -webkit-overflow-scrolling: touch;
     position: relative;
-    padding: 60px 0px 0 10px;
+    padding: 70px 0px 0 10px;
     transition: all .3s ease-in-out;
+}
+.menu+.content{
+    height: 103%;
 }
 
 .left-search{
-    left: calc(210px + 1.3%);
+    left: calc(210px + 15px);
     color: #fff;
     border-bottom: 0;
     position: fixed;
@@ -6279,7 +6314,7 @@ main.content{
 
 .op-mode {
     margin: 0 0 0 0;
-    padding: 39.5px 0 10px 8px;
+    padding: 30px 0 10px 8px;
     width: 100%;
 }
 .op-mode .btn{
@@ -6453,30 +6488,34 @@ main.content{
     width: calc(100% + 4px);
     background: #f3f3f4;
 }
-.page_header{
-    padding: 11px 15px 11px 15px;
+.page_header {
+    padding: 1px 0 11px 0;
+    position: fixed;
+    top: 70px;
+    left: 235.5px;
+    width: calc(100% - 256px);
+    z-index: 25;
 }
 .page_header > h1{
-    display: inline-block;
     margin: 0;
     font-size: 18px;
-    line-height: 30px;
+    line-height: 32px;
     color: #fff;
 }
 
 #content_area{
     height: 100%;
-    width: calc(100% - 207px);
+    width: calc(100% - 209px);
     overflow-y: scroll;
 }
 #aside_area{
     position: absolute;
-    top: 60px;
-    height: calc(100% - 60px);
+    top: 143px;
+    height: calc(100% - 143px);
     right: -2px;
     width: 0;
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
-    z-index: 29;
+    z-index: 24;
     overflow: hidden;
     background-color: #f3f3f4;
 }
@@ -6486,6 +6525,7 @@ main.content{
 #aside_area .nav li > a, #aside_area .nav li > .a {
     display: block;
 }
+#aside_area main.content:before{background-color: transparent !important;}
 
 .in-view-mode .edit-mode, .in-view-mode .view-mode, .in-view-mode .delete-mode, .in-view-mode .sorting-mode,
 .in-edit-mode .edit-mode, .in-edit-mode .view-mode, .in-edit-mode .delete-mode, .in-edit-mode .sorting-mode,
@@ -6726,7 +6766,7 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
         border-color: transparent #f5f5f5 transparent transparent
     }
 }
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: 993px) {
     .menu-visible-md {
         display: block !important
     }
@@ -6735,7 +6775,7 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
         transform: translateY(0)!important;
     }
     body.aside_is_open #content_area{
-        width: calc(100% - 610px);
+        width: calc(100% - 605px);
     }
 
     .menu-scroll {
@@ -6831,10 +6871,20 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
         top: 3px;
     }
 
+    .op-mode {
+        padding: 22px 0 10px 8px;
+    }
     .op-mode .btn {
-        width: 23.5%;
-        margin: 0;
+        width: 50px;
+        margin-left: 4px;
         padding: 0;
+        height: 50px;
+    }
+
+    .op-mode .btn i {
+        font-size: 24px !important;
+        line-height: 49px;
+        height: 50px;
     }
 
     nav .menu-content > .menu-logo {
@@ -6843,6 +6893,14 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
 
     nav.in .menu-content > .menu-logo {
         width: 100%;
+    }
+    .ibox-content.m-b-sm.border-bottom, .page-header-big{
+        left: 25px;
+        width: calc(100% - 48px);
+    }
+    .page_header {
+        left: 25px;
+        width: calc(100% - 48px);
     }
 }
 @media only screen and (min-width: 768px) {
@@ -7010,7 +7068,7 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
 main.content::before {
     content: "";
     position: absolute;
-    top: 52px;
+    top: 42px;
     height: 100px;
     width: 100%;
     left: 0;
@@ -7024,9 +7082,24 @@ body::before {
     position: absolute;
     top: 0;
     left: 0;
-    height: 152px;
+    height: 142px;
     width: 100%;
 }
 .btn-group, .btn-group-vertical{
     margin-top: -1px;
+}
+.page_header a i.icon {
+    margin: 1px 4px -2px -4px;
+}
+.page_header.complex{
+    top: 175px;
+}
+.page_header.complex h1{
+    display: none;
+}
+.page-header-big.complex + .page-wrap{
+    padding: 30px 0 0 0;
+}
+.page-header-big.complex + .page_header.complex + .page-wrap {
+    padding-top: 56px;
 }

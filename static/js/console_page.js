@@ -995,7 +995,15 @@ const methods = {
         });
     },
     "checkPageHeader": function(target){
-        target.dom.find(".page_header").each(function(){ if ($(this).text().trim() == "") $(this).hide() });
+        target.dom.find(".page_header").each(function(){
+            if ($(".content .ibox-content").length > 0){
+                $(this).addClass("complex");
+                $(".page-header-big").addClass("complex")
+            }
+            if ($(this).text().trim() == ""){
+                $(this).remove();
+            }
+        });
     },
     "checkNavItemAndShow": function (target){
         // 處理頁面上的選單區塊

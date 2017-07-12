@@ -1,6 +1,4 @@
 {% extends "backend/form.html" %}
-{%- block layout_header -%}{% endblock %}
-
-{% block layout_buttons %}
-    <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="javascript: saveForm();"><span class="fbtn-text fbtn-text-left">儲存設定</span><span class="icon icon-lg">save</span></a>
+{% block layout_header_buttons %}
+    <a class="btn btn-white" href="javascript: saveForm();"><i class="icon">save</i> 儲存設定</a>
 {% endblock %}

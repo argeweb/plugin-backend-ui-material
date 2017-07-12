@@ -2476,6 +2476,9 @@ video {
     position: inherit;
     margin: 0 0 0 220px
 }
+.page-header-big.complex + .wrapper{
+    padding: 131px 0 0 0;
+}
 
 .title-action {
     text-align: right;
@@ -4858,6 +4861,10 @@ main .nav > li > a {
     z-index: 1;
     border-bottom: solid 1px #888 !important;
     min-height: 119px;
+    position: fixed;
+    top: 60px;
+    left: 212px;
+    width: calc(100% - 217px);
 }
 main.content main.content{
     display: flex;flex-direction: column;
@@ -6453,9 +6460,11 @@ main.content{
 .page_header{
     padding: 15px;
 }
+.page_header.complex{
+    padding-top: 90px;
+}
 .page_header > h1{
-    display: inline-block;
-    margin: 0;
+    margin: 0 3px 10px 3px;
     font-size: 18px;
     line-height: 30px;
 }
@@ -6823,6 +6832,10 @@ main.content{
 
     nav.in .menu-content > .menu-logo {
         width: 100%;
+    }
+    .ibox-content.m-b-sm.border-bottom{
+        left: 0px;
+        width: calc(100% - 3px);
     }
 }
 @media only screen and (min-width: 768px) {

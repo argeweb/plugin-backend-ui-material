@@ -7,14 +7,13 @@
     {%- block layout_head -%}{{ events.layout_head() }}{%- endblock %}
 </head>
 <body class="iframe-page in-edit-mode {{ aside }}">
+    {% block layout_before_header -%}{%- endblock -%}
+    <div class="page_header">{% block layout_header %}{% endblock %}</div>
     <div class="page-wrap">
-        <div class="page_header">{% block layout_header %}{% endblock %}</div>
         <main class="content">
             {%- block layout_body -%}
                 {{ events.layout_before_content() }}
-                {% block layout_before_content -%}{%- endblock -%}
                 {% block layout_content %}{%- endblock %}
-                {% block layout_after_content -%}{%- endblock %}
                 {{ events.layout_after_content() }}
             {%- endblock %}
         </main>

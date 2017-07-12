@@ -20,6 +20,13 @@
 <body class="in-edit-mode" data-user-key="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
       data-user-name="{{ application_user_name }}" data-user-image="{{ application_user.avatar }}" data-profile-url="{{ uri('admin:application_user:application_user:profile') }}"
       ondragover="uploader.onDragOver(event)" ondrop="uploader.onDrop(event)" ondragenter="uploader.onDragStart(event)" ondragleave="uploader.onDragEnd(event)">
+    <div class="sd" style="    position: absolute;
+    height: 30px;
+    width: 100%;
+    top: 101%;
+    left: 0;
+    background: -webkit-linear-gradient(top, rgb(241, 241, 242) 0%,rgba(0,0,0,0) 100%);"></div>
+
 	<header class="print-hide">
         <div class="page-overlay"></div>
 		<ul class="nav nav-list pull-left small-title"><li><a data-toggle="menu" href="#ui_menu"><span class="icon icon-lg">menu</span></a></li></ul>
