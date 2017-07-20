@@ -1,11 +1,7 @@
 {% import "backend/macros.html" as s with context %}{% extends s.layout() %}
 {%- block layout_header -%}
     {% if s %}<h1>{{ s.scaffold_title(route.action) }}</h1>{% endif %}
-
-    {%- if scaffolding %}
-        {% block layout_header_buttons -%}{{ s.partial_include('partial_buttons_area_in_page.html') }}{% endblock %}
-        {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
-    {%- endif %}
+    {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
 {% endblock %}
 
 {% block layout_content %}

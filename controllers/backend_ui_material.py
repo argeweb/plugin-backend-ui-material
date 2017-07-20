@@ -195,7 +195,7 @@ class BackendUiMaterial(Controller):
             'application_user': self.application_user,
             'prohibited_actions': self.prohibited_actions,
             'prohibited_controllers': self.prohibited_controllers,
-            'plugins': self.plugins.get_all_plugin(),
+            'plugins': self.plugins.get_plugin_name_list_with_type(),
             'site_name': self.host_information.site_name,
             'theme': self.host_information.theme,
         })

@@ -1,5 +1,30 @@
 {% import "backend/macros.html" as s with context %}
 {%- if scaffolding -%}
+    {%- if route.action == 'add' -%}
+        {% set submit_text ="建立" %}
+        {% set submit_and_exit_text ="建立並離開" %}
+        {% set submit_and_reload_record ="建立並繼續編輯" %}
+    {% endif %}
+    {%- if route.action == 'edit' -%}
+        {% set submit_text ="儲存" %}
+        {% set submit_and_exit_text ="儲存並離開" %}
+    {% endif %}
+    {%- if route.action == 'config' -%}
+        {% set submit_text ="儲存設定" %}
+        {% set submit_and_exit_text ="儲存並離開" %}
+    {% endif %}
+
+    <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe"><i class="icon">keyboard_backspace</i><span class="hidden-xs"> 回上一頁</span></a>
+    <div class="btn-group">
+        {%- if route.action != 'view' -%}
+        <a href="javascript: saveForm();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
+        <a href="javascript: saveFormAndGoBack();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
+        {% endif %}
+        {%- if route.action == 'add' -%}
+        <a href="javascript: saveFormAndReloadRecord();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_reload_record }}</a>
+        {% endif %}
+    </div>
+
     <div class="dropdown list-operations related-operations hide pull-right">
         <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
            data-toggle="dropdown">
@@ -8,7 +33,7 @@
         </a>
         <ul class="dropdown-menu folder-list ">
             <li class="dropdown-menu-group">頁面</li>
-            {%- if route.action == 'edit' -%}
+            {%- if route.action == 'edit' or route.action == 'config' -%}
             <li><a href="javascript: saveForm();"><i class="material-icons">save</i>{{ submit_text }}
                     <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
             <li><a href="javascript: saveFormAndGoBack();"><i class="material-icons">save</i>{{ submit_and_exit_text }}
