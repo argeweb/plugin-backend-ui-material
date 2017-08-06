@@ -2476,7 +2476,7 @@ video {
     position: inherit;
     margin: 0 0 0 220px
 }
-.page-header-big.complex + .wrapper{
+.page-big-header.complex + .wrapper{
     padding: 131px 0 0 0;
 }
 
@@ -4890,7 +4890,7 @@ main.content main.content{
 .lang{
     display: none;
 }
-.page_data{
+.page-data{
     display: none;
 }
 .dropping body{
@@ -6457,13 +6457,13 @@ main.content{
     margin-top: 0;
     width: calc(100% + 4px);
 }
-.page_header{
+.page-header{
     padding: 15px;
 }
-.page_header.complex{
+.page-header.complex{
     padding-top: 90px;
 }
-.page_header > h1{
+.page-header > h1{
     margin: 0 3px 10px 3px;
     font-size: 18px;
     line-height: 30px;

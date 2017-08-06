@@ -10,7 +10,7 @@ from google.appengine.api.logservice import logservice
 from google.appengine.ext import ndb
 from argeweb import auth, add_authorizations
 from argeweb import Controller, scaffold, route_menu, route_with, route, settings
-from ..models.backend_config_model import BackendConfigModel
+from ..models.config_model import ConfigModel
 from google.appengine.api import app_identity
 from itertools import islice
 import datetime
@@ -24,7 +24,7 @@ backend_version = '0.1.12'
 
 class BackendUiMaterial(Controller):
     class Meta:
-        Model = BackendConfigModel
+        Model = ConfigModel
 
     class Scaffold:
         hidden_in_form = ('name', 'title', 'use')
@@ -36,24 +36,15 @@ class BackendUiMaterial(Controller):
     @route
     @route_menu(list_name=u'backend', text=u'後台設定', sort=9952, group=u'系統設定')
     def admin_config(self):
-        self.context['application_id'] = app_identity.get_application_id()
-        record = self.meta.Model.find_by_name(self.namespace)
-        if record is None:
-            record = self.meta.Model()
-            record.name = self.namespace
-            record.put()
+        self.meta.view.template_name = '/backend_config/config.html'
+        record = self.meta.Model.find_or_create_by_name('backend')
         return scaffold.edit(self, record.key)
 
     @route
     def manifest_json(self):
-        self.context['application_id'] = app_identity.get_application_id()
-        record = self.meta.Model.find_by_name(self.namespace)
+        record = self.meta.Model.find_or_create_by_name('backend')
         backend_title = (self.host_information.site_name is not None) and \
                         self.host_information.site_name or u'網站後台'
-        if record is None:
-            record = self.meta.Model()
-            record.name = self.namespace
-            record.put()
         return self.json({
             'name': backend_title,
             'short_name': backend_title,
@@ -91,7 +82,7 @@ class BackendUiMaterial(Controller):
 
         self.context['dashboard_name'] = dashboard_name
         # self.context['controllers'] = controllers
-        self.context['config'] = self.meta.Model.find_by_name(self.namespace)
+        self.context['config'] = self.meta.Model.get_or_create(self.namespace)
         self.context['menus'] = self.util.get_menu('backend')
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user
@@ -159,7 +150,7 @@ class BackendUiMaterial(Controller):
     def admin_logout(self):
         self.session['application_admin_user_key'] = None
         self.session['application_admin_user_level'] = None
-        return self.redirect('/admin')
+        return self.redirect('/admin/jump_to_login')
 
     @route_with('/admin/record/sort.json')
     @route_with('/dashboard/record/sort.json')
@@ -189,13 +180,18 @@ class BackendUiMaterial(Controller):
     @add_authorizations(auth.check_user)
     @route_with('/sysinfo')
     def sysinfo(self):
+        admin_key = None
+        if 'application_admin_user_key' in self.session:
+            admin_key = self.session['application_admin_user_key']
         self.json({
+            'session': self.session,
+            'application_admin_user_key': admin_key,
             'server_name': self.server_name,
             'namespace': self.namespace,
             'application_user': self.application_user,
             'prohibited_actions': self.prohibited_actions,
             'prohibited_controllers': self.prohibited_controllers,
-            'plugins': self.plugins.get_plugin_name_list_with_type(),
+            'plugins': self.host_information.plugins_list,
             'site_name': self.host_information.site_name,
             'theme': self.host_information.theme,
         })

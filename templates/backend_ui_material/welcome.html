@@ -1,7 +1,7 @@
 {% extends "backend/list_layout.html" %}
 
-{% block layout_before_header %}
-<div class="ibox-content m-b-sm border-bottom page-header-big">
+{% block page_big_header %}
+<div class="ibox-content m-b-sm border-bottom page-big-header">
     <div class="p-xs">
         <div class="pull-left m-r-md">
             <i class="material-icons mid-icon brand-text-color">home</i>
@@ -12,9 +12,9 @@
 </div>
 {% endblock %}
 
-{% block layout_header %}{% endblock %}
-{% block layout_content %}
-<div class="wrapper wrapper-content animated fadeInRight">
+
+{% block page_header %}{% endblock %}
+{% block page_content %}
     <div class="row">
         <div class="col-sm-6">
             <div class="ibox float-e-margins">
@@ -81,7 +81,7 @@
         </div>
 
     </div>
-</div>
 {%- endblock %}
-{% block layout_scripts -%}
+
+{% block page_scripts -%}
 {% endblock %}

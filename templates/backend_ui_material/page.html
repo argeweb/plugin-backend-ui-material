@@ -7,19 +7,19 @@
     {%- block layout_head -%}{{ events.layout_head() }}{%- endblock %}
 </head>
 <body class="iframe-page in-edit-mode {{ aside }}">
-    {% block layout_before_header -%}{%- endblock -%}
-    <div class="page_header">{% block layout_header %}{% endblock %}</div>
+    {% block page_big_header -%}{%- endblock -%}
+    <div class="page-header">{% block page_header %}{% endblock %}</div>
     <div class="page-wrap">
         <main class="content">
-            {%- block layout_body -%}
-                {{ events.layout_before_content() }}
-                {% block layout_content %}{%- endblock %}
-                {{ events.layout_after_content() }}
+            {{ events.layout_before_content() }}
+            {% block page_content_without_wrapper %}
+            <div class="wrapper wrapper-content">{% block page_content %}{%- endblock %}</div>
             {%- endblock %}
+            {{ events.layout_after_content() }}
+            {% block page_helper %}{% endblock %}
         </main>
-        {%- include "backend_ui_material/flash_messages.html" with context %}
     </div>
-    <div class="page_data"
+    <div class="page-data"
          data-search-url="{% if uri_exists_with_permission(action="list") %}{{ uri_action_link('list') }}{% endif %}"
          data-search-prev-word="{% if search_prev_word %}{{ search_prev_word }}{% endif %}"
          data-search-post-word="{% if search_post_word %}{{ search_post_word }}{% endif %}"
@@ -28,7 +28,7 @@
          data-view-function-sort="{% if change_view_to_sort_function %}{{ change_view_to_sort_function }}{% endif %}"
          data-view-function-delete="{% if change_view_to_delete_function %}{{ change_view_to_delete_function }}{% endif %}"
     ></div>
-    <div class="fbtn-container"><div class="fbtn-inner">{% block layout_buttons -%}{%- endblock -%}</div></div>
-    {% block layout_scripts -%}{%- endblock -%}
+    <div class="fbtn-container"><div class="fbtn-inner">{% block page_fly_button -%}{%- endblock -%}</div></div>
+    {% block page_scripts -%}{%- endblock -%}
 </body>
 </html>

@@ -46,7 +46,7 @@ const view = {
         }
     },
     "reset": function(dom){
-        var $page_data = dom.find(".page_data");
+        var $page_data = dom.find(".page-data");
         this.edit = $page_data.data("view-function-edit");
         this.view = $page_data.data("view-function-view");
         this.sort = $page_data.data("view-function-sort");
@@ -487,9 +487,9 @@ const search = {
         $("body").removeClass("on-search");
     },
     "reset": function(dom){
-        this.target_url = dom.find(".page_data").data("search-url");
-        this.prev_word = dom.find(".page_data").data("search-prev-word");
-        this.post_word = dom.find(".page_data").data("search-post-word");
+        this.target_url = dom.find(".page-data").data("search-url");
+        this.prev_word = dom.find(".page-data").data("search-prev-word");
+        this.post_word = dom.find(".page-data").data("search-post-word");
     },
     "esc": function(){
         if ($(this.dom).val().length > 0){
@@ -995,10 +995,10 @@ const methods = {
         });
     },
     "checkPageHeader": function(target){
-        target.dom.find(".page_header").each(function(){
+        target.dom.find(".page-header").each(function(){
             if ($(".content .ibox-content").length > 0){
                 $(this).addClass("complex");
-                $(".page-header-big").addClass("complex")
+                $(".page-big-header").addClass("complex")
             }
             if ($(this).text().trim() == ""){
                 $(this).remove();

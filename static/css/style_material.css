@@ -2468,12 +2468,11 @@ video {
 }
 
 .wrapper {
-    padding: 0 0 0 0;
-    margin-top: 72px;
+    padding: 0 0 50px 0;
     margin-bottom: -11px;
     overflow: scroll;
 }
-.page-header-big + .wrapper{
+.page-big-header + .wrapper{
     padding: 42px 0 0 0;
     margin-top: 72px;
     overflow: scroll;
@@ -4862,7 +4861,7 @@ main .nav > li > a {
     min-height: 25px;
 }
 
-.ibox-content.m-b-sm.border-bottom, .page-header-big{
+.ibox-content.m-b-sm.border-bottom, .page-big-header{
     margin: 0 0 10px 0;
     border-radius: 2px;
     box-shadow: 0 1px 25px rgba(0, 0, 0, 0.15);
@@ -4874,7 +4873,7 @@ main .nav > li > a {
     left: 235px;
     width: calc(100% - 255px);
 }
-.page-header-big::after {
+.page-big-header::after {
     content: "";
     position: absolute;
     height: 30px;
@@ -4907,7 +4906,7 @@ main.content main.content{
 .lang{
     display: none;
 }
-.page_data{
+.page-data{
     display: none;
 }
 .dropping body{
@@ -5066,7 +5065,7 @@ main.content main.content{
     float: left;
 }
 .sortable-list {
-    margin: 15px 0 0 0;
+    margin: 0 0 0 0;
     padding: 0 15px;
     border: 0 !important;
 }
@@ -5297,23 +5296,7 @@ main.content .mail-box .fixed-table-container{
 .table-hover tbody tr:hover {
     background-color: #eee;
 }
-.page-header {
-    position: absolute;
-    top:-140px;
-    left: 0;
-    right: 0;
-    height: 61px;
-    padding: 5px 24px;
-    z-index: 9999;
-    background-color: #03a9f4;
-    line-height: 25px;
-}
-.page-header h3{
-    color: #fff;
-    margin: 16px 0;
-    font-size: 18px;
-    line-height: 18px;
-}
+
 .aside-close{
     display: none !important;
 }
@@ -5589,10 +5572,13 @@ td.hide-sorting-mode, th.hide-sorting-mode{
     font-size: 28px;
 }
 
+li.file-menu {
+    border: solid 2px transparent;
+}
 li.file-menu.active {
-    border-left: 0 solid #19aa8d;
     color: #293846;
     background: transparent;
+    border: solid 2px #666;
 }
 li.file-menu.active a{
     color: #293846;
@@ -6284,7 +6270,7 @@ main.content{
     margin: 12px 0 0 10px !important;
     font-size: 18px;
     line-height: 22px;
-    width: calc(100% - 520px - 2.6%);
+    width: calc(100% - 350px - 2.6%);
     z-index: 40;
 }
 .login-backdrop {
@@ -6492,15 +6478,17 @@ main.content{
     width: calc(100% + 4px);
     background: #f3f3f4;
 }
-.page_header {
+.page-header {
     padding: 1px 0 11px 0;
     position: fixed;
     top: 70px;
     left: 235.5px;
     width: calc(100% - 256px);
     z-index: 25;
+    margin: 0;
+    border-bottom: none;
 }
-.page_header > h1{
+.page-header > h1{
     margin: 0;
     font-size: 18px;
     line-height: 32px;
@@ -6898,11 +6886,11 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
     nav.in .menu-content > .menu-logo {
         width: 100%;
     }
-    .ibox-content.m-b-sm.border-bottom, .page-header-big{
+    .ibox-content.m-b-sm.border-bottom, .page-big-header{
         left: 25px;
         width: calc(100% - 48px);
     }
-    .page_header {
+    .page-header {
         left: 25px;
         width: calc(100% - 48px);
     }
@@ -6988,10 +6976,10 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
     }
 
     .left-search {
-        margin: 5px 0 0 15px !important;
+        margin: 12px 0 0 15px !important;
         left: 42px;
         min-width: 125px;
-        width: calc(100% - 260px)
+        width: calc(100% - 200px)
     }
     .aside_is_open .aside-close{
         display: inline-block !important;
@@ -7092,18 +7080,28 @@ body::before {
 .btn-group, .btn-group-vertical{
     margin-top: -1px;
 }
-.page_header a i.icon {
+.page-header a i.icon {
     margin: 1px 4px -2px -4px;
 }
-.page_header.complex{
+.page-header.complex{
     top: 175px;
 }
-.page_header.complex h1{
+.page-header.complex h1{
     display: none;
 }
-.page-header-big.complex + .page-wrap{
+.page-header + .page-wrap > .content > .wrapper{
+    margin-top: 72px;
+    padding-top: 10px;
+}
+.page-big-header.complex + .page-wrap{
     padding: 30px 0 0 0;
 }
-.page-header-big.complex + .page_header.complex + .page-wrap {
-    padding-top: 62px;
+.page-big-header.complex + .page-header.complex + .page-wrap {
+    padding-top: 72px;
+}
+.page-big-header.complex + .page-header.complex + .page-wrap  > .wrapper{
+    margin-top: 92px;
+}
+.page-big-header + .page-wrap > .content > .wrapper{
+    margin-top: 82px;
 }

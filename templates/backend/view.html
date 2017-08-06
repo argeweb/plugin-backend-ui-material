@@ -1,15 +1,15 @@
 {%- import 'backend/macros.html' as s with context -%}
 {%- extends s.layout() -%}
 {%- set item = context[scaffolding.singular] -%}
-{%- block layout_header -%}
-    {%- if scaffolding %}
-        {% block partial_related_area %}{{ s.partial_include('partial_related_area_in_page.html') }}{% endblock %}
-{#        {% block partial_list_area %}{{ s.partial_include('partial_nav_lang.html') }}{% endblock %}#}
-    {%- endif %}
+
+{%- block page_header -%}
+    {% if scaffolding %}
+        <h1>{{ s.scaffold_title(route.action) }}</h1>
+        {{ s.scaffold_buttons() }}
+    {% endif %}
 {% endblock %}
 
-{%- block layout_content -%}
-<div class="wrapper wrapper-content">
+{% block page_content %}
     <div class="col-sm-12" style="margin-bottom: 30px;">
         <div class="">
             {% block partial_box_header %}{{ s.partial_include('partial_box_header.html') }}{% endblock %}
@@ -41,10 +41,9 @@
             </table>
         </div>
     </div>
-</div>
 {% endblock %}
 
-{% block layout_buttons %}
+{% block page_fly_button %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}
             <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>

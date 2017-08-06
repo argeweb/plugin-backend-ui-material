@@ -110,3 +110,78 @@
         <div class="hr-line-dashed {{ lang_class }}"></div>
     {%- endif %}
 {%- endmacro %}
+
+{# 載入局部頁面 #}
+{% macro scaffold_buttons(display_save_buttons=True, display_go_back_button=True) -%}
+    {%- if scaffolding -%}
+        {%- if route.action == 'add' -%}
+            {% set submit_text ="建立" %}
+            {% set submit_and_exit_text ="建立並離開" %}
+            {% set submit_and_reload_record ="建立並繼續編輯" %}
+        {% endif %}
+        {%- if route.action == 'edit' -%}
+            {% set submit_text ="儲存" %}
+            {% set submit_and_exit_text ="儲存並離開" %}
+        {% endif %}
+        {%- if route.action == 'config' -%}
+            {% set submit_text ="儲存設定" %}
+            {% set submit_and_exit_text ="儲存並離開" %}
+        {% endif %}
+
+        {% if display_go_back_button %}
+        <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe"><i class="icon">keyboard_backspace</i><span class="hidden-xs"> 回上一頁</span></a>
+        {% endif %}
+
+        {% if display_save_buttons %}
+        <div class="btn-group">
+            {%- if route.action != 'view' -%}
+            <a href="javascript: saveForm();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
+            <a href="javascript: saveFormAndGoBack();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
+            {% endif %}
+            {%- if route.action == 'add' -%}
+            <a href="javascript: saveFormAndReloadRecord();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_reload_record }}</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="dropdown list-operations related-operations hide pull-right">
+            <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
+               data-toggle="dropdown">
+                <span><i class="icon icon-lg">arrow_drop_down</i></span>
+                <span class="hidden-xs">相關操作</span><span class="visible-xs">操作</span>
+            </a>
+            <ul class="dropdown-menu folder-list ">
+                <li class="dropdown-menu-group">頁面</li>
+
+                {% if display_save_buttons %}
+                {%- if route.action == 'add' or route.action == 'edit' or route.action == 'config' -%}
+                <li><a href="javascript: saveForm();"><i class="material-icons">save</i>{{ submit_text }} <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
+                <li><a href="javascript: saveFormAndGoBack();"><i class="material-icons">save</i>{{ submit_and_exit_text }} <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Shift</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
+                {% endif %}
+                {% endif %}
+
+                {%- if route.action != 'add' -%}{%- if not item %}{%- set item = context[scaffolding.singular] -%}{% endif -%}
+                {% if uri_exists_with_permission(action="view", item=item) and route.action == 'edit' %}<li><a href="{{ uri_action_link('view', item) }}" class="view-url"><i class="material-icons">keyboard_arrow_right</i>  檢視此項目 </a></li>{% endif %}
+                {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}<li><a href="{{ uri_action_link('edit', item) }}" class="edit-url"><i class="material-icons">keyboard_arrow_right</i>  編輯此項目 </a></li>{% endif %}
+                {%- endif -%}
+
+                {% for nav_item in scaffolding.navigation -%}
+                {% if uri_exists_with_permission("admin:" + scaffolding.singular + ":" + nav_item.action, item=item) %}
+                <li><a href="{{ uri_action_link(nav_item.action, item) }}"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
+                {% endif -%}
+                {% endfor -%}
+                {% if scaffolding.scaffold_language %}
+                <li class="dropdown-menu-group">語系欄位切換</li>
+                    {%- set lang_count = 1 %}
+                    {%- for item in scaffolding.scaffold_language %}
+                        <li><a class="waves-attach waves-effect btn-lang" data-lang="{{ item.lang }}" href="#"> <i class="fa fa-flag-o"></i>{{ item.lang }}, {{ item.title }}
+                            <span class="label quick-key">{{ lang_count }}</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Alt</span></a></li>
+                    {%- set lang_count = lang_count + 1 -%}
+                    {%- endfor %}
+                {% endif %}
+
+            </ul>
+        </div>
+    {%- endif %}
+
+{%- endmacro %}

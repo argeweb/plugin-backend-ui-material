@@ -43,7 +43,7 @@
 {% endif %}
 {% endblock %}
 
-{% block layout_header_buttons %}
+{% block list_header_buttons %}
     {%- if scaffolding %}
         {% if uri_exists_with_permission(action="add") and s.scaffold_title("add") != '' -%}
             {% set q = params.get_string('query', '') %}
