@@ -27,22 +27,21 @@ class BackendUiMaterial(Controller):
         Model = ConfigModel
 
     class Scaffold:
-        hidden_in_form = ('name', 'title', 'use')
-
-    def admin_list(self):
-        url = self.uri('admin:backend_ui_material:backend_config:config')
-        return self.redirect(url)
+        hidden_in_form = ['name', 'title', 'use']
+        # navigation = [{
+        #     'uri': 'admin:backend_ui_material:backend_ui_material:welcome',
+        #     'title': u'網域綁定'
+        # }]
 
     @route
-    @route_menu(list_name=u'backend', text=u'後台設定', sort=9952, group=u'系統設定')
+    @route_menu(list_name=u'system', text=u'後台樣式設定', sort=9952, group=u'系統設定')
     def admin_config(self):
-        self.meta.view.template_name = '/backend_config/config.html'
-        record = self.meta.Model.find_or_create_by_name('backend')
+        record = self.meta.Model.get_or_create_by_name('backend_config')
         return scaffold.edit(self, record.key)
 
     @route
     def manifest_json(self):
-        record = self.meta.Model.find_or_create_by_name('backend')
+        record = self.meta.Model.get_or_create_by_name('backend_config')
         backend_title = (self.host_information.site_name is not None) and \
                         self.host_information.site_name or u'網站後台'
         return self.json({
@@ -76,21 +75,36 @@ class BackendUiMaterial(Controller):
         except:
             self.context['backend_title'] = u'網站後台'
 
-        menus = dashboard_name = 'admin'
+        dashboard_name = 'admin'
         if self.request.path.find('/admin') >= 0:
             dashboard_name = 'admin'
 
         self.context['dashboard_name'] = dashboard_name
         # self.context['controllers'] = controllers
-        self.context['config'] = self.meta.Model.get_or_create(self.namespace)
+        self.context['config'] = self.meta.Model.get_or_create_by_name('backend')
         self.context['menus'] = self.util.get_menu('backend')
         self.context['backend_version'] = backend_version
         self.context['application_user'] = self.application_user
         self.context['application_user_name'] = self.application_user.name
 
+    @route
+    @route_menu(list_name=u'backend', text=u'系統設定', sort=99998, need_hr_parent=True)
+    def admin_system_menu(self):
+        self.context['application_user'] = self.application_user
+        self.context['menus'] = self.util.get_menu('system')
+
+    @route
+    @route_menu(list_name=u'backend', text=u'超級管理員', sort=99999)
+    def admin_super_user_menu(self):
+        self.context['application_user'] = self.application_user
+        self.context['menus'] = self.util.get_menu('super_user')
+
     def admin_list(self):
-        url = self.uri('admin:backend_ui_material:backend_ui_material:welcome')
-        return self.redirect(url)
+        return self.redirect(self.uri('admin:backend_ui_material:backend_ui_material:welcome'))
+
+    @route_with('/admin/ndb')
+    def admin_ndb_record(self):
+        return self.json(self.params.get_ndb_record('target'))
 
     @route_with('/admin/welcome')
     def admin_welcome(self):
@@ -214,6 +228,11 @@ class BackendUiMaterial(Controller):
             'info': 'save'
         }
 
+    @route
+    @route_menu(list_name=u'system', group=u'系統設定', text=u'網域設定', sort=9999, icon=u'settings')
+    def admin_set_domain(self):
+        return 'set_domain'
+
     @route_with('/admin/log')
     def admin_log(self):
         def get_logs(offset=None, log_level=1):
@@ -313,10 +332,6 @@ class BackendUiMaterial(Controller):
             })
         self.context['data'] = {'suggestions': suggestions}
 
-    @route
-    def admin_set_domain(self):
-        return 'aaa'
-
     @route_with('/admin/setup')
     def setup(self):
         if u'' + self.theme != u'install':
@@ -354,17 +369,14 @@ class BackendUiMaterial(Controller):
         password = self.params.get_string('password')
         site_name = self.params.get_string('site_name')
         namespace = self.params.get_string('name_space')
-        account_name = self.params.get_string('account_name')
+        account_name = self.params.get_string('account_name', u'管理員')
         if u'' in [namespace, account, password, site_name, theme]:
             return self.redirect("/admin/setup?error=none")
         self.host_information.namespace = namespace
         self.host_information.site_name = site_name
         self.host_information.put()
-        from plugins.application_user import application_user_init, has_record
-        prohibited_actions = settings.get('application_user_prohibited_actions', u'')
-
-        if not has_record():
-            application_user_init(account_name, account, password, prohibited_actions,
-                                  '/plugins/backend_ui_material/static/images/users/avatar-001.jpg')
         self.settings.set_theme(self.host_information.host, namespace, theme)
+        from plugins.application_user import has_record
+        if not has_record():
+            self.fire('application_user_init', user_name=account_name, user_account=account, user_password=password)
         return self.redirect('/')

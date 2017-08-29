@@ -1,0 +1,10 @@
+<div class="ibox-content m-b-sm border-bottom page-big-header">
+    <div class="p-xs">
+        <div class="pull-left m-r-md">
+            <i class="material-icons mid-icon brand-text-color">settings_applications</i>
+        </div>
+        <h2>後台管理設定</h2>
+        <span>設定後台管理所需的值。</span>
+        {% if last_record_date %}<span class="text-muted small pull-right visible-sm visible-md visible-lg">最後更新：<i class="icon">access_time</i> {{ print_value(last_record_date) }}</span>{% endif %}
+    </div>
+</div>

@@ -2,12 +2,11 @@
 <html>
 <head>
     {%- set aside = params.get_header("Aside") -%}
-    {%- set is_ajax = params.get_header("Is-Ajax") -%}
     <title>{%- block layout_head_title -%}{%- if scaffolding and s %}{{ s.scaffold_title(route.action) }}{% endif %}{%- endblock -%}</title>
     {%- block layout_head -%}{{ events.layout_head() }}{%- endblock %}
 </head>
 <body class="iframe-page in-edit-mode {{ aside }}">
-    {% block page_big_header -%}{%- endblock -%}
+    {% block page_big_header -%}{{ s.partial_include_in_plugin('header.html') }}{%- endblock -%}
     <div class="page-header">{% block page_header %}{% endblock %}</div>
     <div class="page-wrap">
         <main class="content">
@@ -20,7 +19,7 @@
         </main>
     </div>
     <div class="page-data"
-         data-search-url="{% if uri_exists_with_permission(action="list") %}{{ uri_action_link('list') }}{% endif %}"
+         data-search-url="{% if uri_permission(action="list") %}{{ uri_action_link('list') }}{% endif %}"
          data-search-prev-word="{% if search_prev_word %}{{ search_prev_word }}{% endif %}"
          data-search-post-word="{% if search_post_word %}{{ search_post_word }}{% endif %}"
          data-view-function-edit="{% if change_view_to_edit_function %}{{ change_view_to_edit_function }}{% endif %}"

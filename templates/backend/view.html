@@ -11,29 +11,31 @@
 
 {% block page_content %}
     <div class="col-sm-12" style="margin-bottom: 30px;">
-        <div class="">
-            {% block partial_box_header %}{{ s.partial_include('partial_box_header.html') }}{% endblock %}
-        </div>
         <div class="mail-box">
             <table class='table table-striped'>
                 <thead>
                 <tr>
                     <th>欄位名稱</th>
                     <th>值</th>
+                    <th>name</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>系統編號</td>
                     <td><span class='badge' title='{{ item.key.urlsafe() }}'>{{ item.key.id() }}</span></td>
+                    <td>name</td>
                 </tr>
                 {% for property in scaffolding.display_in_form %}{%- if property.name not in scaffolding.hidden_in_form %}
                 <tr>
                     <td>
-                        {{ s.scaffold_field_name(property) }}
+                        {{ s.get_scaffold_field_title(property) }}
                     </td>
                     <td>
                         {{ print_value(item[property]) }}
+                    </td>
+                    <td>
+                        {{ property }}
                     </td>
                 </tr>{% endif -%}
                 {% endfor %}
@@ -43,10 +45,4 @@
     </div>
 {% endblock %}
 
-{% block page_fly_button %}
-    {%- if scaffolding %}
-        {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}
-            <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" href="{{ uri_action_link('edit', item) }}"><span class="fbtn-text fbtn-text-left">{{ s.scaffold_title("edit") }}</span><span class="icon icon-lg">edit</span></a>
-        {%- endif -%}
-    {%- endif %}
-{% endblock %}
+{% block page_fly_button %}{% endblock %}

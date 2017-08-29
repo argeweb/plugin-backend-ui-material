@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/skins/lightgray/skin.min.css">
     <link rel="stylesheet" href="/plugins/backend_ui_material/static/plugins/TinyMCE/4.6.2/skins/lightgray/content.min.css">
 	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/base.min.css">
-	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/style_{{ config.style }}.css?run={{ framework.app_version }}">
+	<link rel="stylesheet" href="/plugins/backend_ui_material/static/css/{% if config.style %}style_{{ config.style }}{% else %}style_material{% endif %}.css?run={{ framework.app_version }}">
 </head>
 <body class="in-edit-mode" data-user-key="{{ print_key(application_user_key) }}" data-dashboard-name="{{ dashboard_name }}"
       data-user-name="{{ application_user_name }}" data-user-image="{{ application_user.avatar }}" data-profile-url="{{ uri('admin:application_user:application_user:profile') }}"
@@ -74,7 +74,8 @@
                     <ul class="nav" id="main-nav">
                         {%- set menu_n = 0 -%}{% for item in menus %}{%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}{%- if item.need_hr_parent %}
                         <li class="hr"></li>{% endif %}
-                        <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>{% else %}
+                        <li><a class="waves-attach collapsed menu-link" href="#menu_box_{{ menu_n }}" data-sort="{{ item.sort }}">{{ item.text }}<i class="icon material-icons float-icon">keyboard_arrow_right</i></a></li>{% else %}{%- if item.need_hr_parent %}
+                        <li class="hr"></li>{% endif %}
                         <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_area" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
                         {%- endfor %}
                     </ul>

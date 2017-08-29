@@ -1,3 +1,4 @@
+
 // yooliang material backend
 // 侑良管理後台
 // Version 1.01 (2016/08/21)
@@ -163,7 +164,7 @@ const saveFormAndReloadRecord = form.submitAndReload;
 
 const shortcut = {
     keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
-    'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, /, shift+/',
+    'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, alt+j, alt+k, /, shift+/',
     "data": {
         "lock_timer": null,
         "is_lock": false
@@ -194,6 +195,8 @@ const shortcut = {
             case 'ctrl+f5': content_area.reload(true); break;
             case 'ctrl+shift+s': saveFormAndGoBack(); break;
             case 'ctrl+s': saveForm(); break;
+            case 'alt+j': methods.goPrevOne(); break;
+            case 'alt+k': methods.goNextOne(); break;
             case 'alt+1': case 'alt+2': case 'alt+3': case 'alt+4': case 'alt+5': case 'alt+6': case 'alt+7': case 'alt+8':case 'alt+9':
                 changeLangField(parseInt(shortcut_key.replace('alt+', ''))-1);
                 break;
@@ -739,7 +742,8 @@ const console_history = {
         }else{
             console_history.data[url] = history_item;
         }
-        history.pushState(history_item, text, "#" + url);
+        if (url.indexOf("#") < 0) url = "#" + url;
+        history.pushState(history_item, text, url);
         localStorage.setItem('console.history', JSON.stringify(console_history.data));
     },
     "popState": function(event){
@@ -751,7 +755,8 @@ const console_history = {
         }
     },
     "replaceState": function(url, page_title, data){
-        history.replaceState(data, page_title, "#" + url);
+        if (url.indexOf("#") < 0) url = "#" + url;
+        history.replaceState(data, page_title, url);
     }
 };
 const content_area = {
@@ -920,10 +925,20 @@ const methods = {
     "goEditPage": function(){
         var $target = $(".edit-url").first();
         if ($target.length)
-            content_area.load($target.attr("href"), $target.text(), {}, false, true);
+            content_area.load($target.data("url"), $target.text(), {}, false, true);
     },
     "goViewPage": function(){
         var $target = $(".view-url").first();
+        if ($target.length)
+            content_area.load($target.data("url"), $target.text(), {}, false, true);
+    },
+    "goPrevOne": function(){
+        var $target = $(".alt-j").first();
+        if ($target.length)
+            content_area.load($target.attr("href"), $target.text(), {}, false, true);
+    },
+    "goNextOne": function(){
+        var $target = $(".alt-k").first();
         if ($target.length)
             content_area.load($target.attr("href"), $target.text(), {}, false, true);
     },

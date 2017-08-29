@@ -1,0 +1,37 @@
+{% extends "backend/config.html" %}
+
+{% block page_big_header %}
+<div class="ibox-content m-b-sm border-bottom page-big-header">
+    <div class="p-xs">
+        <div class="pull-left m-r-md">
+            <i class="material-icons mid-icon brand-text-color">settings</i>
+        </div>
+        <h2>系統設定</h2>
+        <span>請點擊下方的相關選單進行操作與設定。</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        {% for item in menus -%}
+        <div class="col-sm-4 col-md-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>{{ item.text }}</h5>
+                </div>
+                <div class="ibox-content no-padding" style="min-height: 180px;">
+                    <div class="panel-body">
+                    {% for subitem in item.submenu %}
+                        <p data-sort="{{ subitem.sort }}"><i class="icon">{{ subitem.icon }}</i> <a href="{{ subitem.url }}" {% if subitem.target != '' %}target="{{ subitem.target }}"{% endif %}>{{ subitem.text }} </a></p>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{%- endblock %}
+
+{% block page_scripts -%}
+{% endblock %}

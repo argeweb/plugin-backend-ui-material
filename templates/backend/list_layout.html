@@ -3,9 +3,7 @@
 {%- block page_header -%}
     {%- if scaffolding %}
         {% if s %}<h1>{{ s.scaffold_title(route.action) }}</h1>{% endif %}
-        {% block list_header_buttons -%}{% endblock %}
-        {% block partial_related_area %}{{ s.partial_include('partial_related_area.html') }}{% endblock %}
-        {% block partial_list_area %}{{ s.partial_include('partial_nav_list.html') }}{% endblock %}
+        {{ s.scaffold_buttons() }}
     {%- endif %}
 {% endblock %}
 {% block page_content %}
@@ -17,7 +15,7 @@
                 <tr>{% block partial_thead_tr %}
                     <th data-field="sortable" class="sorting-mode text-center srot-filed" style="width: 100px;">排序</th>
                     {% for property in scaffolding.display_in_list -%}
-                        <th data-field="{{ property }}" class="text-center">{{ s.scaffold_field_name(property) }}</th>
+                        <th data-field="{{ property }}" class="text-center">{{ s.get_scaffold_field_title(property) }}</th>
                     {% endfor -%}{% endblock %}
                     {% if len(scaffolding.actions_in_list) %}
                         {% for action in scaffolding.actions_in_list %}
@@ -32,7 +30,8 @@
             </table>
             {% block partial_records_footer %}
                 {{ s.next_page_link() }}
-                {{ s.partial_include('partial_records_footer.html') }}{% endblock %}
+                {{ s.scaffold_last_record_date(last_record_date) }}
+            {% endblock %}
         </div>
     </div>
 {% endblock %}

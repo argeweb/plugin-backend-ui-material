@@ -25,12 +25,3 @@ class ConfigModel(BasicModel):
     theme_color = Fields.StringProperty(verbose_name=u'manifest theme_color', default='#1C5D87', tab_page=1)
     icon_128 = Fields.ImageProperty(verbose_name=u'manifest icon_128', default='', tab_page=1)
     icon_256 = Fields.ImageProperty(verbose_name=u'manifest icon_256', default='', tab_page=1)
-
-    @classmethod
-    def get_or_create(cls, namespace):
-        n = cls.find_by_name(namespace)
-        if n is None:
-            n = cls()
-            n.name = namespace
-            n.put()
-        return n

@@ -21,8 +21,8 @@
 {%- endmacro %}
 
 {# Scaffold 欄位名稱 #}
-{% macro scaffold_field_name(field_name) -%}
-    {%- for key,name in scaffolding.scaffold_field_name.items() -%}
+{% macro get_scaffold_field_title(field_name) -%}
+    {%- for key,name in scaffolding.scaffold_field_verbose_names.items() -%}
         {%- if key == field_name -%}
             {{ name }}
         {%- endif -%}
@@ -32,6 +32,14 @@
 {# 載入局部頁面 #}
 {% macro partial_include(template) -%}
 {% include [controller_name+'/'+template, 'backend_ui_material/partial/'+template, 'scaffolding/'+template] %}
+{%- endmacro %}
+
+{# 載入局部頁面 #}
+{% macro partial_include_in_plugin(template) -%}
+{% include [
+'/plugins/'+plugin_name+'/templates/'+controller_name+'/'+route.action+'_'+template,
+'/application/'+plugin_name+'/templates/'+controller_name+'/'+route.action+'_'+template,
+'backend/blank.html'] %}
 {%- endmacro %}
 
 {# 分頁按鈕 #}
@@ -111,9 +119,15 @@
     {%- endif %}
 {%- endmacro %}
 
+{# 載入最後更新時間 #}
+{% macro scaffold_last_record_date(last_record_date) -%}
+{% if last_record_date %}<span class="text-muted small pull-right visible-sm visible-md visible-lg" style="margin: 10px;">最後更新：<i class="icon">access_time</i> {{ print_value(last_record_date) }}</span>{% endif %}
+{%- endmacro %}
+
 {# 載入局部頁面 #}
 {% macro scaffold_buttons(display_save_buttons=True, display_go_back_button=True) -%}
     {%- if scaffolding -%}
+        {%- if not item %}{%- set item = context[scaffolding.singular] -%}{% endif -%}
         {%- if route.action == 'add' -%}
             {% set submit_text ="建立" %}
             {% set submit_and_exit_text ="建立並離開" %}
@@ -123,22 +137,36 @@
             {% set submit_text ="儲存" %}
             {% set submit_and_exit_text ="儲存並離開" %}
         {% endif %}
+        {%- if route.action == 'view' -%}
+            {% set edit_item_text ="編輯此項目" %}
+        {% endif %}
         {%- if route.action == 'config' -%}
             {% set submit_text ="儲存設定" %}
             {% set submit_and_exit_text ="儲存並離開" %}
         {% endif %}
-
         {% if display_go_back_button %}
-        <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe"><i class="icon">keyboard_backspace</i><span class="hidden-xs"> 回上一頁</span></a>
+        <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe" title="回上一頁"><i class="icon">keyboard_backspace</i></a>
         {% endif %}
 
-        {% if display_save_buttons %}
+        {%- if route.action == 'list' -%}
         <div class="btn-group">
-            {%- if route.action != 'view' -%}
+            {% if uri_permission(action="add") and scaffold_title("add") != '' -%}
+                {% set q = params.get_string('query', '') %}
+                <a href="{{ uri_action_link('add') }}?{{ q }}" class="btn btn-white"><i class="icon">add_circle</i> {{ scaffold_title("add") }}</a>
+            {%- endif -%}
+        </div>
+        {% endif %}
+
+        {% if display_save_buttons and route.action != 'list' %}
+        <div class="btn-group">
+            {%- if route.action != 'view' and submit_text and submit_and_exit_text -%}
             <a href="javascript: saveForm();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
             <a href="javascript: saveFormAndGoBack();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
             {% endif %}
-            {%- if route.action == 'add' -%}
+            {% if route.action == 'view' and uri_permission(action='edit', item=item) %}
+            <a href="javascript: view.change('edit');" class="btn btn-white"><i class="icon">edit</i> {{ edit_item_text }}</a>
+            {% endif %}
+            {%- if route.action == 'add' and submit_and_reload_record != '' -%}
             <a href="javascript: saveFormAndReloadRecord();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_reload_record }}</a>
             {% endif %}
         </div>
@@ -152,7 +180,6 @@
             </a>
             <ul class="dropdown-menu folder-list ">
                 <li class="dropdown-menu-group">頁面</li>
-
                 {% if display_save_buttons %}
                 {%- if route.action == 'add' or route.action == 'edit' or route.action == 'config' -%}
                 <li><a href="javascript: saveForm();"><i class="material-icons">save</i>{{ submit_text }} <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
@@ -160,15 +187,23 @@
                 {% endif %}
                 {% endif %}
 
-                {%- if route.action != 'add' -%}{%- if not item %}{%- set item = context[scaffolding.singular] -%}{% endif -%}
-                {% if uri_exists_with_permission(action="view", item=item) and route.action == 'edit' %}<li><a href="{{ uri_action_link('view', item) }}" class="view-url"><i class="material-icons">keyboard_arrow_right</i>  檢視此項目 </a></li>{% endif %}
-                {% if uri_exists_with_permission(action='edit', item=item) and route.action == 'view' %}<li><a href="{{ uri_action_link('edit', item) }}" class="edit-url"><i class="material-icons">keyboard_arrow_right</i>  編輯此項目 </a></li>{% endif %}
+                {%- if route.action != 'add' -%}
+                    {% if uri_permission(action='edit', item=item) and route.action == 'view' %}<li><a href="javascript: view.change('edit');" data-url="{{ uri_action_link('edit', item) }}" class="edit-url"><i class="material-icons">keyboard_arrow_right</i>  編輯此項目 <span class="label quick-key">1</span> <span class="label quick-key" style="margin-right: 2px;">E</span></a></li>{% endif %}
+                    {% if uri_permission(action="view", item=item) and route.action == 'edit' %}<li><a href="javascript: view.change('view');" data-url="{{ uri_action_link('view', item) }}" class="view-url"><i class="material-icons">keyboard_arrow_right</i>  檢視此項目 <span class="label quick-key">2</span> <span class="label quick-key" style="margin-right: 2px;">V</span></a></li>{% endif %}
+                    {%- if route.action == 'edit' -%}
+                        {% set prev_one = item.get_prev_one() %}
+                        {% set next_one = item.get_next_one() %}
+                        {% if prev_one and uri_permission(action='edit', item=prev_one) and route.action == 'edit' %}<li><a href="{{ uri_action_link('edit', prev_one) }}" class="edit-url alt-j"><i class="material-icons">keyboard_arrow_right</i>  上一個項目 <span class="label quick-key">J</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Alt</span></a></li>{% endif %}
+                        {% if next_one and uri_permission(action='edit', item=next_one) and route.action == 'edit' %}<li><a href="{{ uri_action_link('edit', next_one) }}" class="edit-url alt-k"><i class="material-icons">keyboard_arrow_right</i>  下一個項目 <span class="label quick-key">K</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Alt</span></a></li>{% endif %}
+                        {% if prev_one and uri_permission(action='view', item=prev_one) and route.action == 'view' %}<li><a href="{{ uri_action_link('view', prev_one) }}" class="edit-url alt-j"><i class="material-icons">keyboard_arrow_right</i>  上一個項目 <span class="label quick-key">J</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Alt</span></a></li>{% endif %}
+                        {% if next_one and uri_permission(action='view', item=next_one) and route.action == 'view' %}<li><a href="{{ uri_action_link('view', next_one) }}" class="edit-url alt-k"><i class="material-icons">keyboard_arrow_right</i>  下一個項目 <span class="label quick-key">K</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Alt</span></a></li>{% endif %}
+                    {%- endif -%}
                 {%- endif -%}
 
                 {% for nav_item in scaffolding.navigation -%}
-                {% if uri_exists_with_permission("admin:" + scaffolding.singular + ":" + nav_item.action, item=item) %}
-                <li><a href="{{ uri_action_link(nav_item.action, item) }}"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
-                {% endif -%}
+                    {% if uri_permission(nav_item.uri) %}
+                    <li><a href="{{ uri(nav_item.uri) }}"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
+                    {% endif -%}
                 {% endfor -%}
                 {% if scaffolding.scaffold_language %}
                 <li class="dropdown-menu-group">語系欄位切換</li>
@@ -179,9 +214,21 @@
                     {%- set lang_count = lang_count + 1 -%}
                     {%- endfor %}
                 {% endif %}
-
             </ul>
         </div>
+
+        {%- if route.action == 'list' -%}
+        <div class="dropdown list-operations filed-display-operations hide in pull-right">
+            <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
+               data-toggle="dropdown">
+                <span><i class="icon icon-lg">arrow_drop_down</i></span>
+                <span class="hidden-xs">顯示欄位</span>
+                <span class="visible-xs">欄位</span>
+            </a>
+            <ul class="dropdown-menu folder-list ">
+            </ul>
+        </div>
+        {%- endif %}
     {%- endif %}
 
 {%- endmacro %}

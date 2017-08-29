@@ -16,6 +16,8 @@ plugins_helper = {
             'actions': [
                 {'action': 'login_json', 'name': u'登入後台'},
                 {'action': 'config', 'name': u'後台設定'},
+                {'action': 'system_menu', 'name': u'系統設定'},
+                {'action': 'super_user_menu', 'name': u'超級管理員'}
             ]
         }
     }

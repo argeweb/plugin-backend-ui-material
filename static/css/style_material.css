@@ -4845,9 +4845,6 @@ del {
     padding-bottom: 27px;
 }
 
-#aside_area {
-    background-color: #fff !important;
-}
 .body-hide {
     overflow: hidden;
 }
@@ -5058,6 +5055,9 @@ main.content main.content{
 }
 .list-pager{
     margin-right: 0;
+}
+.list-operations+.list-operations {
+    margin-right: 5px;
 }
 .list-operations input[type="checkbox"] {
     margin: 11px 3px 11px 8px;
@@ -6363,10 +6363,16 @@ main.content{
     border-bottom: solid 1px rgba(68, 62, 62, 0.69);
     box-shadow: 1px 1px 2px #aea7a7;
 }
-.show-sort-tag [data-sort] i{
+.show-sort-tag [data-sort] i, p[data-sort]::after{
     display: none;
 }
-.show-sort-tag [data-sort]::after{
+.show-sort-tag p[data-sort]{
+    position: relative;
+}
+.show-sort-tag p[data-sort] i{
+    display: inline-block;
+}
+.show-sort-tag [data-sort]::after, .show-sort-tag p[data-sort]::after{
     display: block;
     position: absolute;
     top: 6px;
@@ -6380,6 +6386,15 @@ main.content{
 }
 .show-sort-tag .menu-content .nav>li>a[data-sort]::after {
     top: 12px;
+}
+.show-sort-tag p[data-sort]::after{
+    top: -2px;
+    right: -10px;
+    height: 25px;
+    width: 50px;
+    font-size: 12px;
+    background-color: #fff;
+    z-index: 99999;
 }
 .progress{
     top: 0;width: 100%;height: 4px;z-index: 999;margin: 0;
@@ -6501,6 +6516,7 @@ main.content{
     overflow-y: scroll;
 }
 #aside_area{
+    background-color: #fff !important;
     position: absolute;
     top: 143px;
     height: calc(100% - 143px);
@@ -6509,7 +6525,6 @@ main.content{
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
     z-index: 24;
     overflow: hidden;
-    background-color: #f3f3f4;
 }
 #aside_area main.content{
     padding: 0 0 0 0;
@@ -6518,6 +6533,10 @@ main.content{
     display: block;
 }
 #aside_area main.content:before{background-color: transparent !important;}
+#aside_area .tab-content{
+    overflow-y: auto;
+    height: 100%;
+}
 
 .in-view-mode .edit-mode, .in-view-mode .view-mode, .in-view-mode .delete-mode, .in-view-mode .sorting-mode,
 .in-edit-mode .edit-mode, .in-edit-mode .view-mode, .in-edit-mode .delete-mode, .in-edit-mode .sorting-mode,
@@ -6626,7 +6645,30 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
         display: none !important;
     }
     body {
+        overflow: scroll;
+        height: auto;
         background-color: transparent !important;
+    }
+
+    .ibox-content.m-b-sm.border-bottom, .page-big-header {
+        left: 0;
+        width: 100%;
+        position: relative;
+    }
+    .page-header {
+        left: 0;
+        width: 100%;
+        position: relative;
+    }
+    .page-header.complex {
+        display: none;
+    }
+    .page-big-header.complex + .page-header.complex + .page-wrap {
+         padding-top: 0 !important;
+    }
+    .page-header + .page-wrap > .content > .wrapper {
+        margin-top: 0;
+        padding-top: 10px;
     }
     input[type="text"] {
         border: 0 !important;
@@ -6639,6 +6681,7 @@ body.in-edit-mode .enter-edit-mode, body.in-view-mode .enter-view-mode, body.in-
         display: none;
     }
     .page-wrap {
+        padding-top: 0;
         height: auto !important;
     }
     #content_area {
@@ -7061,7 +7104,7 @@ main.content::before {
     content: "";
     position: absolute;
     top: 42px;
-    height: 100px;
+    height: 80px;
     width: 100%;
     left: 0;
     z-index: -1;
@@ -7104,4 +7147,56 @@ body::before {
 }
 .page-big-header + .page-wrap > .content > .wrapper{
     margin-top: 82px;
+}
+.stock-avatar a img {
+    width: 32px;
+    border: solid 2px #333;
+    border-radius: 32px;
+    padding: 0;
+    margin: 0;
+}
+.stock-feed-separated {
+    display: inline-block;
+    margin-bottom: 10px;
+    width: 100%;
+    background: #fff;
+    padding: 5px;
+    border: solid 1px transparent;
+    border-radius: 10px;
+}
+.stock-avatar {
+    float: left;
+}
+.stock-body {
+    width: 100%;
+    display: inline-block;
+}
+.stock-feed-box {
+    float: right;
+    width: calc(100% - 42px);
+}
+.stock-feed-box a.time{
+    float: right;
+    margin: 2px;
+}
+.stock-feed-box i.material-icons{
+    font-size: 18px;
+    line-height: 18px;
+    float: right;
+    color: #ccc;
+}
+.stock-comment a img {
+    border: solid 1px #ddd;
+    margin: 15px 7px 15px 3px;
+}
+.stock-comment {
+    border: solid 1px #ddd;
+    margin: 10px 0 0 -4px;
+    padding: 2px;
+    border-radius: 4px;
+    background: #eee;
+}
+.stock-footer {
+    display: inline-block;
+    width: 100%;
 }

@@ -2,22 +2,23 @@
 
 {# 權限 #}
 {% macro check_permission_url(action, item) -%}
-    {% if uri_exists_with_permission(action=action, item=item) %}data-{{ action }}-url="{{ uri_action_link(action, item) }}"{% endif %}
+    {% if uri_permission(action=action, item=item) %}data-{{ action }}-url="{{ uri_action_link(action, item) }}"{% endif %}
 {%- endmacro %}
 
 {% block partial_tr_item %}
 {%- set list = context[scaffolding.plural] -%}
 {% if list %}
 {% for item in list %}
+    {% if uri_permission(action="view", item=item) %}
     <tr id="node_{{ item.sort }}" class="record_item"
         {{ check_permission_url("view", item) }}
         {{ check_permission_url("edit", item) }}
         {{ check_permission_url("delete", item) }}
         data-id="{{ print_key(item) }}">
         <td class="text-center sorting-mode move-headline">
-            {% if uri_exists_with_permission(action="sort_up", item=item) %}<a href="{{ uri_action_link('sort_up', item) }}" class="btn-json"><i class="icon icon-2x">keyboard_arrow_up</i></a>{% endif %}
+            {% if uri_permission(action="sort_up", item=item) %}<a href="{{ uri_action_link('sort_up', item) }}" class="btn-json"><i class="icon icon-2x">keyboard_arrow_up</i></a>{% endif %}
             <i class="icon icon-2x">view_headline</i>
-            {% if uri_exists_with_permission(action="sort_down", item=item) %}<a href="{{ uri_action_link('sort_down', item) }}" class="btn-json"><i class="icon icon-2x">keyboard_arrow_down</i></a>{% endif %}
+            {% if uri_permission(action="sort_down", item=item) %}<a href="{{ uri_action_link('sort_down', item) }}" class="btn-json"><i class="icon icon-2x">keyboard_arrow_down</i></a>{% endif %}
         </td>
         {%- for property in scaffolding.display_in_list -%}
             <td>
@@ -39,14 +40,16 @@
             {% endfor %}
         {% endif %}
     </tr>
+    {% endif %}
 {% endfor -%}
 {% endif %}
 {% endblock %}
 
 {% block list_header_buttons %}
     {%- if scaffolding %}
-        {% if uri_exists_with_permission(action="add") and s.scaffold_title("add") != '' -%}
+        {% if uri_permission(action="add") and s.scaffold_title("add") != '' -%}
             {% set q = params.get_string('query', '') %}
+            <a href="javascript: history.go(-1);" class="btn btn-white btn-display-in-iframe" title="回上一頁"><i class="icon">keyboard_backspace</i></a>
             <a href="{{ uri_action_link('add') }}?{{ q }}" class="btn btn-white"><i class="icon">add_circle</i> {{ s.scaffold_title("add") }}</a>
         {%- endif -%}
     {%- endif %}
