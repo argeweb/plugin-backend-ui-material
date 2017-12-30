@@ -5,7 +5,7 @@
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
 	<title>{{ backend_title }}</title>
-    <link rel="manifest"  href="/backend_ui_material/backend_config/manifest_json">
+    <link rel="manifest" href="/backend_ui_material/backend_ui_material/manifest_json">
 	<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/vendor/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="/static/vendor/vue-multiselect/vue-multiselect.min.css">
@@ -78,6 +78,9 @@
                         <li class="hr"></li>{% endif %}
                         <li><a class="waves-attach main-link" href="{{ item.url }}" target="content_area" data-sort="{{ item.sort }}">{{ item.text }}</a></li>{% endif %}
                         {%- endfor %}
+                        {% if application_user_name == 'super_user' %}
+                        <li><a class="waves-attach main-link" href="/admin/backend_ui_material/backend_ui_material/super_user_menu" target="content_area" data-sort="99999">超級管理員</a></li>
+                        {% endif %}
                     </ul>
                     {% set menu_n = 0 -%}{%- for item in menus -%}{%- if item.submenu -%}{%- set menu_n = menu_n + 1 -%}
                     <div class="nav menu-box"  id="menu_box_{{ menu_n }}">
@@ -105,7 +108,11 @@
 	<div class="progress console-progress"><div class="progress-bar"></div></div>
     <div class="hidden"><form id="file-form"><input type="file" id="image-file-picker" accept="image/*" /></form></div>
 	{% if is_login == False %}<div class="login-backdrop in"></div>{% endif %}
-    <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>
+{#    <script type="text/javascript" src="/static/vendor/jquery/jquery.min.js"></script>#}
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
     <script type="text/javascript" src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/static/vendor/jquery-form/jquery.form.min.js"></script>
     <script type="text/javascript" src="/static/vendor/sweetalert2/sweetalert2.min.js"></script>

@@ -32,34 +32,33 @@
         </div>
 
         <div class="col-sm-6">
+            {% if information %}
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>網域註冊相關訊息</h5>
                 </div>
                 <div class="ibox-content no-padding">
                     <div class="panel-body">
-                        {% if information %}{% if information.is_domain_manager == True -%}
-                        <p><i class="icon">edit</i> 註冊於：{{ information.domain_registration }}</p>
-                        <p><i class="fa fa-calendar-check-o"></i> 起始日：{{ information.domain_registration_date }}</p>
-                        <p><i class="fa fa-calendar-minus-o"></i> 到期日：{{ information.domain_expiration_date }}</p>
-                        <p><i class="fa fa-money"></i> 　價格：{{ information.domain_registration_price }}</p>
-                        {%- endif %}{% endif %}
-                        <a href="{{ uri_action_link('set_domain') }}">進行網域綁定</a>
+                        {% if information.is_domain_manager == True -%}
+                        <p>註冊於：{{ information.domain_registration }}</p>
+                        <p>起始日：{{ information.domain_registration_date }}</p>
+                        <p>到期日：{{ information.domain_expiration_date }}</p>
+                        <p>　價格：{{ information.domain_registration_price }}</p>
+                        {%- endif %}
                     </div>
                 </div>
             </div>
 
-            {% if information %}
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>伺服器租用相關訊息</h5>
                 </div>
                 <div class="ibox-content no-padding">
                     <div class="panel-body">
-                        <p><i class="fa fa-server"></i> 伺服器等級：{{ information.space_rental_level }}</p>
-                        <p><i class="fa fa-calendar-check-o"></i> 起始日：{{ information.space_rental_date }}</p>
-                        <p><i class="fa fa-calendar-minus-o"></i> 到期日：{{ information.space_expiration_date }}</p>
-                        <p><i class="fa fa-money"></i> 　價格：{{ information.space_rental_price }}</p>
+                        <p>伺服器等級：{{ information.space_rental_level }}</p>
+                        <p>起始日：{{ information.space_rental_date }}</p>
+                        <p>到期日：{{ information.space_expiration_date }}</p>
+                        <p>　價格：{{ information.space_rental_price }}</p>
                     </div>
                 </div>
             </div>

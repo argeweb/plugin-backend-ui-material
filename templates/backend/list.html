@@ -22,7 +22,7 @@
         </td>
         {%- for property in scaffolding.display_in_list -%}
             <td>
-                {%- if property.find("is_") >= 0 or property.find("can_") >= 0 %}
+                {%- if property.startswith("is_") or property.startswith("can_") %}
                     {{ s.scaffold_field_boolean(item, property) }}
                 {% else -%}
                     {%- if property.find("image") >= 0 %}
@@ -35,7 +35,7 @@
         {%- endfor -%}
         {% if len(scaffolding.actions_in_list) %}
             {% for action in scaffolding.actions_in_list %}
-                <td><a class="btn btn-sm {{ action.button_class }}"
+                <td><a class="btn btn-sm {% if action.use_json %}btn-json{% endif %}"
                        href="{{ uri_action_link(action, item) }}">{{ action.button }}</a> </td>
             {% endfor %}
         {% endif %}

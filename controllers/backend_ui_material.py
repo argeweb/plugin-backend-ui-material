@@ -34,31 +34,31 @@ class BackendUiMaterial(Controller):
         # }]
 
     @route
-    @route_menu(list_name=u'system', text=u'後台樣式設定', sort=9952, group=u'系統設定')
+    @route_menu(list_name=u'system', text=u'後台 Manifest 設定', sort=9952, group=u'系統設定')
     def admin_config(self):
-        record = self.meta.Model.get_or_create_by_name('backend_config')
-        return scaffold.edit(self, record.key)
+        config_record = self.meta.Model.get_config()
+        return scaffold.edit(self, config_record.key)
 
     @route
     def manifest_json(self):
-        record = self.meta.Model.get_or_create_by_name('backend_config')
+        config_record = self.meta.Model.get_config()
         backend_title = (self.host_information.site_name is not None) and \
                         self.host_information.site_name or u'網站後台'
         return self.json({
             'name': backend_title,
             'short_name': backend_title,
-            'start_url': record.start_url,
-            'display': record.display,
-            'background_color': record.background_color,
-            'theme_color': record.theme_color,
+            'start_url': config_record.start_url,
+            'display': config_record.display,
+            'background_color': config_record.background_color,
+            'theme_color': config_record.theme_color,
             'icons': [
                 {
-                    'src': record.icon_128,
+                    'src': config_record.icon_128,
                     'sizes': '128x128',
                     'type': 'image/png'
                 },
                 {
-                    'src': record.icon_256,
+                    'src': config_record.icon_256,
                     'sizes': '256x256',
                     'type': 'image/png'
                 }
@@ -94,8 +94,9 @@ class BackendUiMaterial(Controller):
         self.context['menus'] = self.util.get_menu('system')
 
     @route
-    @route_menu(list_name=u'backend', text=u'超級管理員', sort=99999)
     def admin_super_user_menu(self):
+        if self.application_user.name != 'super_user':
+            self.abort(404)
         self.context['application_user'] = self.application_user
         self.context['menus'] = self.util.get_menu('super_user')
 
@@ -191,7 +192,6 @@ class BackendUiMaterial(Controller):
     def auth_redirect(self):
         self.context['auth_redirect_to'] = self.params.get_string('to')
 
-    @add_authorizations(auth.check_user)
     @route_with('/sysinfo')
     def sysinfo(self):
         admin_key = None
@@ -314,24 +314,6 @@ class BackendUiMaterial(Controller):
         self.context['next_link'] = next_link
         self.context['this_link'] = 'size=%s&offset=%s' % (size, current_offset)
 
-    @route
-    def admin_model_suggestions(self):
-        self.meta.change_view('json')
-        model_ix = 'auto_ix_%s' % self.params.get_string('model')
-        value_field_name = self.params.get_string('value_field_name', 'title')
-        data_field_name = self.params.get_string('data_field_name', 'key')
-        query = self.params.get_string('query', '')
-        suggestions = []
-        for item in self.components.search(model_ix, query=query):
-            item_data = getattr(item, data_field_name)
-            if data_field_name == 'key':
-                item_data = self.util.encode_key(item_data)
-            suggestions.append({
-                'label': getattr(item, value_field_name),
-                'data': item_data
-            })
-        self.context['data'] = {'suggestions': suggestions}
-
     @route_with('/admin/setup')
     def setup(self):
         if u'' + self.theme != u'install':
@@ -380,3 +362,73 @@ class BackendUiMaterial(Controller):
         if not has_record():
             self.fire('application_user_init', user_name=account_name, user_account=account, user_password=password)
         return self.redirect('/')
+
+    @route
+    def admin_model_suggestions(self):
+        self.meta.change_view('json')
+        model_ix = 'auto_ix_%s' % self.params.get_string('model')
+        value_field_name = self.params.get_string('value_field_name', 'title')
+        data_field_name = self.params.get_string('data_field_name', 'key')
+        query = self.params.get_string('query', '')
+        suggestions = []
+        for item in self.components.search(model_ix, query=query):
+            item_data = getattr(item, data_field_name)
+            if data_field_name == 'key':
+                item_data = self.util.encode_key(item_data)
+            suggestions.append({
+                'label': getattr(item, value_field_name),
+                'data': item_data
+            })
+        self.context['data'] = {'suggestions': suggestions}
+
+    @route
+    def taskqueue_model_update(self):
+        self.meta.change_view('json')
+        from argeweb.core.model import DataUpdater, DataWatcher
+        from google.appengine.datastore.datastore_query import Cursor
+        updater = DataUpdater.query(DataUpdater.need_updater==True).get()
+        if updater is None:
+            self.context['data'] = {
+                'update': 'done'
+            }
+            return
+        setattr(updater, '__stop_update__', True)
+        be_watcher = updater.updater.get()
+        if be_watcher is None:
+            updater.need_updater = False
+            updater.put()
+            self.context['data'] = {
+                'update': 'be_watcher not exist'
+            }
+            return
+        cursor = Cursor(urlsafe=updater.cursor)
+        query = DataWatcher.query(DataWatcher.be_watcher == be_watcher.key)
+        data, next_cursor, more = query.fetch_page(100, start_cursor=cursor)
+        need_update_records = []
+        last_item = None
+        last_w = None
+        for item in data:
+            if last_item == item.watcher:
+                w = last_w
+            else:
+                w = item.watcher.get()
+                last_item = item.watcher
+                last_w = w
+                need_update_records.append(w)
+            if w is not None:
+                setattr(w, '__stop_update__', True)
+                setattr(w, item.watcher_field, getattr(be_watcher, item.be_watcher_field))
+            setattr(item, '__stop_update__', True)
+            item.last_update = updater.last_update
+        updater.cursor = next_cursor.urlsafe() if more else None
+        updater.need_updater = more
+        updater.put_async()
+        ndb.put_multi_async(data)
+        ndb.put_multi_async(need_update_records)
+        self.context['data'] = {
+            'update': updater.name
+        }
+        self.fire(
+            event_name='create_taskqueue',
+            url='/taskqueue/backend_ui_material/backend_ui_material/model_update'
+        )

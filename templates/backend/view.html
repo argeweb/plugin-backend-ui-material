@@ -17,14 +17,14 @@
                 <tr>
                     <th>欄位名稱</th>
                     <th>值</th>
-                    <th>name</th>
+                    <th class="print-hide">name</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td>系統編號</td>
                     <td><span class='badge' title='{{ item.key.urlsafe() }}'>{{ item.key.id() }}</span></td>
-                    <td>name</td>
+                    <td class="print-hide">name</td>
                 </tr>
                 {% for property in scaffolding.display_in_form %}{%- if property.name not in scaffolding.hidden_in_form %}
                 <tr>
@@ -34,7 +34,7 @@
                     <td>
                         {{ print_value(item[property]) }}
                     </td>
-                    <td>
+                    <td class="print-hide">
                         {{ property }}
                     </td>
                 </tr>{% endif -%}

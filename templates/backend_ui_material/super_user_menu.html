@@ -20,7 +20,7 @@
                 <div class="ibox-title">
                     <h5>{{ item.text }}</h5>
                 </div>
-                <div class="ibox-content no-padding" style="min-height: 130px;">
+                <div class="ibox-content no-padding" style="min-height: 152px;">
                     <div class="panel-body">
                     {% for subitem in item.submenu %}
                         <p data-sort="{{ subitem.sort }}"><i class="icon">{{ subitem.icon }}</i> <a href="{{ subitem.url }}" {% if subitem.target != '' %}target="{{ subitem.target }}"{% endif %}>{{ subitem.text }} </a></p>

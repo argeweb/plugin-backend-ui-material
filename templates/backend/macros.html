@@ -152,7 +152,8 @@
         <div class="btn-group">
             {% if uri_permission(action="add") and scaffold_title("add") != '' -%}
                 {% set q = params.get_string('query', '') %}
-                <a href="{{ uri_action_link('add') }}?{{ q }}" class="btn btn-white"><i class="icon">add_circle</i> {{ scaffold_title("add") }}</a>
+                {% if q.find("=") > 0 %}{% set q = "?" + q %}{% else %}{% endif %}
+                <a href="{{ uri_action_link('add') }}{{ q }}" class="btn btn-white"><i class="icon">add_circle</i> {{ scaffold_title("add") }}</a>
             {%- endif -%}
         </div>
         {% endif %}
@@ -161,27 +162,37 @@
         <div class="btn-group">
             {%- if route.action != 'view' and submit_text and submit_and_exit_text -%}
             <a href="javascript: saveForm();" class="btn btn-white"><i class="icon">save</i> {{ submit_text }}</a>
-            <a href="javascript: saveFormAndGoBack();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
+            <a href="javascript: saveFormAndGoBack();" class="btn btn-white hidden-xs"><i class="icon">save</i> {{ submit_and_exit_text }}</a>
             {% endif %}
             {% if route.action == 'view' and uri_permission(action='edit', item=item) %}
             <a href="javascript: view.change('edit');" class="btn btn-white"><i class="icon">edit</i> {{ edit_item_text }}</a>
             {% endif %}
             {%- if route.action == 'add' and submit_and_reload_record != '' -%}
-            <a href="javascript: saveFormAndReloadRecord();" class="btn btn-white"><i class="icon">save</i> {{ submit_and_reload_record }}</a>
+            <a href="javascript: saveFormAndReloadRecord();" class="btn btn-white hidden-xs"><i class="icon">save</i> {{ submit_and_reload_record }}</a>
             {% endif %}
         </div>
         {% endif %}
 
-        <div class="dropdown list-operations related-operations hide pull-right">
-            <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
-               data-toggle="dropdown">
+        <div class="dropdown list-operations {% if route.action == 'list' %}filed-display-operations{% endif %} related-operations hide pull-right">
+            <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white" data-toggle="dropdown">
                 <span><i class="icon icon-lg">arrow_drop_down</i></span>
-                <span class="hidden-xs">相關操作</span><span class="visible-xs">操作</span>
+                <span class="hidden-xs">相關功能</span><span class="visible-xs">功能</span>
             </a>
             <ul class="dropdown-menu folder-list ">
-                <li class="dropdown-menu-group">頁面</li>
-                {% if display_save_buttons %}
+                {% if len(scaffolding.navigation) > 0 %}<li class="dropdown-menu-group">頁面相關</li>{% endif %}
+                {% for nav_item in scaffolding.navigation -%}
+                    {% if uri_permission(nav_item.uri) %}
+                    <li><a href="{{ uri(nav_item.uri) }}" {% if nav_item.use_json %}class="btn-json"{% endif %}><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
+                    {% else %}
+                    {% if item and uri_permission(nav_item.uri, item=item) %}
+                    <li><a href="{{ uri_action_link(nav_item.uri, item=item) }}" {% if nav_item.use_json %}class="btn-json"{% endif %}><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
+                    {% endif -%}
+                    {% endif -%}
+                {% endfor -%}
+
                 {%- if route.action == 'add' or route.action == 'edit' or route.action == 'config' -%}
+                <li class="dropdown-menu-group">編輯與檢視</li>
+                {% if display_save_buttons %}
                 <li><a href="javascript: saveForm();"><i class="material-icons">save</i>{{ submit_text }} <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
                 <li><a href="javascript: saveFormAndGoBack();"><i class="material-icons">save</i>{{ submit_and_exit_text }} <span class="label quick-key">S</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Shift</span><span class="quick-key quick-key-2">+</span><span class="label quick-key">Ctrl</span></a></li>
                 {% endif %}
@@ -200,11 +211,6 @@
                     {%- endif -%}
                 {%- endif -%}
 
-                {% for nav_item in scaffolding.navigation -%}
-                    {% if uri_permission(nav_item.uri) %}
-                    <li><a href="{{ uri(nav_item.uri) }}"><i class="material-icons">keyboard_arrow_right</i> {{ nav_item.title }} </a></li>
-                    {% endif -%}
-                {% endfor -%}
                 {% if scaffolding.scaffold_language %}
                 <li class="dropdown-menu-group">語系欄位切換</li>
                     {%- set lang_count = 1 %}
@@ -214,21 +220,12 @@
                     {%- set lang_count = lang_count + 1 -%}
                     {%- endfor %}
                 {% endif %}
-            </ul>
-        </div>
 
-        {%- if route.action == 'list' -%}
-        <div class="dropdown list-operations filed-display-operations hide in pull-right">
-            <a class="dropdown-toggle text-black waves-attach padding-left-no padding-right-no waves-effect btn btn-white"
-               data-toggle="dropdown">
-                <span><i class="icon icon-lg">arrow_drop_down</i></span>
-                <span class="hidden-xs">顯示欄位</span>
-                <span class="visible-xs">欄位</span>
-            </a>
-            <ul class="dropdown-menu folder-list ">
+                {%- if route.action == 'list' -%}
+                <li class="dropdown-menu-group">欄位顯示</li>
+                {%- endif %}
             </ul>
         </div>
-        {%- endif %}
     {%- endif %}
 
 {%- endmacro %}

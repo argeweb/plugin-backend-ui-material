@@ -23,7 +23,11 @@
                 <div class="ibox-content no-padding" style="min-height: 180px;">
                     <div class="panel-body">
                     {% for subitem in item.submenu %}
-                        <p data-sort="{{ subitem.sort }}"><i class="icon">{{ subitem.icon }}</i> <a href="{{ subitem.url }}" {% if subitem.target != '' %}target="{{ subitem.target }}"{% endif %}>{{ subitem.text }} </a></p>
+                        <p data-sort="{{ subitem.sort }}"><i class="icon">{{ subitem.icon }}</i>
+                            <a href="{{ subitem.url }}"
+                               {% if subitem.target == 'json' %}class="btn-json"{% endif %}
+                               {% if subitem.target != '' and subitem.target != 'json' %}target="{{ subitem.target }}"{% endif %}
+                            >{{ subitem.text }} </a></p>
                     {% endfor %}
                     </div>
                 </div>

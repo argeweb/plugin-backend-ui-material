@@ -5005,10 +5005,10 @@ main.content main.content{
 .file.theme{
     overflow: hidden;
 }
-.file_picker_div{
+.file-picker-div{
     width: 100%;
 }
-.file_picker_item {
+.file-picker-item {
     line-height: 42px;
     height: 54px;
     float: left;
@@ -5018,21 +5018,21 @@ main.content main.content{
     background-position: 50%;
     margin: -10px 0 -10px 0;
 }
-.file_picker_div input{
+.file-picker-div input{
     border-right: 0;
     width: 100%;
     margin-top: 5px;
     float: left;
 }
-.file_picker_div .input-group-btn{
+.file-picker-div .input-group-btn{
     width: 1%;
     display: table-cell;
 }
-.file_picker_div .filepicker{
+.file-picker-div .file-picker{
     width: 100px;border-left: 0;
     display: table-cell;
 }
-.file_picker_item_none {
+.file-picker-item-none {
     border: 0 !important;
 }
 .btn-image-open-server, .btn-image-open-google-picker, .btn-image-open-dropbox {
@@ -5668,7 +5668,7 @@ img.descPicture.descPictureClose { width:150px; }
     background: rgba(255, 255, 255, 0.23);
 }
 
-.btn.brand-bg-color.filepicker{
+.btn.brand-bg-color.file-picker{
     color: #fff;
 }
 .btn-group-vertical>.btn, .btn-group>.btn {
@@ -5710,7 +5710,7 @@ textarea.w100p {
     content: inherit;
     display: none;
 }
-.file_picker_item [data-ext="html"]{
+.file-picker-item [data-ext="html"]{
     background-color: #f0ad4e;
 }
 .sTree2 .btn.btn-flat{

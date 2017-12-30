@@ -5,10 +5,89 @@
 // @requires jQuery v2 or later
 // Copyright (c) 2016 Qi-Liang Wen 啟良
 function ajax(url,data,successCallback,errorCallback,headers){$.ajax({url:url,type:"GET",headers: headers,cache: true,data:data,async:1,success:function(responseText){successCallback(responseText)},error:function(xhr,ajaxOptions,thrownError){if(errorCallback){errorCallback(xhr.responseText)}else{alert(thrownError.message)}}})};
-function json(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",dataType:"json",data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(d.message)}})};
-function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",cache: false,dataType:"json",data:data,async:1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(d.message)}})};
+function json(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",dataType:"json",data:data,async:!1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(b,c,d)}})};
+function json_async(url,data,successCallback,errorCallback){$.ajax({url:url,type:"POST",cache: false,dataType:"json",data:data,async:1,success:function(a){successCallback(a)},error:function(b,c,d){void 0==errorCallback?alert(d.message):errorCallback(b,c,d)}})};
 function replaceParam(a,b,c){a=a.replace("#/","");var d="";var m=a.substring(0,a.indexOf("?"));var s=a.substring(a.indexOf("?"),a.length);var j=0;if(a.indexOf("?")>=0){var i=s.indexOf(b+"=");if(i>=0){j=s.indexOf("&",i);if(j>=0){d=s.substring(i+b.length+1,j);s=a.replace(b+"="+d,b+"="+c)}else{d=s.substring(i+b.length+1,s.length);s=a.replace(b+"="+d,b+"="+c)}}else{s=a+"&"+b+"="+c}}else{s=a+"?"+b+"="+c}return s};
 function getRandID(a){if(a==undefined){a="rand-id-"}var b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<5;i++)a+=b.charAt(Math.floor(Math.random()*b.length));return a};
+function deleteRecord(url){
+    swal({
+        title: "您確定要刪除此記錄嗎",
+        text: "删除後后将無法恢複，請謹慎操作！",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "删除",
+        cancelButtonText: "取消",
+        showLoaderOnConfirm: true
+    }).then(function () {
+        alert("請稍候...", 30000, false);
+        setTimeout(function(){
+            json(url, null, function (data) {
+                swal("删除成功！", "您已经永久删除了此記錄。", "success");
+                content_area.reload();
+            }, function (data) {
+                swal("删除失敗！", "刪除記錄時發生問題。", "error");
+            })
+        }, 50);
+    });
+}
+// 可以排序的表格
+function makeSortTable(){
+    //try{
+        $(".sortable-list tbody").sortable({
+            placeholder: "ui-state-highlight",
+            handle: 'td.move-headline',
+            opacity: 0.8,
+            //拖曳時透明
+            cursor: 'move',
+            //游標設定
+            axis:'y',
+            //只能垂直拖曳
+            update : function () {
+                var last_page_record = "";
+                var $sort = $('.sortable-list tbody');
+                $sort.find("tr").each(function() {
+                    if ($(this).data("id") != undefined) {
+                        last_page_record += "rec[]=" + $(this).data("id") + "&";
+                    }
+                });
+                json_async("/admin/record/sort.json", last_page_record + $sort.sortable('serialize'), function (data) {
+                    message.snackbar("排序完成...");
+                }, function (data) {
+                    return false;
+                });
+            }
+        });
+    //}catch(e){
+    //}
+}
+function makeListOp(){
+    var $operations_ul = $(".filed-display-operations ul");
+    if ($operations_ul.data("done") == true) return false;
+    $("input[data-field]").each(function () {
+        var field_name = $(this).data("field");
+        var field_texe = $(this).text();
+        var field_val  = $(this).val();
+        var is_checked = "checked" ? $(this).attr("checked"): "";
+        if (field_name != 'sortable' && field_name != 'is_enable' && field_name != 'record_buttons' && field_name != '') {
+            $operations_ul.append(
+                '<li><input type="checkbox" ' + is_checked + ' ' +
+                'id="ro-field-' + field_name + '" ' +
+                'value="' + field_val + '">' +
+                '<label for="ro-field-' + field_name + '">' + $(this).parent().text() + '</label></li>'
+            );
+        }
+    });
+    $operations_ul.find("input[type=checkbox]").change(function() {
+        var id = $(this).attr("id").replace("ro-field-", "");
+        var val = $(this).is(":checked");
+        $("input[data-field='" + id + "']").click();
+    });
+    $operations_ul.attr("data-done", true);
+}
+function changeLangField(index){
+    $("a.btn-lang").eq(index).click();
+}
 
 let page = null;
 const user = new Vue({
@@ -20,6 +99,7 @@ const user = new Vue({
         "profile_url": ""
     }
 });
+
 const view = {
     "current": "edit",
     "last": "edit",
@@ -105,13 +185,19 @@ const form = {
     "submitAndGoBack": function(form_id){
         form.submit(form_id, function(data){
             methods.goBack();
-            message.snackbar(data);
+            message.snackbar(data, '已儲存');
+        });
+    },
+    "saveFormAndGoNext": function(form_id){
+        form.submit(form_id, function(data){
+            methods.goNextOne();
+            message.snackbar(data, '已儲存');
         });
     },
     "submitAndReload": function(form_id){
         form.submit(form_id, function(data){
             content_area.load(data["scaffold"]["method_record_edit_url"], "", {}, false, true);
-            message.snackbar(data);
+            message.snackbar(data, '已儲存');
         });
     },
     "afterSubmit": function(j, b , c, d){
@@ -139,9 +225,13 @@ const form = {
     },
     "afterSubmitCallback": undefined,
     "onError": function(j, b, c, d){
-        console.log(j, b, c, d);
+        let ob = $('<div/>').html(j.responseText);
+        console.error(ob.find("pre").html());
+        let em = ob.find("pre").html().split("\n");
+        // console.log(j, b, c, d);
+        // console.log(em[em.length-2]);
         methods.unlock(form);
-        message.alert("發生錯誤了，詳情請見 console ...");
+        message.alert('發生錯誤了<pre>' + ob.find("pre").html() + '</pre>');
     },
     "lock": function(s){
         s = s || 5000;
@@ -156,14 +246,15 @@ const form = {
     "timeout": function(){
         methods.unlock(form);
         alert("連線逾時");
-    }
+    },
+    "lastUiTarget": null,
 };
-const saveFormAndGoBack = form.submitAndGoBack;
 const saveForm = form.submit;
+const saveFormAndGoBack = form.submitAndGoBack;
+const saveFormAndGoNext = form.saveFormAndGoNext;
 const saveFormAndReloadRecord = form.submitAndReload;
-
 const shortcut = {
-    keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
+    keys: 'ctrl+r, `, ctrl+s, ctrl+shift+s, ctrl+alt+s, ctrl+p, esc, f5, ctrl+f5, alt+s, ' +
     'alt+1, alt+2, alt+3, alt+4, alt+5, alt+6, alt+7, alt+8, alt+9, alt+j, alt+k, /, shift+/',
     "data": {
         "lock_timer": null,
@@ -194,6 +285,7 @@ const shortcut = {
             case 'ctrl+r':
             case 'ctrl+f5': content_area.reload(true); break;
             case 'ctrl+shift+s': saveFormAndGoBack(); break;
+            case 'ctrl+alt+s': saveFormAndGoNext(); break;
             case 'ctrl+s': saveForm(); break;
             case 'alt+j': methods.goPrevOne(); break;
             case 'alt+k': methods.goNextOne(); break;
@@ -319,11 +411,10 @@ const message = {
             swal(msg).done();
         }
     },
-    "snackbar": function(msg, sec){
+    "snackbar": function(msg, default_msg=''){
         msg = message.parse(msg);
         message.hideAll();
 		$('body').snackbar({
-            alive: sec,
 			content: msg,
 			show: function () {
 				message.snackbarText++;
@@ -610,11 +701,11 @@ const uploader = {
         var dt = evt.dataTransfer;
         if (dt.types && (dt.types.indexOf ? dt.types.indexOf('Files') != -1 : dt.types.contains('Files'))) {
             $("html").addClass("dropping");
-            if ($(".file_picker_div, .imgs_selector_div, .field-type-rich-text-field").length == 0){
+            if ($(".file-picker-div, .imgs-selector-div, .field-type-rich-text-field").length == 0){
                 $("#dropping").addClass("no_target");
             }else{
                 $("#dropping").removeClass("no_target");
-                $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+                $(".file-picker-div, .imgs-selector-div").parent().parent().addClass("dropping-box");
             }
         }
     },
@@ -629,12 +720,12 @@ const uploader = {
         evt.stopPropagation();
         uploader.visual_timer=3;
         $("html").addClass("dropping");
-        $(".file_picker_div, .imgs_selector_div").parent().parent().addClass("dropping-box");
+        $(".file-picker-div, .imgs-selector-div").parent().parent().addClass("dropping-box");
     },
     "removeVisualClass": function (){
         if (uploader.visual_timer==0){
             $("html").removeClass("dropping");
-            $(".file_picker_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
+            $(".file-picker-div, .imgs-selector-div").parent().parent().removeClass("dropping-box");
             uploader.visual_timer = 0;
         }else{
             uploader.visual_timer--;
@@ -646,7 +737,7 @@ const uploader = {
         evt.preventDefault();
         uploader.visual_timer=0;
         $("html").removeClass("dropping");
-        $(".file_picker_div, .imgs_selector_div").parent().parent().removeClass("dropping-box");
+        $(".file-picker-div, .imgs-selector-div").parent().parent().removeClass("dropping-box");
         if (files.length > 10){
             message.insert("danger", "錯誤", "一次可上傳 10個文件", undefined);
             return;
@@ -678,9 +769,9 @@ const uploader = {
         var t = $("*[data-uploadId='" + target_id + "']");
         t.find("input").first().val(url).data("key", item_key).show();
         if (url == ""){
-            t.find(".file_picker_item").css("background-image", "none").addClass("file_picker_item_none");
+            t.find(".file-picker-item").css("background-image", "none").addClass("file-picker-item-none");
         }else{
-            t.find(".file_picker_item").css("background-image", "url(" + url + ")").removeClass("file_picker_item_none");
+            t.find(".file-picker-item").css("background-image", "url(" + url + ")").removeClass("file-picker-item-none");
             t.find("input").first().change();
         }
     },
@@ -804,6 +895,8 @@ const content_area = {
         var last_page = console_history.getState();
         if (last_page != null) {
             content_area.load(last_page.href, last_page.text, last_page.referer_page, false);
+        }else{
+            location.reload();
         }
     },
     "getUrl": function(){
@@ -897,7 +990,7 @@ const aside_area = {
     "showUi": function(callback){
         $("body").addClass("aside_is_open");
         $("#aside_area").stop().addClass("open").animate({
-            "width": ($(window).width() < 768) ? $(window).width() + 3 : "400"}, 500, function(){
+            "width": ($(window).width() < 768) ? $(window).width() + 3 : "392"}, 500, function(){
             aside_area.data.is_open = true;
             if (typeof callback === "function") callback();
         });
@@ -1015,6 +1108,10 @@ const methods = {
                 $(this).addClass("complex");
                 $(".page-big-header").addClass("complex")
             }
+            if ($(".content .ibox-report").length > 0){
+                $(this).addClass("has-report");
+            }
+
             if ($(this).text().trim() == ""){
                 $(this).remove();
             }
@@ -1155,8 +1252,76 @@ const methods = {
         }
         methods.checkPageHeader(target);
         methods.checkNavItemAndShow(target);
-        methods.checkEditor(target);
+        if (target.dom.attr("id") == "content_area"){
+            methods.checkEditor(target);
+        }
         setTimeout(function(){ target.dom.show() }, 100)
+    },
+    "showUserSearch": function(keyword){
+        json_async('/admin/application_user/form/search_application_user?query=' + keyword, null, function(data){
+            data = data.data;
+            let c = '';
+            for (let i=0;i<data.length;i++){
+                let d = data[i];
+                c += '<tr><td><input type="radio" class="user_item" name="swal2-radio" data-image="' + d.avatar + '" id="' + d.__key__ + '" value="' + d.__key__ + '" ></td><td class="text-left"><label for="' + d.__key__ + '">' + d.name + '</label></td><td class="text-left"><label for="' + d.__key__ + '">' + d.email + '</label></td></tr>';
+            }
+            swal({
+                showCancelButton: true,
+                preConfirm: function () {
+                    return new Promise(function (resolve) {
+                        let select_item = $(".user_item[type=radio]:checked");
+                        resolve([
+                            select_item.val(),
+                            select_item.parent().next().text(),
+                            select_item.data("image")
+                        ])
+                    })
+                },
+                html: '<input type="text" class="form-control" id="user-search" value="' + keyword + '"><button id="btn-user-search" class="btn">搜尋</button><div><table id="table" class="margin-0" style="width:100%"><thead><tr><th class="text-center" style="background: #c6c6c6; padding: 8px;">#</th><th class="text-center" style="background: #c6c6c6; padding: 8px;">Name</th><th class="text-center" style="background: #c6c6c6; padding: 8px;">E-Mail</th></tr></thead><tbody>' + c + '</tbody></table></div>'
+            }).then(function (result) {
+                $(form.lastUiTarget).val(result[1]).next().val(result[0]).next().find(".user-picker-item").css("background-image", "url(" + result[2] + ")");
+            })
+        });
+        // var radiohtml = '';
+        // var inputOptions = new Promise(function (resolve) {
+        //     json_async('/admin/application_user/form/search_application_user?query=' + keyword, null, function(data){
+        //         data = data.data;
+        //         let c = {};
+        //         for (let i=0;i<data.length;i++){
+        //             let d = data[i];
+        //             c[d.__key__] = d.name + ' / ' + d.email;
+        //             radiohtml += '<tr><td><input type="radio" class="user_item" name="swal2-radio" id="swal2-radio-1" value="' + d.__key__ + '" ></td><td class="text-left"><label for="' + d.__key__ + '">' + d.name + '</label></td><td class="text-left"><label for="' + d.__key__ + '">' + d.email + '</label></td></tr>';
+        //         }
+        //         resolve(c)
+        //     });
+        // });
+        //
+        // swal({
+        //     input: 'radio',
+        //     showCancelButton: true,
+        //     inputOptions: inputOptions,
+        //     inputValidator: function (result) {
+        //         return new Promise(function (resolve, reject) {
+        //             if (result) {
+        //                 resolve()
+        //             } else {
+        //                 reject('You need to select something!')
+        //             }
+        //         })
+        //     },
+        //     html: '<input type="text" class="form-control" id="user-search" value="' + keyword + '"><button id="btn-user-search" class="btn">搜尋</button><div><table id="table" class="margin-0" style="width:100%"><thead><tr><th class="text-center" style="background: #c6c6c6; padding: 8px;">#</th><th class="text-center" style="background: #c6c6c6; padding: 8px;">Name</th><th class="text-center" style="background: #c6c6c6; padding: 8px;">E-Mail</th></tr></thead><tbody></tbody></table></div>',
+        //     onOpen: function(ele) {
+        //         debugger;
+        //         $(ele).find('.swal2-radio').remove();
+        //         $(ele).find('tbody').html(radiohtml);
+        //         // $(radiohtml).appendTo();
+        //     }
+        // }).then(function (result) {
+        //     swal({
+        //         type: 'success',
+        //         html: 'You selected: ' + result
+        //     })
+        // })
     },
     "lock": function(target, s){
         s = s || 30000;
@@ -1169,86 +1334,7 @@ const methods = {
         target.data.is_lock = false;
     }
 };
-function deleteRecord(url){
-    swal({
-        title: "您確定要刪除此記錄嗎",
-        text: "删除後后将無法恢複，請謹慎操作！",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "删除",
-        cancelButtonText: "取消",
-        showLoaderOnConfirm: true
-    }).then(function () {
-        alert("請稍候...", 30000, false);
-        setTimeout(function(){
-            json(url, null, function (data) {
-                swal("删除成功！", "您已经永久删除了此記錄。", "success");
-                content_area.reload();
-            }, function (data) {
-                swal("删除失敗！", "刪除記錄時發生問題。", "error");
-            })
-        }, 50);
-    });
-}
-// 可以排序的表格
-function makeSortTable(){
-    //try{
-        $(".sortable-list tbody").sortable({
-            placeholder: "ui-state-highlight",
-            handle: 'td.move-headline',
-            opacity: 0.8,
-            //拖曳時透明
-            cursor: 'move',
-            //游標設定
-            axis:'y',
-            //只能垂直拖曳
-            update : function () {
-                var last_page_record = "";
-                var $sort = $('.sortable-list tbody');
-                $sort.find("tr").each(function() {
-                    if ($(this).data("id") != undefined) {
-                        last_page_record += "rec[]=" + $(this).data("id") + "&";
-                    }
-                });
-                json_async("/admin/record/sort.json", last_page_record + $sort.sortable('serialize'), function (data) {
-                    message.snackbar("排序完成...");
-                }, function (data) {
-                    return false;
-                });
-            }
-        });
-    //}catch(e){
-    //}
-}
-function makeListOp(){
-    var $operations_ul = $(".filed-display-operations ul");
-    if ($operations_ul.data("done") == true) return false;
-    $("input[data-field]").each(function () {
-        var field_name = $(this).data("field");
-        var field_texe = $(this).text();
-        var field_val  = $(this).val();
-        var is_checked = "checked" ? $(this).attr("checked"): "";
-        if (field_name != 'is_enable' && field_name != 'record_buttons' && field_name != '') {
-            $operations_ul.append(
-                '<li><input type="checkbox" ' + is_checked + ' ' +
-                'id="ro-field-' + field_name + '" ' +
-                'value="' + field_val + '">' +
-                '<label for="ro-field-' + field_name + '">' + $(this).parent().text() + '</label></li>'
-            );
-        }
-    });
-    $operations_ul.find("input[type=checkbox]").change(function() {
-        var id = $(this).attr("id").replace("ro-field-", "");
-        var val = $(this).is(":checked");
-        $("input[data-field='" + id + "']").click();
-    });
-    $operations_ul.attr("data-done", true);
-}
-function changeLangField(index){
-    $("a.btn-lang").eq(index).click();
-}
-//  初始化 fff
+//  初始化
 $(function(){
     uploader.init();
     shortcut.init();
@@ -1314,22 +1400,20 @@ $(function(){
             e.stopPropagation();
             var parent_is_content = $(this).parents("#content_area").length;
             var callback = $(this).data("callback");
+            var not_reload = false;
+            if ($(this).hasClass("btn-json-not-reload")){
+                not_reload = true;
+            }
             json(_url, null, function (data) {
                 if (callback !== undefined && callback !== "undefined"){
                     eval(callback + '(' + JSON.stringify(data) + ')' );
                 }else{
                     if (typeof data["message"] !== "undefined" && data["message"] !== "")
                         alert(data["message"]);
-                    if (parent_is_content)
+                    if (parent_is_content && not_reload == false)
                         content_area.reload();
                 }
-            }, function(data){
-                if (data.code == "404"){
-                    alert("找不到目標頁面");
-                }else{
-                    alert(data.error);
-                }
-            });
+            }, form.onError);
             return;
         }
         // js 語法
@@ -1371,8 +1455,21 @@ $(function(){
         }
     }).on("click", ".aside-close, .close-side-panel", function(e){
         aside_area.closeUi();
-    }).on("click", ".filepicker", function(e){
+    }).on("click", ".file-picker", function(e){
         uploader.pickup($(this).parents(".input-group").find("input"), false);
+        e.preventDefault();
+        e.stopPropagation();
+    }).on("click", "#btn-user-search", function(e){
+        methods.showUserSearch($("#user-search").val());
+    }).on("click", ".user-picker", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if ($(this).hasClass('lock')){
+            return false;
+        }
+        // TODO
+        form.lastUiTarget = $(this).parents(".form-group").find("input[type=text]");
+        methods.showUserSearch(form.lastUiTarget.val());
     }).on("click", "a[target=content_area]", function(e){
         e.preventDefault();
         e.stopPropagation();
@@ -1380,17 +1477,25 @@ $(function(){
         var t = $(this).text().replace(i_text, "").trim();
         content_area.load($(this).attr("href"), t, content_area.getUrl(), true);
         if ($(this).hasClass("main-link")){ aside_area.closeUi(); }
-    }).on("change", ".file_picker_div input", function(){
+    }).on("change", ".file-picker-div input", function(){
         var val = $(this).val();
         var is_image = $(this).parents(".form-group").hasClass("form-group-avatar") ||
                 $(this).parents(".form-group").find("input").hasClass("image");
         if (is_image){
-            $(this).parents(".form-group").find(".file_picker_item").css("background-image", "url(" + val + ")").text("");
+            $(this).parents(".form-group").find(".file-picker-item").css("background-image", "url(" + val + ")").text("");
         }else{
-            $(this).parents(".form-group").find(".file_picker_item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
+            $(this).parents(".form-group").find(".file-picker-item").attr("data-ext", val.split(".")[1]).text(val.split(".")[1]);
         }
     }).on("change", ".record_item td .btn-checkbox-json", function(){
         json($(this).is(":checked") && $(this).data("enable-url") || $(this).data("disable-url"), null, message.snackbar);
+    }).on("change", "input[type=range]", function(){
+        $(this).next().text($(this).val() + $(this).data("unit"));
+    }).on("input", "input[type=range]", function(){
+        $(this).next().text($(this).val() + $(this).data("unit"));
+    }).on("keypress", "#user-search", function (e){
+        if (e.keyCode == 13) {
+            methods.showUserSearch($("#user-search").val());
+        }
     });
 
     $(window).resize(function(){
@@ -1450,7 +1555,6 @@ CodeMirror.defineExtension("autoFormatRange", function (from, to) {
             cm.indentLine(cur, "smart");
     });
 });
-
 CodeMirror.defineExtension("autoIndentRange", function (from, to) {
     var cmInstance = this;
     this.operation(function () {

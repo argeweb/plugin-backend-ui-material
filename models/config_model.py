@@ -6,11 +6,11 @@
 # Web: http://www.yooliang.com/
 # Date: 2015/7/12.
 
-from argeweb import BasicModel
+from argeweb import BasicConfigModel
 from argeweb import Fields
 
 
-class ConfigModel(BasicModel):
+class ConfigModel(BasicConfigModel):
     class Meta:
         tab_pages = [u'後台設定', u'Manifest 相關設定']
 
