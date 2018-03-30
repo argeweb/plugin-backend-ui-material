@@ -28,10 +28,6 @@ class BackendUiMaterial(Controller):
 
     class Scaffold:
         hidden_in_form = ['name', 'title', 'use']
-        # navigation = [{
-        #     'uri': 'admin:backend_ui_material:backend_ui_material:welcome',
-        #     'title': u'網域綁定'
-        # }]
 
     @route
     @route_menu(list_name=u'system', text=u'後台 Manifest 設定', sort=9952, group=u'系統設定')
@@ -127,13 +123,9 @@ class BackendUiMaterial(Controller):
 
     @route_with('/admin/login')
     def login(self):
-        try:
-            self.context['backend_title'] = (self.host_information.site_name is not None) and \
-                            self.host_information.site_name or u'網站後台'
-        except:
-            self.context['backend_title'] = u'網站後台'
+        self.context['backend_title'] = u'網站後台'
         if self.host_information is not None:
-            self.context['backend_title'] = self.host_information.site_name
+            self.context['backend_title'] = self.host_information.site_name or u'網站後台'
 
     @route_with('/admin/login.json')
     @route_with('/dashboard/login.json')
@@ -156,13 +148,18 @@ class BackendUiMaterial(Controller):
         if application_user is None:
             if has_record():
                 return
+            else:
+                self.host_information.theme = 'install'
+                self.host_information.put()
+                self.redirect('/admin/setup')
+                return
         self.session['application_admin_user_key'] = application_user.key
         self.context['data'] = {
             'is_login': 'true'
         }
 
     @route_with('/admin/logout')
-    def admin_logout(self):
+    def logout(self):
         self.session['application_admin_user_key'] = None
         self.session['application_admin_user_level'] = None
         return self.redirect('/admin/jump_to_login')
@@ -229,7 +226,7 @@ class BackendUiMaterial(Controller):
         }
 
     @route
-    @route_menu(list_name=u'system', group=u'系統設定', text=u'網域設定', sort=9999, icon=u'settings')
+    # @route_menu(list_name=u'system', group=u'系統設定', text=u'網域設定', sort=9999, icon=u'settings')
     def admin_set_domain(self):
         return 'set_domain'
 
